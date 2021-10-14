@@ -52,9 +52,15 @@ namespace RelatorioVM.Relatorios.Construtores
             return this;
         }
 
+        public IRelatorioVM Titulo(string titulo)
+        {
+            _estruturaRelatorio.Titulo.Texto = titulo;
+            return this;
+        }
+
         public IGeradorRelatorioVM Construir()
         {
-            return GeradorRelatorioFabrica.Criar(new EstruturaRelatorio(), _configuracaoRelatorio, _conversor);
-        }
+            return GeradorRelatorioFabrica.Criar(_estruturaRelatorio, _configuracaoRelatorio, _conversor);
+        }        
     }
 }

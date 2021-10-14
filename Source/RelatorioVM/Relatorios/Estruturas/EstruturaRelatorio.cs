@@ -7,11 +7,13 @@ namespace RelatorioVM.Relatorios.Estruturas
 {
     internal class EstruturaRelatorio
     {
+        public TituloElemento Titulo { get; set; }
         public FiltrosElemento Filtro { get; set; }
 
         public EstruturaRelatorio()
         {
             Filtro = new FiltrosElemento();
+            Titulo = new TituloElemento();
         }
     }
 }

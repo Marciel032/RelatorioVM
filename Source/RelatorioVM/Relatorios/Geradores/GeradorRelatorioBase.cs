@@ -1,4 +1,5 @@
 ﻿using DinkToPdf;
+using HtmlTags;
 using RelatorioVM.Conversores.Interfaces;
 using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Extensoes;
@@ -25,33 +26,38 @@ namespace RelatorioVM.Relatorios.Geradores
 
         public byte[] Gerar()
         {
-            var relatorio = @"<html>
-        <head>
-        <style>
-            * { font-family: arial;}
-            .tr-totais td { border-top: 1px solid #888; font-weight: bold; }
-            table { page-break-inside:auto } 
-            tr { page-break-inside:avoid; page-break-after:auto } 
-            .keep-together { page-break-inside:avoid; page-break-after:auto } 
-            thead { display:table-header-group } 
-            tfoot { display:table-footer-group } 
-            .page-break  { page-break-before: always; }
-        .titulo {
-            display: block; text-align: center; 
-            position: running(titulo);
-        } 
-        @page {
-            @top-center { content: element(titulo) }
-        }
-        </style>
-        </head>
-        <body>";
+            var estilo = new HtmlTag("style")
+                .Text(
+                   @"* { font-family: arial;}
+                    .tr-totais td { border-top: 1px solid #888; font-weight: bold; }
+                    table { page-break-inside:auto } 
+                    tr { page-break-inside:avoid; page-break-after:auto } 
+                    .keep-together { page-break-inside:avoid; page-break-after:auto } 
+                    thead { display:table-header-group } 
+                    tfoot { display:table-footer-group } 
+                    .page-break  { page-break-before: always; }
+                    .titulo {
+                        display: block; text-align: center; 
+                        position: running(titulo);
+                    } 
+                    @page {
+                        @top-center { content: element(titulo) }
+                    }"
+                );
 
-            relatorio += "</body></html>";
+            var relatorio = new HtmlTag("html")
+                .Append(
+                    new HtmlTag("head")
+                        .Append(estilo)
+                );
+
+            var corpo = new HtmlTag("body", relatorio);
+            _estrutura.Titulo.AdicionarHtml(corpo);
+            _estrutura.Filtro.AdicionarHtml(corpo);
             
             var documento = new ObjectSettings()
             {
-                HtmlContent = relatorio
+                HtmlContent = relatorio.ToHtmlString()
             };
             documento.Configurar(_configuracao);
 

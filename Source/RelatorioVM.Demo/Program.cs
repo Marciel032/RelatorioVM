@@ -4,6 +4,7 @@ using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Dominio.Enumeradores;
 using RelatorioVM.Extensoes;
 using RelatorioVM.Relatorios.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -18,6 +19,9 @@ namespace RelatorioVM.Demo
 
             var viewModel = new ExemploSimplesViewModel() { 
                 FilialCodigo = 1,
+                PessoaCodigo = 5236,
+                DataFinal = DateTime.Now,
+                DataInicial = DateTime.Now,
                 Itens = new List<ExemploSimplesItemViewModel>() { 
                     new ExemploSimplesItemViewModel(),
                     new ExemploSimplesItemViewModel()
@@ -29,9 +33,10 @@ namespace RelatorioVM.Demo
             var bytes = relatorio
                 .Filtros(viewModel, opcoes => {
                     opcoes
-                        .Ignorar(x => x.PessoaCodigo);
+                        .Ignorar(x => x.Itens);
                 })
                 .AdicionarConteudo(viewModel.Itens)
+                .Titulo("Teste de relatório")
                 .Construir()
                 .Gerar();
 
