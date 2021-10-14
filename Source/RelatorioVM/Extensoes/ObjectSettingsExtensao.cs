@@ -22,6 +22,7 @@ namespace RelatorioVM.Extensoes
             cabecalho.Left = configuracao.ElementoEsquerda.ObterValor();
             cabecalho.Center = configuracao.ElementoCentro.ObterValor();
             cabecalho.Right = configuracao.ElementoDireita.ObterValor();
+            cabecalho.Line = true;
         }
 
         private static void Configurar(this FooterSettings rodape, ConfiguracaoRodapeRelatorio configuracao)
@@ -31,6 +32,7 @@ namespace RelatorioVM.Extensoes
             rodape.Left = configuracao.ElementoEsquerda.ObterValor();
             rodape.Center = configuracao.ElementoCentro.ObterValor();
             rodape.Right = configuracao.ElementoDireita.ObterValor();
+            rodape.Line = true;
         }
     }
 }

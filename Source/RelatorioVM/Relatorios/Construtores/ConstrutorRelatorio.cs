@@ -1,4 +1,5 @@
-﻿using RelatorioVM.Dominio.Configuracoes;
+﻿using RelatorioVM.Conversores.Interfaces;
+using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Dominio.Configuracoes.Interfaces;
 using RelatorioVM.Infraestruturas;
 using RelatorioVM.Relatorios.Estruturas;
@@ -12,17 +13,20 @@ namespace RelatorioVM.Relatorios.Construtores
 {
     internal class ConstrutorRelatorio : IRelatorioVM
     {
-        private object _filtros;
+        private EstruturaRelatorio _estruturaRelatorio;
         private List<object> _conteudos;
         private ConfiguracaoRelatorio _configuracaoRelatorio;
+        private IConversor _conversor;
 
-        public ConstrutorRelatorio()
+        public ConstrutorRelatorio(IConversor conversor)
         {
+            _conversor = conversor;
+            _estruturaRelatorio = new EstruturaRelatorio();
             _conteudos = new List<object>();
-            _configuracaoRelatorio = Configuracao.ConfiguracaoRelatorio.Clone();
+            _configuracaoRelatorio = Configuracao.ConfiguracaoRelatorio.Clone();            
         }
 
-        public IRelatorioVM AdicionarConteudo<T>(T conteudo)
+        public IRelatorioVM AdicionarConteudo<TConteudo>(TConteudo conteudo)
         {
             if(conteudo != null)
                 _conteudos.Add(conteudo);
@@ -30,10 +34,14 @@ namespace RelatorioVM.Relatorios.Construtores
             return this;
         }
 
-        public IRelatorioVM AdicionarFiltros<T>(T filtros)
+        public IRelatorioVM Filtros<TFiltro>(TFiltro filtros, Action<IFiltroRelatorioVM<TFiltro>> opcoes = null)
         {
-            if (filtros != null)
-                _filtros = filtros;
+            if (filtros != null) {
+                var construtorFiltro = new ConstrutorFiltroRelatorio<TFiltro>(filtros);
+
+                opcoes?.Invoke(construtorFiltro);
+                _estruturaRelatorio.Filtro = construtorFiltro.Construir();
+            }            
 
             return this;
         }
@@ -46,7 +54,7 @@ namespace RelatorioVM.Relatorios.Construtores
 
         public IGeradorRelatorioVM Construir()
         {
-            return GeradorRelatorioFabrica.Criar(new EstruturaRelatorio(), _configuracaoRelatorio);
+            return GeradorRelatorioFabrica.Criar(new EstruturaRelatorio(), _configuracaoRelatorio, _conversor);
         }
     }
 }

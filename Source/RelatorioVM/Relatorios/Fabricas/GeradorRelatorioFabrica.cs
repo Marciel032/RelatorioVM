@@ -1,4 +1,5 @@
-﻿using RelatorioVM.Dominio.Configuracoes;
+﻿using RelatorioVM.Conversores.Interfaces;
+using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Relatorios.Estruturas;
 using RelatorioVM.Relatorios.Geradores;
 using RelatorioVM.Relatorios.Interfaces;
@@ -10,8 +11,8 @@ namespace RelatorioVM.Relatorios.Fabricas
 {
     internal class GeradorRelatorioFabrica
     {
-        public static IGeradorRelatorioVM Criar(EstruturaRelatorio estrutura, ConfiguracaoRelatorio configuracao) {
-            return new GeradorRelatorioBase(estrutura, configuracao);
+        public static IGeradorRelatorioVM Criar(EstruturaRelatorio estrutura, ConfiguracaoRelatorio configuracao, IConversor conversor) {
+            return new GeradorRelatorioBase(estrutura, configuracao, conversor);
         }
     }
 }

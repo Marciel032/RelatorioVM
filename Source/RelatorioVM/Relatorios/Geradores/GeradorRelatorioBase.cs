@@ -1,4 +1,5 @@
 ﻿using DinkToPdf;
+using RelatorioVM.Conversores.Interfaces;
 using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Extensoes;
 using RelatorioVM.Relatorios.Estruturas;
@@ -13,11 +14,13 @@ namespace RelatorioVM.Relatorios.Geradores
     {
         private EstruturaRelatorio _estrutura;
         private ConfiguracaoRelatorio _configuracao;
+        private IConversor _conversor;
 
-        public GeradorRelatorioBase(EstruturaRelatorio estrutura, ConfiguracaoRelatorio configuracao)
+        public GeradorRelatorioBase(EstruturaRelatorio estrutura, ConfiguracaoRelatorio configuracao, IConversor conversor)
         {
             _estrutura = estrutura;
             _configuracao = configuracao;
+            _conversor = conversor;
         }
 
         public byte[] Gerar()
@@ -56,7 +59,7 @@ namespace RelatorioVM.Relatorios.Geradores
             pdf.Configurar(_configuracao);
             pdf.Objects.Add(documento);
 
-            return new SynchronizedConverter(new PdfTools()).Convert(pdf);
+            return _conversor.Converter(pdf);
         }
     }
 }

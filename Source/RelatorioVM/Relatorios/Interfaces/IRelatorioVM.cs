@@ -7,8 +7,8 @@ namespace RelatorioVM.Relatorios.Interfaces
 {
     public interface IRelatorioVM
     {
-        IRelatorioVM AdicionarFiltros<T>(T filtros);
-        IRelatorioVM AdicionarConteudo<T>(T conteudo);
+        IRelatorioVM Filtros<TFiltro>(TFiltro filtros, Action<IFiltroRelatorioVM<TFiltro>> opcoes = null);
+        IRelatorioVM AdicionarConteudo<TConteudo>(TConteudo conteudo);
         IRelatorioVM Configurar(Action<IConfiguracaoRelatorio> configuracao);
         IGeradorRelatorioVM Construir();
     }

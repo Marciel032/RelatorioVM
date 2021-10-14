@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Blocos\" />
-    <Folder Include="Elementos\" />
   </ItemGroup>
 
   <ItemGroup>

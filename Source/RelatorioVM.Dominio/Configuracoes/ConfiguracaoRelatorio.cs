@@ -16,7 +16,7 @@ namespace RelatorioVM.Dominio.Configuracoes
 
         public ConfiguracaoRelatorio()
         {
-            Orientacao = TipoOrientacao.Paisagem;
+            Orientacao = TipoOrientacao.Retrato;
             Cabecalho = new ConfiguracaoCabecalhoRelatorio();
             Rodape = new ConfiguracaoRodapeRelatorio();
         }
