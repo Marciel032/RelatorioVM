@@ -13,8 +13,8 @@ namespace RelatorioVM.Demo.Modelos
         [DisplayName("Pessoa código")]
         public int PessoaCodigo { get; set; }
 
-        [DisplayName("Nome")]
-        public string PessoaNome { get; set; }
+        public PessoaViewModel Pessoa { get; set; }
+
         public DateTime Data { get; set; }
         public decimal Valor { get; set; }
     }

@@ -33,8 +33,11 @@ namespace RelatorioVM.Demo
                     Data = DateTime.Now,
                     FilialCodigo = new Random().Next(),
                     PessoaCodigo = new Random().Next(),
-                    PessoaNome = "Testes",
-                    Valor = (decimal)new Random().NextDouble()
+                    Valor = (decimal)new Random().NextDouble(),
+                    Pessoa = new PessoaViewModel() { 
+                        Codigo = new Random().Next(),
+                        Nome = "Teste"
+                    }
                 });
             }
 
@@ -48,6 +51,7 @@ namespace RelatorioVM.Demo
                 })
                 .AdicionarTabela(viewModel.Itens)
                 .Titulo("Teste de relatório")
+                .Configurar(opcoes => opcoes.ConfigurarCabecalho(a => a.DefinirQuantidadeDeFiltrosPorLinha(1)))
                 .Construir()
                 .Gerar();
 

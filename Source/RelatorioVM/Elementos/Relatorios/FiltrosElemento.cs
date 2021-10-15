@@ -1,4 +1,5 @@
 ﻿using HtmlTags;
+using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Elementos.Interfaces;
 using RelatorioVM.Extensoes;
 using System;
@@ -9,10 +10,12 @@ namespace RelatorioVM.Elementos.Relatorios
 {
     internal class FiltrosElemento: IElemento
     {
+        private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
         public List<Filtro> Filtros { get; set; }
 
-        public FiltrosElemento()
+        public FiltrosElemento(ConfiguracaoRelatorio configuracaoRelatorio)
         {
+            _configuracaoRelatorio = configuracaoRelatorio;
             Filtros = new List<Filtro>();
         }
 
@@ -22,7 +25,7 @@ namespace RelatorioVM.Elementos.Relatorios
 
             var tabela = CriarTabela(pai);
             
-            foreach (var filtros in Filtros.CriarGruposDe(4)) {
+            foreach (var filtros in Filtros.CriarGruposDe(_configuracaoRelatorio.Cabecalho.QuantidadeDeFiltrosPorLinha)) {
                 var linha = tabela.CriarLinhaTabela();
                 foreach (var filtro in filtros)
                 {

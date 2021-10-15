@@ -38,7 +38,8 @@ namespace RelatorioVM.Relatorios.Construtores
                 if (filtro.PropriedadeComplemento != null)
                     filtro.ValorComplemento = filtro.PropriedadeComplemento.ObterValorConvertido(_filtroVM, _configuracaoRelatorio.Formatacao);
             }
-            return new FiltrosElemento()
+
+            return new FiltrosElemento(_configuracaoRelatorio)
             {
                 Filtros = _filtros.Values.ToList()
             };

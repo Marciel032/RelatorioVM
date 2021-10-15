@@ -1,4 +1,5 @@
 ﻿using HtmlTags;
+using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Elementos.Interfaces;
 using RelatorioVM.Elementos.Relatorios;
 using System;
@@ -9,13 +10,16 @@ namespace RelatorioVM.Relatorios.Estruturas
 {
     internal class EstruturaRelatorio
     {
+        private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
         public TituloElemento Titulo { get; set; }
         public FiltrosElemento Filtro { get; set; }
         public List<IElemento> Tabelas { get; set; }
 
-        public EstruturaRelatorio()
+        public EstruturaRelatorio(ConfiguracaoRelatorio configuracaoRelatorio)
         {
-            Filtro = new FiltrosElemento();
+            _configuracaoRelatorio = configuracaoRelatorio;
+
+            Filtro = new FiltrosElemento(configuracaoRelatorio);
             Titulo = new TituloElemento();
             Tabelas = new List<IElemento>();
         }

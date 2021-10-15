@@ -19,9 +19,10 @@ namespace RelatorioVM.Relatorios.Construtores
 
         public ConstrutorRelatorio(IConversorPdf conversor)
         {
+            _configuracaoRelatorio = Configuracao.ConfiguracaoRelatorio.Clone();
             _conversor = conversor;
-            _estruturaRelatorio = new EstruturaRelatorio();
-            _configuracaoRelatorio = Configuracao.ConfiguracaoRelatorio.Clone();            
+            _estruturaRelatorio = new EstruturaRelatorio(_configuracaoRelatorio);
+                        
         }
 
         public IRelatorioVM AdicionarTabela<TConteudo>(IEnumerable<TConteudo> conteudo, Action<ITabelaRelatorioVM<TConteudo>> opcoes = null)

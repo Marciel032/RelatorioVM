@@ -6,6 +6,6 @@ namespace RelatorioVM.Dominio.Configuracoes.Interfaces
 {
     public interface IConfiguracaoCabecalhoRelatorio: IConfiguracaoCabecalhoRodapeRelatorioBase
     {
-        
+        IConfiguracaoCabecalhoRelatorio DefinirQuantidadeDeFiltrosPorLinha(short quantidade);
     }
 }
