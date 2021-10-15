@@ -55,8 +55,7 @@ namespace RelatorioVM.Demo
                         .Nome(x => x.PessoaCodigo, "Pessoa")
                         .ComplementarValor(x => x.FilialCodigo, x => x.FilialNome)
                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa.Nome)
-                        .ComplementarValor(x => x.DataInicial, x => x.DataFinal)
-                        .Separador(x => x.DataInicial, "até");
+                        .FaixaDeValor(x => x.DataInicial, x => x.DataFinal);
                 })
                 .AdicionarTabela(viewModel.Itens)
                 .Titulo("Teste de relatório")
