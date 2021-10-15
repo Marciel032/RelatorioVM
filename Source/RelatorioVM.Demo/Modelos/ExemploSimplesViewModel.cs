@@ -11,6 +11,9 @@ namespace RelatorioVM.Demo.Modelos
         public int? FilialCodigo { get; set; }
         public string FilialNome { get; set; }
         public int? PessoaCodigo { get; set; }
+
+        public PessoaViewModel Pessoa { get; set; }
+
         [DisplayName("Data inicial")]
         public DateTime? DataInicial { get; set; }
         public DateTime? DataFinal { get; set; }

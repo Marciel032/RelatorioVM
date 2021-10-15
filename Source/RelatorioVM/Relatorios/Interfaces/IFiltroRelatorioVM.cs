@@ -9,6 +9,16 @@ namespace RelatorioVM.Relatorios.Interfaces
     public interface IFiltroRelatorioVM<T>
     {
         /// <summary>
+        /// Altera o nome do filtro para o valor informado
+        /// </summary>
+        IFiltroRelatorioVM<T> Nome<TPropriedade>(Expression<Func<T, TPropriedade>> propriedadeExpressao, string nome);
+
+        /// <summary>
+        /// Altera o separador que divide campos de codigo e nome, ou periodos
+        /// </summary>
+        IFiltroRelatorioVM<T> Separador<TPropriedade>(Expression<Func<T, TPropriedade>> propriedadeExpressao, string separador);
+
+        /// <summary>
         /// Não exibe a propriedade informada ao gerar a tabela de filtros
         /// </summary>
         IFiltroRelatorioVM<T> Ignorar<TPropriedade>(Expression<Func<T, TPropriedade>> propriedadeExpressao);

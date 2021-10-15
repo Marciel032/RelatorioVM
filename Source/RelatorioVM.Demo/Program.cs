@@ -23,7 +23,11 @@ namespace RelatorioVM.Demo
                 PessoaCodigo = 5236,
                 DataFinal = DateTime.Now.Date,
                 DataInicial = DateTime.Now.Date,
-                Itens = new List<ExemploSimplesItemViewModel>()
+                Pessoa = new PessoaViewModel() { 
+                    Codigo = 1,
+                    Nome = "Testes"
+                },
+                Itens = new List<ExemploSimplesItemViewModel>(),                
             };
 
             for (int i = 0; i < 150; i++)
@@ -47,11 +51,15 @@ namespace RelatorioVM.Demo
                 .Filtros(viewModel, opcoes => {
                     opcoes
                         .Ignorar(x => x.Itens)
-                        .ComplementarValor(x => x.FilialCodigo, x => x.FilialNome);
+                        .Nome(x => x.DataFinal, "Data final")
+                        .Nome(x => x.PessoaCodigo, "Pessoa")
+                        .ComplementarValor(x => x.FilialCodigo, x => x.FilialNome)
+                        .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa.Nome)
+                        .ComplementarValor(x => x.DataInicial, x => x.DataFinal)
+                        .Separador(x => x.DataInicial, "até");
                 })
                 .AdicionarTabela(viewModel.Itens)
                 .Titulo("Teste de relatório")
-                .Configurar(opcoes => opcoes.ConfigurarCabecalho(a => a.DefinirQuantidadeDeFiltrosPorLinha(1)))
                 .Construir()
                 .Gerar();
 

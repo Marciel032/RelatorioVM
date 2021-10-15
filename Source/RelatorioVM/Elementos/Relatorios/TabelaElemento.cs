@@ -33,7 +33,7 @@ namespace RelatorioVM.Elementos.Relatorios
             return pai
                 .CriarTabela()
                 .Style("width", "100%")
-                .Style("font-family", "arial")
+                .Style("font-family", "courier new")
                 //.Style("margin-top", "20px")
                 .Style("margin-bottom", "10px")
                 .Style("border-top", "1px solid #888");

@@ -1,4 +1,5 @@
 ﻿using RelatorioVM.Dominio.Conversores;
+using RelatorioVM.Elementos.Propriedades;
 using RelatorioVM.Infraestruturas;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,17 @@ namespace RelatorioVM.Extensoes
             }
             var conversor = ConversorValor.ObterConversor(tipo);
             return conversor.Converter(propriedade.GetValue(origem), formato);
+        }
+
+        public static string ObterValorConvertido(this Propriedade propriedade, object origem, OpcoesFormatacao formato)
+        {
+            var tipo = propriedade.PropriedadeInformacao.PropertyType;
+            if (tipo.IsGenericType && tipo.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                tipo = Nullable.GetUnderlyingType(tipo);
+            }
+            var conversor = ConversorValor.ObterConversor(tipo);
+            return conversor.Converter(propriedade.ObterValor(origem), formato);
         }
     }
 }

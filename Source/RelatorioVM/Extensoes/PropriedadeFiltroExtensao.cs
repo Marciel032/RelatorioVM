@@ -1,4 +1,5 @@
-﻿using RelatorioVM.Elementos.Relatorios;
+﻿using RelatorioVM.Elementos.Propriedades;
+using RelatorioVM.Elementos.Relatorios;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -21,7 +22,10 @@ namespace RelatorioVM.Extensoes
             filtro.Identificador = propriedade.Name;            
             filtro.Nome = propriedade.ObterNome();
             filtro.Valor = string.Empty;
-            filtro.Propriedade = propriedade;
+            filtro.Propriedade = new Propriedade()
+            {
+                PropriedadeInformacao = propriedade
+            };
 
             return filtro;
         }
