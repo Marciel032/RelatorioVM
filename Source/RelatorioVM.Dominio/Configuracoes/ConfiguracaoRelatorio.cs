@@ -1,4 +1,5 @@
 ﻿using RelatorioVM.Dominio.Configuracoes.Interfaces;
+using RelatorioVM.Dominio.Conversores;
 using RelatorioVM.Dominio.Enumeradores;
 using System;
 using System.Collections.Generic;
@@ -14,11 +15,14 @@ namespace RelatorioVM.Dominio.Configuracoes
 
         public ConfiguracaoRodapeRelatorio Rodape { get; set; }
 
+        public OpcoesFormatacao Formatacao { get; set; }
+
         public ConfiguracaoRelatorio()
-        {
+        {           
             Orientacao = TipoOrientacao.Retrato;
             Cabecalho = new ConfiguracaoCabecalhoRelatorio();
             Rodape = new ConfiguracaoRodapeRelatorio();
+            Formatacao = new OpcoesFormatacao();
         }
 
         public IConfiguracaoRelatorio UsarOrientacao(TipoOrientacao orientacao)
@@ -36,6 +40,12 @@ namespace RelatorioVM.Dominio.Configuracoes
         public IConfiguracaoRelatorio ConfigurarRodape(Action<IConfiguracaoRodapeRelatorio> configurarRodape)
         {
             configurarRodape?.Invoke(Rodape);
+            return this;
+        }
+
+        public IConfiguracaoRelatorio ConfigurarFormatacao(Action<OpcoesFormatacao> configurarFormatacao)
+        {
+            configurarFormatacao?.Invoke(Formatacao);
             return this;
         }
 

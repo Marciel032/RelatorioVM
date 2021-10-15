@@ -1,4 +1,5 @@
 ﻿using HtmlTags;
+using RelatorioVM.Elementos.Interfaces;
 using RelatorioVM.Extensoes;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace RelatorioVM.Elementos.Relatorios
 {
-    internal class FiltrosElemento
+    internal class FiltrosElemento: IElemento
     {
         public List<Filtro> Filtros { get; set; }
 
@@ -15,33 +16,48 @@ namespace RelatorioVM.Elementos.Relatorios
             Filtros = new List<Filtro>();
         }
 
-        public void AdicionarHtml(HtmlTag parent) {
+        public bool ProcessarHtml(HtmlTag pai) {
             if (Filtros.Count == 0)
-                return;
+                return false;
 
-            var tabela = new HtmlTag("table", parent)
-                .Attr("width", "100%")
-                .Attr("border", "0");
+            var tabela = CriarTabela(pai);
             
-            foreach (var filtros in Filtros.CriarGruposDe(3)) {
-                var linha = new HtmlTag("tr", tabela);
+            foreach (var filtros in Filtros.CriarGruposDe(4)) {
+                var linha = tabela.CriarLinhaTabela();
                 foreach (var filtro in filtros)
                 {
-                    new HtmlTag("td", linha)
+                    linha.CriarColunaTabela()
                         .Style("font-family", "Arial")
                         .Style("font-size", "14px")
                         .Style("text-align", "right")
                         .Text($"{filtro.Nome}:");
 
-                    new HtmlTag("td", linha)
+                    linha.CriarColunaTabela()
                         .Style("font-family", "Arial")
                         .Style("font-size", "14px")
                         .Append(
-                            new HtmlTag("strong")
-                                .Text(filtro.Valor)
+                            ObterValorTag(filtro)
                         );
                 }
             }
+
+            return true;
+        }
+
+        private HtmlTag CriarTabela(HtmlTag pai) { 
+            return pai
+                .CriarTabela()
+                .Attr("width", "100%")
+                .Attr("border", "0");
+        }
+
+        private HtmlTag ObterValorTag(Filtro filtro) {
+            var valor = filtro.Valor;
+            if (!string.IsNullOrWhiteSpace(filtro.ValorComplemento))
+                valor = $"{valor} - {filtro.ValorComplemento}";
+
+            return new HtmlTag("strong")
+                                .Text(valor);
         }
     }
 }

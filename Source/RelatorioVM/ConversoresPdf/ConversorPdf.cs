@@ -1,16 +1,13 @@
 ﻿using DinkToPdf.Contracts;
-using RelatorioVM.Conversores.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using RelatorioVM.ConversoresPdf.Interfaces;
 
-namespace RelatorioVM.Conversores
+namespace RelatorioVM.ConversoresPdf
 {
-    internal abstract class Conversor : IConversor
+    internal abstract class ConversorPdf : IConversorPdf
     {
         protected IConverter _conversor;
 
-        public Conversor(IConverter conversor)
+        public ConversorPdf(IConverter conversor)
         {
             _conversor = conversor;
         }

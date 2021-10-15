@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RelatorioVM.Conversores.Interfaces
+namespace RelatorioVM.ConversoresPdf.Interfaces
 {
-    internal interface IConversor
+    internal interface IConversorPdf
     {
         byte[] Converter(IDocument documento);
     }

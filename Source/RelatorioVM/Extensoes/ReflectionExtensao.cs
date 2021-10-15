@@ -9,7 +9,12 @@ namespace RelatorioVM.Extensoes
     internal static class ReflectionExtensao
     {
         public static List<PropertyInfo> ObterPropriedades<T>(this T origem) {
-            return typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
+            return typeof(T).ObterPropriedades();
+        }
+
+        public static List<PropertyInfo> ObterPropriedades(this Type tipo)
+        {
+            return tipo.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using RelatorioVM.Configuradores;
 using RelatorioVM.Conversores;
-using RelatorioVM.Conversores.Interfaces;
+using RelatorioVM.ConversoresPdf;
+using RelatorioVM.ConversoresPdf.Interfaces;
 using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Dominio.Configuracoes.Interfaces;
 using RelatorioVM.Infraestruturas;
@@ -11,24 +13,27 @@ namespace RelatorioVM.Extensoes
 {
     public static class ColecaoDeServicosExtensao
     {
-        public static IServiceCollection AdicionarRelatorioVM(this IServiceCollection colecaoDeServicos)
+        public static IConfiguradorRelatorio UtilizarRelatorioVM(this IServiceCollection colecaoDeServicos)
         {
-            colecaoDeServicos.AddSingleton(typeof(IConversor), new ConversorSincrono());
+            colecaoDeServicos.AddSingleton(typeof(IConversorPdf), new ConversorPdfSincrono());
 
             colecaoDeServicos.AddSingleton((provedorDeServicos) => { 
-                return ConstrutorRelatorioFabrica.Criar(provedorDeServicos.GetRequiredService<IConversor>()); 
+                return ConstrutorRelatorioFabrica.Criar(provedorDeServicos.GetRequiredService<IConversorPdf>()); 
             });
 
-            return colecaoDeServicos;
+            ConversorValor.DefinirConversor<DateTime>(new ConversorDataHora());
+            ConversorValor.DefinirConversor<decimal>(new ConversorDecimal());
+
+            return new ConfiguradorRelatorio();
         }
         
-        public static IServiceCollection AdicionarRelatorioVM(this IServiceCollection colecaoDeServicos, Action<IConfiguracaoRelatorio> opcoes)
+        public static IConfiguradorRelatorio UtilizarRelatorioVM(this IServiceCollection colecaoDeServicos, Action<IConfiguracaoRelatorio> opcoes)
         {
-            colecaoDeServicos.AdicionarRelatorioVM();
+            var configurador = colecaoDeServicos.UtilizarRelatorioVM();
 
             opcoes.Invoke(Configuracao.ConfiguracaoRelatorio);
 
-            return colecaoDeServicos;
+            return configurador;
         }
     }
 }

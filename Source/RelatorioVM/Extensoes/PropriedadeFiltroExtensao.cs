@@ -15,14 +15,17 @@ namespace RelatorioVM.Extensoes
             return true;
         }
 
-        public static Filtro ObterFiltro<TOrigem>(this PropertyInfo propriedade, TOrigem origem) {
+        public static Filtro ObterFiltro(this PropertyInfo propriedade) {
             var filtro = new Filtro();
 
             filtro.Identificador = propriedade.Name;            
             filtro.Nome = propriedade.ObterNome();
-            filtro.Valor = propriedade.GetValue(origem).ToString();
+            filtro.Valor = string.Empty;
+            filtro.Propriedade = propriedade;
 
             return filtro;
         }
+
+
     }
 }

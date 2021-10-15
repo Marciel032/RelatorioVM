@@ -1,5 +1,5 @@
-﻿using RelatorioVM.Conversores;
-using RelatorioVM.Conversores.Interfaces;
+﻿using RelatorioVM.ConversoresPdf;
+using RelatorioVM.ConversoresPdf.Interfaces;
 using RelatorioVM.Relatorios.Construtores;
 using RelatorioVM.Relatorios.Interfaces;
 using System;
@@ -10,13 +10,13 @@ namespace RelatorioVM.Relatorios.Fabricas
 {
     internal class ConstrutorRelatorioFabrica
     {
-        public static IRelatorioVM Criar(IConversor conversor) {
+        public static IRelatorioVM Criar(IConversorPdf conversor) {
             return new ConstrutorRelatorio(conversor);
         }
 
         public static IRelatorioVM Criar()
         {
-            return new ConstrutorRelatorio(new ConversorBasico());
+            return new ConstrutorRelatorio(new ConversorPdfBasico());
         }
     }
 }

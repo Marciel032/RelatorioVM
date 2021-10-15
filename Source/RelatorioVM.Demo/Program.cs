@@ -19,23 +19,34 @@ namespace RelatorioVM.Demo
 
             var viewModel = new ExemploSimplesViewModel() { 
                 FilialCodigo = 1,
+                FilialNome = "Nome da filial",
                 PessoaCodigo = 5236,
-                DataFinal = DateTime.Now,
-                DataInicial = DateTime.Now,
-                Itens = new List<ExemploSimplesItemViewModel>() { 
-                    new ExemploSimplesItemViewModel(),
-                    new ExemploSimplesItemViewModel()
-                }
+                DataFinal = DateTime.Now.Date,
+                DataInicial = DateTime.Now.Date,
+                Itens = new List<ExemploSimplesItemViewModel>()
             };
+
+            for (int i = 0; i < 150; i++)
+            {
+                viewModel.Itens.Add(new ExemploSimplesItemViewModel()
+                {
+                    Data = DateTime.Now,
+                    FilialCodigo = new Random().Next(),
+                    PessoaCodigo = new Random().Next(),
+                    PessoaNome = "Testes",
+                    Valor = (decimal)new Random().NextDouble()
+                });
+            }
 
             var relatorio = host.Services.GetService(typeof(IRelatorioVM)) as IRelatorioVM;
 
             var bytes = relatorio
                 .Filtros(viewModel, opcoes => {
                     opcoes
-                        .Ignorar(x => x.Itens);
+                        .Ignorar(x => x.Itens)
+                        .ComplementarValor(x => x.FilialCodigo, x => x.FilialNome);
                 })
-                .AdicionarConteudo(viewModel.Itens)
+                .AdicionarTabela(viewModel.Itens)
                 .Titulo("Teste de relatório")
                 .Construir()
                 .Gerar();
@@ -56,9 +67,12 @@ namespace RelatorioVM.Demo
         static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((_, services) =>
-                    services.AdicionarRelatorioVM(options => {
+                    services.UtilizarRelatorioVM(options => {
                         options
                             .UsarOrientacao(TipoOrientacao.Retrato)
+                            .ConfigurarFormatacao(formato => {
+                                formato.CasasDecimais = 3;
+                            })
                             .ConfigurarCabecalho(cabecalho => {
                                 cabecalho
                                     .Esquerda().ImprimirTexto("Nome da empresa")

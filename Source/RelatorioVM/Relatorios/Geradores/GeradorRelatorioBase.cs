@@ -1,6 +1,6 @@
 ﻿using DinkToPdf;
 using HtmlTags;
-using RelatorioVM.Conversores.Interfaces;
+using RelatorioVM.ConversoresPdf.Interfaces;
 using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Extensoes;
 using RelatorioVM.Relatorios.Estruturas;
@@ -15,9 +15,9 @@ namespace RelatorioVM.Relatorios.Geradores
     {
         private EstruturaRelatorio _estrutura;
         private ConfiguracaoRelatorio _configuracao;
-        private IConversor _conversor;
+        private IConversorPdf _conversor;
 
-        public GeradorRelatorioBase(EstruturaRelatorio estrutura, ConfiguracaoRelatorio configuracao, IConversor conversor)
+        public GeradorRelatorioBase(EstruturaRelatorio estrutura, ConfiguracaoRelatorio configuracao, IConversorPdf conversor)
         {
             _estrutura = estrutura;
             _configuracao = configuracao;
@@ -27,9 +27,8 @@ namespace RelatorioVM.Relatorios.Geradores
         public byte[] Gerar()
         {
             var estilo = new HtmlTag("style")
-                .Text(
-                   @"* { font-family: arial;}
-                    .tr-totais td { border-top: 1px solid #888; font-weight: bold; }
+                .AppendHtml(
+                   @"* { font-family: arial;}.tr-totais td { border-top: 1px solid #888; font-weight: bold; }
                     table { page-break-inside:auto } 
                     tr { page-break-inside:avoid; page-break-after:auto } 
                     .keep-together { page-break-inside:avoid; page-break-after:auto } 
@@ -39,7 +38,7 @@ namespace RelatorioVM.Relatorios.Geradores
                     .titulo {
                         display: block; text-align: center; 
                         position: running(titulo);
-                    } 
+                    }
                     @page {
                         @top-center { content: element(titulo) }
                     }"
@@ -52,8 +51,7 @@ namespace RelatorioVM.Relatorios.Geradores
                 );
 
             var corpo = new HtmlTag("body", relatorio);
-            _estrutura.Titulo.AdicionarHtml(corpo);
-            _estrutura.Filtro.AdicionarHtml(corpo);
+            _estrutura.AdicionarHtml(corpo);
             
             var documento = new ObjectSettings()
             {

@@ -1,4 +1,5 @@
-﻿using RelatorioVM.Dominio.Enumeradores;
+﻿using RelatorioVM.Dominio.Conversores;
+using RelatorioVM.Dominio.Enumeradores;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,5 +11,6 @@ namespace RelatorioVM.Dominio.Configuracoes.Interfaces
         IConfiguracaoRelatorio UsarOrientacao(TipoOrientacao orientacao);
         IConfiguracaoRelatorio ConfigurarCabecalho(Action<IConfiguracaoCabecalhoRelatorio> cabecalho);
         IConfiguracaoRelatorio ConfigurarRodape(Action<IConfiguracaoRodapeRelatorio> rodape);
+        IConfiguracaoRelatorio ConfigurarFormatacao(Action<OpcoesFormatacao> configurarFormatacao);
     }
 }

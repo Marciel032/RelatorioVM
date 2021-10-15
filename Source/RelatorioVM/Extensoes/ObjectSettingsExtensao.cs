@@ -22,7 +22,7 @@ namespace RelatorioVM.Extensoes
             cabecalho.Left = configuracao.ElementoEsquerda.ObterValor();
             cabecalho.Center = configuracao.ElementoCentro.ObterValor();
             cabecalho.Right = configuracao.ElementoDireita.ObterValor();
-            cabecalho.Line = true;
+            cabecalho.Line = true;            
         }
 
         private static void Configurar(this FooterSettings rodape, ConfiguracaoRodapeRelatorio configuracao)

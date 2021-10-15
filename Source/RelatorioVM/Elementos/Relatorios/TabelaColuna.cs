@@ -5,13 +5,10 @@ using System.Text;
 
 namespace RelatorioVM.Elementos.Relatorios
 {
-    internal class Filtro
+    internal class TabelaColuna
     {
         public string Identificador { get; set; }
-        public string Nome { get; set; }
-        public string Valor { get; set; }   
-        public string ValorComplemento { get; set; }
+        public string Titulo { get; set; }
         public PropertyInfo Propriedade { get; set; }
-        public PropertyInfo PropriedadeComplemento { get; set; }
     }
 }

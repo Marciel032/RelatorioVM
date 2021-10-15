@@ -1,4 +1,4 @@
-﻿using RelatorioVM.Conversores.Interfaces;
+﻿using RelatorioVM.ConversoresPdf.Interfaces;
 using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Dominio.Configuracoes.Interfaces;
 using RelatorioVM.Infraestruturas;
@@ -14,22 +14,24 @@ namespace RelatorioVM.Relatorios.Construtores
     internal class ConstrutorRelatorio : IRelatorioVM
     {
         private EstruturaRelatorio _estruturaRelatorio;
-        private List<object> _conteudos;
         private ConfiguracaoRelatorio _configuracaoRelatorio;
-        private IConversor _conversor;
+        private IConversorPdf _conversor;
 
-        public ConstrutorRelatorio(IConversor conversor)
+        public ConstrutorRelatorio(IConversorPdf conversor)
         {
             _conversor = conversor;
             _estruturaRelatorio = new EstruturaRelatorio();
-            _conteudos = new List<object>();
             _configuracaoRelatorio = Configuracao.ConfiguracaoRelatorio.Clone();            
         }
 
-        public IRelatorioVM AdicionarConteudo<TConteudo>(TConteudo conteudo)
+        public IRelatorioVM AdicionarTabela<TConteudo>(IEnumerable<TConteudo> conteudo, Action<ITabelaRelatorioVM<TConteudo>> opcoes = null)
         {
-            if(conteudo != null)
-                _conteudos.Add(conteudo);
+            if (conteudo != null)
+            {
+                var construtorTabela = new ConstrutorTabelaRelatorio<TConteudo>(_configuracaoRelatorio, conteudo);
+                opcoes?.Invoke(construtorTabela);
+                _estruturaRelatorio.Tabelas.Add(construtorTabela.Construir());
+            }
 
             return this;
         }
@@ -37,7 +39,7 @@ namespace RelatorioVM.Relatorios.Construtores
         public IRelatorioVM Filtros<TFiltro>(TFiltro filtros, Action<IFiltroRelatorioVM<TFiltro>> opcoes = null)
         {
             if (filtros != null) {
-                var construtorFiltro = new ConstrutorFiltroRelatorio<TFiltro>(filtros);
+                var construtorFiltro = new ConstrutorFiltroRelatorio<TFiltro>(_configuracaoRelatorio, filtros);
 
                 opcoes?.Invoke(construtorFiltro);
                 _estruturaRelatorio.Filtro = construtorFiltro.Construir();

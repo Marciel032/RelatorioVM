@@ -9,6 +9,7 @@ namespace RelatorioVM.Demo.Modelos
     {
         [DisplayName("Filial")]
         public int? FilialCodigo { get; set; }
+        public string FilialNome { get; set; }
         public int? PessoaCodigo { get; set; }
         [DisplayName("Data inicial")]
         public DateTime? DataInicial { get; set; }
