@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Blocos\" />
+    <Compile Remove="Blocos\**" />
+    <EmbeddedResource Remove="Blocos\**" />
+    <None Remove="Blocos\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,6 +18,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RelatorioVM.Dominio\RelatorioVM.Dominio.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="libwkhtmltox.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
