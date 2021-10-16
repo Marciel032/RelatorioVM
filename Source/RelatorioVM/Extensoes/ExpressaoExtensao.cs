@@ -8,7 +8,7 @@ namespace RelatorioVM.Extensoes
 {
     internal static class ExpressaoExtensao
     {
-        public static PropertyInfo ObterPropriedade<TOrigem, TPropriedade>(this Expression<Func<TOrigem, TPropriedade>> propertyLambda, TOrigem origem)
+        public static PropertyInfo ObterPropriedade<TOrigem, TPropriedade>(this Expression<Func<TOrigem, TPropriedade>> propertyLambda)
         {
             Type type = typeof(TOrigem);
 
@@ -23,13 +23,41 @@ namespace RelatorioVM.Extensoes
                 throw new ArgumentException(string.Format(
                     "Expressão '{0}' se refere a um campo, não a uma propriedade.",
                     propertyLambda.ToString()));
-
+            /*
             if (type != propInfo.ReflectedType && !type.IsSubclassOf(propInfo.ReflectedType))
                 throw new ArgumentException(string.Format(
                     "Expressão '{0}' se refere a uma propriedade que não pertence a {1}.",
                     propertyLambda.ToString(),
                     type));
+            */
+            return propInfo;
+        }
 
+        public static PropertyInfo ObterPropriedadeBase<TOrigem, TPropriedade>(this Expression<Func<TOrigem, TPropriedade>> propertyLambda)
+        {
+            Type type = typeof(TOrigem);
+
+            MemberExpression member = propertyLambda.Body as MemberExpression;
+            while (member.Expression.NodeType == ExpressionType.MemberAccess)
+                member = member.Expression as MemberExpression;
+
+            if (member == null)
+                throw new ArgumentException(string.Format(
+                    "Expressão '{0}' se refere a um método, não a uma propriedade.",
+                    propertyLambda.ToString()));
+
+            PropertyInfo propInfo = member.Member as PropertyInfo;
+            if (propInfo == null)
+                throw new ArgumentException(string.Format(
+                    "Expressão '{0}' se refere a um campo, não a uma propriedade.",
+                    propertyLambda.ToString()));
+            /*
+            if (type != propInfo.ReflectedType && !type.IsSubclassOf(propInfo.ReflectedType))
+                throw new ArgumentException(string.Format(
+                    "Expressão '{0}' se refere a uma propriedade que não pertence a {1}.",
+                    propertyLambda.ToString(),
+                    type));
+            */
             return propInfo;
         }
     }

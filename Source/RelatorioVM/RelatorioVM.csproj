@@ -5,12 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Blocos\**" />
-    <EmbeddedResource Remove="Blocos\**" />
-    <None Remove="Blocos\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="DinkToPdf" Version="1.0.8" />
     <PackageReference Include="HtmlTags" Version="8.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.1" />
@@ -18,12 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RelatorioVM.Dominio\RelatorioVM.Dominio.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="libwkhtmltox.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

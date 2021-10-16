@@ -14,7 +14,10 @@ namespace RelatorioVM.Extensoes
             configuracaoGlobal.ColorMode = ColorMode.Color;
             configuracaoGlobal.Orientation = configuracao.Orientacao.ParaDinkPDF();
             configuracaoGlobal.PaperSize = PaperKind.A4;
-            configuracaoGlobal.Margins.Top = 10;            
+            configuracaoGlobal.Margins.Top = 10;             
+            configuracaoGlobal.Margins.Left = 2;             
+            configuracaoGlobal.Margins.Right = 2;             
+            configuracaoGlobal.Margins.Bottom = 10;             
         }
     }
 }

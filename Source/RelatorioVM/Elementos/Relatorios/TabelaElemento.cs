@@ -33,7 +33,7 @@ namespace RelatorioVM.Elementos.Relatorios
             return pai
                 .CriarTabela()
                 .Style("width", "100%")
-                .Style("font-family", "arial")
+                .Style("font-family", "courier new")
                 //.Style("margin-top", "20px")
                 .Style("margin-bottom", "10px")
                 .Style("border-top", "1px solid #888");
@@ -49,7 +49,7 @@ namespace RelatorioVM.Elementos.Relatorios
             foreach (var coluna in Colunas)
             {
                 new HtmlTag("th", linhaCabecalho)
-                     .Style("text-align", "left")
+                     .Style("text-align", coluna.AlinhamentoHorizontal.ObterDescricao())
                      .Text(coluna.Titulo);
             }
         }
@@ -59,7 +59,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 var linha = new HtmlTag("tr", tabela);
                 foreach (var coluna in Colunas) {
                     new HtmlTag("td", linha)
-                        .Style("text-align", "left")
+                        .Style("text-align", coluna.AlinhamentoHorizontal.ObterDescricao())
                         .Text(coluna.Propriedade.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                 }
             }

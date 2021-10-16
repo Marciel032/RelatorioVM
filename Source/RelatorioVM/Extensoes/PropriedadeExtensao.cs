@@ -1,4 +1,5 @@
 ﻿using RelatorioVM.Dominio.Conversores;
+using RelatorioVM.Elementos.Propriedades;
 using RelatorioVM.Infraestruturas;
 using System;
 using System.Collections.Generic;
@@ -20,13 +21,16 @@ namespace RelatorioVM.Extensoes
 
         public static string ObterValorConvertido(this PropertyInfo propriedade, object origem, OpcoesFormatacao formato)
         {
-            var tipo = propriedade.PropertyType;
-            if (tipo.IsGenericType && tipo.GetGenericTypeDefinition() == typeof(Nullable<>))
-            {
-                tipo = Nullable.GetUnderlyingType(tipo);
-            }
+            var tipo = propriedade.PropertyType.ObterTipoNaoNullo();
             var conversor = ConversorValor.ObterConversor(tipo);
             return conversor.Converter(propriedade.GetValue(origem), formato);
+        }
+
+        public static string ObterValorConvertido(this Propriedade propriedade, object origem, OpcoesFormatacao formato)
+        {
+            var tipo = propriedade.PropriedadeInformacao.PropertyType.ObterTipoNaoNullo();
+            var conversor = ConversorValor.ObterConversor(tipo);
+            return conversor.Converter(propriedade.ObterValor(origem), formato);
         }
     }
 }

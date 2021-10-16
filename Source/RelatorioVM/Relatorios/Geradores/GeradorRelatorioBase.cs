@@ -28,7 +28,8 @@ namespace RelatorioVM.Relatorios.Geradores
         {
             var estilo = new HtmlTag("style")
                 .AppendHtml(
-                   @"* { font-family: arial;}.tr-totais td { border-top: 1px solid #888; font-weight: bold; }
+                   @"* { font-family: courier new;}
+                    .tr-totais td { border-top: 1px solid #888; font-weight: bold; }
                     table { page-break-inside:auto } 
                     tr { page-break-inside:avoid; page-break-after:auto } 
                     .keep-together { page-break-inside:avoid; page-break-after:auto } 

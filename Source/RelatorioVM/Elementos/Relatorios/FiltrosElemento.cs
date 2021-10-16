@@ -30,13 +30,16 @@ namespace RelatorioVM.Elementos.Relatorios
                 foreach (var filtro in filtros)
                 {
                     linha.CriarColunaTabela()
-                        .Style("font-family", "Arial")
+                        .Style("font-family", "Courier new")
                         .Style("font-size", "14px")
                         .Style("text-align", "right")
-                        .Text($"{filtro.Nome}:");
-
+                        .Append(
+                            new HtmlTag("span")
+                                .AppendText(filtro.Nome)
+                                .AppendText(":")
+                        );                    
                     linha.CriarColunaTabela()
-                        .Style("font-family", "Arial")
+                        .Style("font-family", "Courier new")
                         .Style("font-size", "14px")
                         .Append(
                             ObterValorTag(filtro)
@@ -55,12 +58,23 @@ namespace RelatorioVM.Elementos.Relatorios
         }
 
         private HtmlTag ObterValorTag(Filtro filtro) {
-            var valor = filtro.Valor;
             if (!string.IsNullOrWhiteSpace(filtro.ValorComplemento))
-                valor = $"{valor} - {filtro.ValorComplemento}";
+                return ObterValorComComplemento(filtro);
 
             return new HtmlTag("strong")
-                                .Text(valor);
+                .Text(filtro.Valor);
+        }
+
+        private HtmlTag ObterValorComComplemento(Filtro filtro) {
+            return new HtmlTag("strong")
+                .Text(filtro.Valor)                
+                .After(
+                    new HtmlTag("strong")
+                        .Text(filtro.ValorComplemento))
+                .After(
+                    new HtmlTag("span")
+                        .Text($" {filtro.Separador} ")
+                );
         }
     }
 }
