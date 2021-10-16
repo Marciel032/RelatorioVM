@@ -1,5 +1,6 @@
 ﻿using HtmlTags;
 using RelatorioVM.Dominio.Configuracoes;
+using RelatorioVM.Dominio.Enumeradores;
 using RelatorioVM.Elementos.Interfaces;
 using RelatorioVM.Extensoes;
 using RelatorioVM.Infraestruturas;
@@ -12,14 +13,12 @@ namespace RelatorioVM.Elementos.Relatorios
     internal class TabelaElemento<T>: IElemento
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
-        public List<TabelaColuna> Colunas { get; set; }
-        public IEnumerable<T> Conteudos { get; set; }
+        private Tabela<T> _tabela;
 
-        public TabelaElemento(ConfiguracaoRelatorio configuracaoRelatorio, List<TabelaColuna> colunas, IEnumerable<T> conteudos)
+        public TabelaElemento(ConfiguracaoRelatorio configuracaoRelatorio, Tabela<T> tabela)
         {
             _configuracaoRelatorio = configuracaoRelatorio;
-            Colunas = colunas;
-            Conteudos = conteudos;
+            _tabela = tabela;
         }
 
         public bool ProcessarHtml(HtmlTag pai) {            
@@ -33,36 +32,53 @@ namespace RelatorioVM.Elementos.Relatorios
             return pai
                 .CriarTabela()
                 .Style("width", "100%")
-                .Style("font-family", "courier new")
-                //.Style("margin-top", "20px")
-                .Style("margin-bottom", "10px")
-                .Style("border-top", "1px solid #888");
+                .Style("font-family", "courier new");
         }
 
         private void AdicionarCabecalho(HtmlTag tabela) {
-            var cabecalho = new HtmlTag("thead", tabela)
+            var cabecalho = tabela.CriarCabecalhoTabela()
                     .Style("display", "table-header-group");
 
-            var linhaCabecalho = new HtmlTag("tr", cabecalho)
-                   .Style("border-bottom", "1px solid #000");
+            AdicionarTitulo(cabecalho);
 
-            foreach (var coluna in Colunas)
+            var linhaCabecalho = cabecalho
+                .CriarLinhaTabela()
+                .Style("border", "1px solid #777");
+
+            foreach (var coluna in _tabela.Colunas)
             {
-                new HtmlTag("th", linhaCabecalho)
+                linhaCabecalho.CriarColunaCabecalhoTabela()
                      .Style("text-align", coluna.AlinhamentoHorizontal.ObterDescricao())
+                     .Style("padding-left", "3px")
+                     .Style("padding-right", "3px")
                      .Text(coluna.Titulo);
             }
         }
 
         private void AdicionarConteudo(HtmlTag tabela) {
-            foreach (var conteudo in Conteudos) {
-                var linha = new HtmlTag("tr", tabela);
-                foreach (var coluna in Colunas) {
+            var corpoTabela = tabela.CriarCorpoTabela();
+            foreach (var conteudo in _tabela.Conteudo) {
+                var linha = new HtmlTag("tr", corpoTabela);
+                foreach (var coluna in _tabela.Colunas) {
                     new HtmlTag("td", linha)
                         .Style("text-align", coluna.AlinhamentoHorizontal.ObterDescricao())
+                        .Style("padding-left", "3px")
+                        .Style("padding-right", "3px")
                         .Text(coluna.Propriedade.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                 }
             }
+        }
+
+        private void AdicionarTitulo(HtmlTag cabecalho) {
+            if (string.IsNullOrWhiteSpace(_tabela.Titulo))
+                return;
+
+            cabecalho
+                .CriarLinhaTabela()
+                .CriarColunaCabecalhoTabela()
+                .Text(_tabela.Titulo)
+                .Attr("colspan", _tabela.Colunas.Count)
+                .Style("text-align", TipoAlinhamentoHorizontal.Esquerda.ObterDescricao());
         }
     }
 }

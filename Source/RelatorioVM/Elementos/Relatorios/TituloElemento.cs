@@ -14,8 +14,7 @@ namespace RelatorioVM.Elementos.Relatorios
             if (string.IsNullOrWhiteSpace(Texto))
                 return false;
 
-            new HtmlTag("h3", pai)
-                .Style("padding", "10px")
+            new HtmlTag("h3", pai)                
                 .AddClass("titulo")
                 .Text(Texto);
 

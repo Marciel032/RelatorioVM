@@ -7,5 +7,6 @@ namespace RelatorioVM.Relatorios.Interfaces
     public interface IGeradorRelatorioVM
     {
         byte[] Gerar();
+        string GerarHtml();
     }
 }

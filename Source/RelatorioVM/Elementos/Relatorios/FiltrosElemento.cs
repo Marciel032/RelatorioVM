@@ -23,15 +23,22 @@ namespace RelatorioVM.Elementos.Relatorios
             if (Filtros.Count == 0)
                 return false;
 
-            var tabela = CriarTabela(pai);
+            var tabela = CriarTabela(pai)
+                .Style("font-family", "Courier new")
+                .Style("font-size", "14px");
+
+            tabela
+                .CriarLinhaTabela()
+                .CriarColunaTabela()
+                .Text("Filtros")
+                .Attr("colspan", _configuracaoRelatorio.Cabecalho.QuantidadeDeFiltrosPorLinha * 2);
             
             foreach (var filtros in Filtros.CriarGruposDe(_configuracaoRelatorio.Cabecalho.QuantidadeDeFiltrosPorLinha)) {
-                var linha = tabela.CriarLinhaTabela();
+                var linha = tabela.CriarLinhaTabela()
+                    .Style("border", "1px solid #888") ;
                 foreach (var filtro in filtros)
                 {
                     linha.CriarColunaTabela()
-                        .Style("font-family", "Courier new")
-                        .Style("font-size", "14px")
                         .Style("text-align", "right")
                         .Append(
                             new HtmlTag("span")
@@ -39,8 +46,6 @@ namespace RelatorioVM.Elementos.Relatorios
                                 .AppendText(":")
                         );                    
                     linha.CriarColunaTabela()
-                        .Style("font-family", "Courier new")
-                        .Style("font-size", "14px")
                         .Append(
                             ObterValorTag(filtro)
                         );
@@ -53,8 +58,7 @@ namespace RelatorioVM.Elementos.Relatorios
         private HtmlTag CriarTabela(HtmlTag pai) { 
             return pai
                 .CriarTabela()
-                .Attr("width", "100%")
-                .Attr("border", "0");
+                .Attr("width", "100%");
         }
 
         private HtmlTag ObterValorTag(Filtro filtro) {

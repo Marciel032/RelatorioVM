@@ -24,20 +24,26 @@ namespace RelatorioVM.Relatorios.Geradores
             _conversor = conversor;
         }
 
-        public byte[] Gerar()
-        {
+        public string GerarHtml() {
             var estilo = new HtmlTag("style")
                 .AppendHtml(
                    @"* { font-family: courier new;}
                     .tr-totais td { border-top: 1px solid #888; font-weight: bold; }
-                    table { page-break-inside:auto } 
+                    table { 
+                        page-break-inside:auto;
+                        border-collapse: collapse;
+                        margin-top: 10px;
+                    } 
                     tr { page-break-inside:avoid; page-break-after:auto } 
                     .keep-together { page-break-inside:avoid; page-break-after:auto } 
                     thead { display:table-header-group } 
                     tfoot { display:table-footer-group } 
                     .page-break  { page-break-before: always; }
                     .titulo {
-                        display: block; text-align: center; 
+                        display: block; 
+                        text-align: center; 
+                        margin: 0px;
+                        padding-top: 20px;                        
                         position: running(titulo);
                     }
                     @page {
@@ -53,10 +59,15 @@ namespace RelatorioVM.Relatorios.Geradores
 
             var corpo = new HtmlTag("body", relatorio);
             _estrutura.AdicionarHtml(corpo);
-            
+
+            return relatorio.ToHtmlString();
+        }
+
+        public byte[] Gerar()
+        {            
             var documento = new ObjectSettings()
             {
-                HtmlContent = relatorio.ToHtmlString()
+                HtmlContent = GerarHtml()
             };
             documento.Configurar(_configuracao);
 

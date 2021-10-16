@@ -45,9 +45,9 @@ namespace RelatorioVM.Demo
                 });
             }
 
-            var relatorio = host.Services.GetService(typeof(IRelatorioVM)) as IRelatorioVM;
+            var relatorioConstrutor = host.Services.GetService(typeof(IRelatorioVM)) as IRelatorioVM;
 
-            var bytes = relatorio
+            var relatorio = relatorioConstrutor
                 .Filtros(viewModel, opcoes => {
                     opcoes
                         .Ignorar(x => x.Itens)
@@ -57,18 +57,33 @@ namespace RelatorioVM.Demo
                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa.Nome)
                         .FaixaDeValor(x => x.DataInicial, x => x.DataFinal);
                 })
-                .AdicionarTabela(viewModel.Itens)
+                .AdicionarTabela(viewModel.Itens, tabela => {
+                    tabela
+                        .Titulo("Descrição da tabela de testes");
+                })
                 .Titulo("Teste de relatório")
-                .Construir()
-                .Gerar();
+                .Construir();
 
-            var path = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Replace(".tmp",".pdf"));
+            var pathPdf = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Replace(".tmp",".pdf"));
 
-            File.WriteAllBytes(path, bytes);
+            File.WriteAllBytes(pathPdf, relatorio.Gerar());
 
             new Process
             {
-                StartInfo = new ProcessStartInfo(path)
+                StartInfo = new ProcessStartInfo(pathPdf)
+                {
+                    UseShellExecute = true
+                }
+            }.Start();
+
+            
+            var pathHtml = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Replace(".tmp", ".html"));
+
+            File.WriteAllText(pathHtml, relatorio.GerarHtml());
+
+            new Process
+            {
+                StartInfo = new ProcessStartInfo(pathHtml)
                 {
                     UseShellExecute = true
                 }

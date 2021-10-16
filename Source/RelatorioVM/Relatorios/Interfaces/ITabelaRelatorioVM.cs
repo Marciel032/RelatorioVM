@@ -6,5 +6,6 @@ namespace RelatorioVM.Relatorios.Interfaces
 {
     public interface ITabelaRelatorioVM<TConteudo>
     {
+        ITabelaRelatorioVM<TConteudo> Titulo(string titulo);
     }
 }

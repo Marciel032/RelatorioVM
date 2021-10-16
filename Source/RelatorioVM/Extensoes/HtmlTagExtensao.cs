@@ -11,6 +11,16 @@ namespace RelatorioVM.Extensoes
             return new HtmlTag("table", tag);
         }
 
+        public static HtmlTag CriarCabecalhoTabela(this HtmlTag tag)
+        {
+            return new HtmlTag("thead", tag);
+        }
+
+        public static HtmlTag CriarCorpoTabela(this HtmlTag tag)
+        {
+            return new HtmlTag("tbody", tag);
+        }
+
         public static HtmlTag CriarLinhaTabela(this HtmlTag tag)
         {
             return new HtmlTag("tr", tag);
@@ -19,6 +29,11 @@ namespace RelatorioVM.Extensoes
         public static HtmlTag CriarColunaTabela(this HtmlTag tag)
         {
             return new HtmlTag("td", tag);
+        }
+
+        public static HtmlTag CriarColunaCabecalhoTabela(this HtmlTag tag)
+        {
+            return new HtmlTag("th", tag);
         }
     }
 }
