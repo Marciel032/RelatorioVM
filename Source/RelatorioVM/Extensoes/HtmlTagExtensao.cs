@@ -16,6 +16,11 @@ namespace RelatorioVM.Extensoes
             return new HtmlTag("thead", tag);
         }
 
+        public static HtmlTag CriarRodapeTabela(this HtmlTag tag)
+        {
+            return new HtmlTag("tfoot", tag);
+        }
+
         public static HtmlTag CriarCorpoTabela(this HtmlTag tag)
         {
             return new HtmlTag("tbody", tag);

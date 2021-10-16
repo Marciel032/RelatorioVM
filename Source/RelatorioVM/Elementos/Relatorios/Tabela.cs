@@ -9,12 +9,14 @@ namespace RelatorioVM.Elementos.Relatorios
         public string Titulo { get; set; }
         public List<TabelaColuna> Colunas { get; set; }
         public IEnumerable<T> Conteudo { get; set; }
+        public List<TabelaTotal<T>> Totais { get; set; }
 
         public Tabela(IEnumerable<T> conteudo)
         {
             Titulo = string.Empty;
             Conteudo = conteudo;
             Colunas = new List<TabelaColuna>();
+            Totais = new List<TabelaTotal<T>>();
         }
     }
 }

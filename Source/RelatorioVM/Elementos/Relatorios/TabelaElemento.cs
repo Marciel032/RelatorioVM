@@ -25,6 +25,7 @@ namespace RelatorioVM.Elementos.Relatorios
             var tabela = CriarTabela(pai);
             AdicionarCabecalho(tabela);
             AdicionarConteudo(tabela);
+            AdicionarTotais(tabela);
             return true;
         }
 
@@ -58,13 +59,39 @@ namespace RelatorioVM.Elementos.Relatorios
         private void AdicionarConteudo(HtmlTag tabela) {
             var corpoTabela = tabela.CriarCorpoTabela();
             foreach (var conteudo in _tabela.Conteudo) {
-                var linha = new HtmlTag("tr", corpoTabela);
+                var linha = corpoTabela.CriarLinhaTabela();
                 foreach (var coluna in _tabela.Colunas) {
-                    new HtmlTag("td", linha)
+                    linha.CriarColunaTabela()
                         .Style("text-align", coluna.AlinhamentoHorizontal.ObterDescricao())
                         .Style("padding-left", "3px")
                         .Style("padding-right", "3px")
                         .Text(coluna.Propriedade.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
+                }
+            }
+        }
+
+        private void AdicionarTotais(HtmlTag tabela)
+        {
+            if (_tabela.Totais.Count == 0)
+                return;
+
+            //var rodapeTabela = tabela.CriarRodapeTabela();
+            foreach (var total in _tabela.Totais)
+            {
+                var linha = tabela.CriarLinhaTabela().AddClass("tr-totais");
+                foreach (var coluna in _tabela.Colunas)
+                {
+                    if (total.Totais.ContainsKey(coluna.Identificador))
+                    {
+                        linha.CriarColunaTabela()
+                            .Style("text-align", coluna.AlinhamentoHorizontal.ObterDescricao())
+                            .Style("padding-left", "3px")
+                            .Style("padding-right", "3px")                            
+                            .Text("Teste");
+                    }
+                    else
+                        linha.CriarColunaTabela();
+
                 }
             }
         }

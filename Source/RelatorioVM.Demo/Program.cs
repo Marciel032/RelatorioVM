@@ -59,7 +59,11 @@ namespace RelatorioVM.Demo
                 })
                 .AdicionarTabela(viewModel.Itens, tabela => {
                     tabela
-                        .Titulo("Descrição da tabela de testes");
+                        .Titulo("Descrição da tabela de testes")
+                        .Totalizar(totais => {
+                            totais
+                                .Titulo("Titulo dos totais");
+                        });
                 })
                 .Titulo("Teste de relatório")
                 .Construir();

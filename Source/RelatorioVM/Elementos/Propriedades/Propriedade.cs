@@ -6,15 +6,15 @@ using System.Text;
 
 namespace RelatorioVM.Elementos.Propriedades
 {
-    internal class Propriedade
+    internal class Propriedade<T>
     {
         public PropertyInfo PropriedadeInformacao { get; set; }
 
-        public Func<object> FuncaoPropriedade { get; set; }
+        public Func<T,object> FuncaoPropriedade { get; set; }
 
-        public object ObterValor(object origem) {
+        public object ObterValor(T origem) {
             if (FuncaoPropriedade != null)
-                return FuncaoPropriedade();
+                return FuncaoPropriedade(origem);
 
             return PropriedadeInformacao.GetValue(origem);
         }

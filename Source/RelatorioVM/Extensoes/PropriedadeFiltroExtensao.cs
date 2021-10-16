@@ -16,13 +16,13 @@ namespace RelatorioVM.Extensoes
             return true;
         }
 
-        public static Filtro ObterFiltro(this PropertyInfo propriedade) {
-            var filtro = new Filtro();
+        public static Filtro<T> ObterFiltro<T>(this PropertyInfo propriedade) {
+            var filtro = new Filtro<T>();
 
             filtro.Identificador = propriedade.Name;            
             filtro.Nome = propriedade.ObterNome();
             filtro.Valor = string.Empty;
-            filtro.Propriedade = new Propriedade()
+            filtro.Propriedade = new Propriedade<T>()
             {
                 PropriedadeInformacao = propriedade
             };

@@ -6,15 +6,15 @@ using System.Text;
 
 namespace RelatorioVM.Elementos.Relatorios
 {
-    internal class Filtro
+    internal class Filtro<T>
     {
         public string Identificador { get; set; }
         public string Nome { get; set; }
         public string Valor { get; set; }   
         public string ValorComplemento { get; set; }
         public string Separador { get; set; }
-        public Propriedade Propriedade { get; set; }
-        public Propriedade PropriedadeComplemento { get; set; }
+        public Propriedade<T> Propriedade { get; set; }
+        public Propriedade<T> PropriedadeComplemento { get; set; }
 
         public Filtro()
         {

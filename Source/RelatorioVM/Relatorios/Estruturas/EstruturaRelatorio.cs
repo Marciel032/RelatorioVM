@@ -12,21 +12,20 @@ namespace RelatorioVM.Relatorios.Estruturas
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
         public TituloElemento Titulo { get; set; }
-        public FiltrosElemento Filtro { get; set; }
+        public IElemento Filtro { get; set; }
         public List<IElemento> Tabelas { get; set; }
 
         public EstruturaRelatorio(ConfiguracaoRelatorio configuracaoRelatorio)
         {
             _configuracaoRelatorio = configuracaoRelatorio;
 
-            Filtro = new FiltrosElemento(configuracaoRelatorio);
             Titulo = new TituloElemento();
             Tabelas = new List<IElemento>();
         }
 
         public void AdicionarHtml(HtmlTag parent) {
             Titulo.ProcessarHtml(parent);
-            Filtro.ProcessarHtml(parent);
+            Filtro?.ProcessarHtml(parent);
             Tabelas.ForEach(x => x.ProcessarHtml(parent));
         }
     }

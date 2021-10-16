@@ -12,7 +12,7 @@ namespace RelatorioVM.Relatorios.Construtores
     internal class ConstrutorTabelaRelatorio<TConteudo>: ITabelaRelatorioVM<TConteudo>
     {
         private ConfiguracaoRelatorio _configuracaoRelatorio;
-        private Tabela<TConteudo> _tabela;
+        private Tabela<TConteudo> _tabela;        
 
         public ConstrutorTabelaRelatorio(ConfiguracaoRelatorio configuracaoRelatorio, IEnumerable<TConteudo> conteudo)
         {
@@ -32,6 +32,14 @@ namespace RelatorioVM.Relatorios.Construtores
 
         public ITabelaRelatorioVM<TConteudo> Titulo(string titulo) {
             _tabela.Titulo = titulo;
+            return this;
+        }
+
+        public ITabelaRelatorioVM<TConteudo> Totalizar(Action<ITabelaTotalRelatorioVM<TConteudo>> opcoes = null)
+        {
+            var totaisConstrutor = new ConstrutorTabelaTotalRelatorio<TConteudo>(_configuracaoRelatorio, _tabela.Conteudo);
+            opcoes?.Invoke(totaisConstrutor);
+            _tabela.Totais.Add(totaisConstrutor.Construir());
             return this;
         }
     }

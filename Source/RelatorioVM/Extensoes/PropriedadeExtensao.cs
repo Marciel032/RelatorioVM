@@ -26,7 +26,7 @@ namespace RelatorioVM.Extensoes
             return conversor.Converter(propriedade.GetValue(origem), formato);
         }
 
-        public static string ObterValorConvertido(this Propriedade propriedade, object origem, OpcoesFormatacao formato)
+        public static string ObterValorConvertido<T>(this Propriedade<T> propriedade, T origem, OpcoesFormatacao formato)
         {
             var tipo = propriedade.PropriedadeInformacao.PropertyType.ObterTipoNaoNullo();
             var conversor = ConversorValor.ObterConversor(tipo);

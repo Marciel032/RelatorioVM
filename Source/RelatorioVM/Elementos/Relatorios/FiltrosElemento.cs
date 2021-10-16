@@ -8,15 +8,15 @@ using System.Text;
 
 namespace RelatorioVM.Elementos.Relatorios
 {
-    internal class FiltrosElemento: IElemento
+    internal class FiltrosElemento<T>: IElemento
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
-        public List<Filtro> Filtros { get; set; }
+        public List<Filtro<T>> Filtros { get; set; }
 
         public FiltrosElemento(ConfiguracaoRelatorio configuracaoRelatorio)
         {
             _configuracaoRelatorio = configuracaoRelatorio;
-            Filtros = new List<Filtro>();
+            Filtros = new List<Filtro<T>>();
         }
 
         public bool ProcessarHtml(HtmlTag pai) {
@@ -61,7 +61,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 .Attr("width", "100%");
         }
 
-        private HtmlTag ObterValorTag(Filtro filtro) {
+        private HtmlTag ObterValorTag<T>(Filtro<T> filtro) {
             if (!string.IsNullOrWhiteSpace(filtro.ValorComplemento))
                 return ObterValorComComplemento(filtro);
 
@@ -69,7 +69,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 .Text(filtro.Valor);
         }
 
-        private HtmlTag ObterValorComComplemento(Filtro filtro) {
+        private HtmlTag ObterValorComComplemento<T>(Filtro<T> filtro) {
             return new HtmlTag("strong")
                 .Text(filtro.Valor)                
                 .After(
