@@ -51,13 +51,13 @@ namespace RelatorioVM.Extensoes
                 throw new ArgumentException(string.Format(
                     "Expressão '{0}' se refere a um campo, não a uma propriedade.",
                     propertyLambda.ToString()));
-            /*
+            
             if (type != propInfo.ReflectedType && !type.IsSubclassOf(propInfo.ReflectedType))
                 throw new ArgumentException(string.Format(
                     "Expressão '{0}' se refere a uma propriedade que não pertence a {1}.",
                     propertyLambda.ToString(),
                     type));
-            */
+            
             return propInfo;
         }
     }

@@ -85,7 +85,7 @@ namespace RelatorioVM.Elementos.Relatorios
             //var rodapeTabela = tabela.CriarRodapeTabela();            
 
             foreach (var total in _tabela.Totais)
-            {
+            {               
                 if (!string.IsNullOrWhiteSpace(total.Titulo))
                 {
                     tabela.CriarLinhaTabela()
@@ -114,7 +114,6 @@ namespace RelatorioVM.Elementos.Relatorios
                     else
                         linhaTotal
                             .CriarColunaTabela();
-
                 }
             }
         }

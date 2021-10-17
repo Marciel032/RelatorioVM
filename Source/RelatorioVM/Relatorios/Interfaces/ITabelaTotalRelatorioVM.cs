@@ -28,6 +28,22 @@ namespace RelatorioVM.Relatorios.Interfaces
         /// <param name="expressaoCalculo">Valor calculado para obter o totalizador</param>
         /// <returns></returns>
         ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, long>> expressaoCalculo);
+        
+        /// <summary>
+        /// Ignora uma coluna especifica
+        /// </summary>
+        /// <typeparam name="TPropriedade"></typeparam>
+        /// <param name="expressaoPropriedade">Coluna a ser ignorada</param>
+        /// <returns></returns>
+        ITabelaTotalRelatorioVM<TConteudo> Ignorar<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade);
+
+        /// <summary>
+        /// Ignora todas as colunas, permitindo configurar manualmente os totais desejados
+        /// </summary>
+        /// <typeparam name="TPropriedade"></typeparam>
+        /// <param name="expressaoPropriedade">Coluna a ser ignorada</param>
+        /// <returns></returns>
+        ITabelaTotalRelatorioVM<TConteudo> IgnorarTodos();
 
     }
 }

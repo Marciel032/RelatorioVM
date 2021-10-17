@@ -39,7 +39,9 @@ namespace RelatorioVM.Relatorios.Construtores
         {
             var totaisConstrutor = new ConstrutorTabelaTotalRelatorio<TConteudo>(_configuracaoRelatorio, _tabela.Conteudo);
             opcoes?.Invoke(totaisConstrutor);
-            _tabela.Totais.Add(totaisConstrutor.Construir());
+            var total = totaisConstrutor.Construir();
+            if(total.Totais.Count > 0)
+                _tabela.Totais.Add(total);
             return this;
         }
     }

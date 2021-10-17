@@ -102,7 +102,7 @@ namespace RelatorioVM.Demo
                         options
                             .UsarOrientacao(TipoOrientacao.Retrato)
                             .ConfigurarFormatacao(formato => {
-                                formato.CasasDecimais = 3;
+                                formato.CasasDecimais = 2;
                             })
                             .ConfigurarCabecalho(cabecalho => {
                                 cabecalho

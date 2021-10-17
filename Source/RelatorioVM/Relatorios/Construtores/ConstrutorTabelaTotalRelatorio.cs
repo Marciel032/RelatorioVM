@@ -34,7 +34,7 @@ namespace RelatorioVM.Relatorios.Construtores
 
         public ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, decimal>> expressaoCalculo = null)
         {
-            var propriedade = expressaoPropriedade.ObterPropriedade();
+            var propriedade = expressaoPropriedade.ObterPropriedadeBase();
             var total = ObterOuAdicionarTotal(propriedade);
 
             if (expressaoCalculo != null)
@@ -45,7 +45,7 @@ namespace RelatorioVM.Relatorios.Construtores
 
         public ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, long>> expressaoCalculo = null)
         {
-            var propriedade = expressaoPropriedade.ObterPropriedade();
+            var propriedade = expressaoPropriedade.ObterPropriedadeBase();
             var total = ObterOuAdicionarTotal(propriedade);
 
             if (expressaoCalculo != null)
@@ -60,13 +60,32 @@ namespace RelatorioVM.Relatorios.Construtores
             return this;
         }
 
+        public ITabelaTotalRelatorioVM<TConteudo> Ignorar<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade)
+        {
+            var propriedade = expressaoPropriedade.ObterPropriedadeBase();
+            _totais.Totais.Remove(propriedade.Name);
+
+            return this;
+        }
+
+        public ITabelaTotalRelatorioVM<TConteudo> IgnorarTodos()
+        {
+            _totais.Totais.Clear();
+            return this;
+        }
+
         private TabelaColunaTotal<TConteudo> ObterOuAdicionarTotal(PropertyInfo propriedade) {
-            if (_totais.Totais.TryGetValue(propriedade.Name, out var total))
+            if (ObterTotal(propriedade, out var total))
                 return total;
 
             total = propriedade.ObterTotalTabela<TConteudo>();
             _totais.Totais.Add(total.Identificador, total);
             return total;
+        }
+
+        private bool ObterTotal(PropertyInfo propriedade, out TabelaColunaTotal<TConteudo> total)
+        {
+            return _totais.Totais.TryGetValue(propriedade.Name, out total);
         }
     }
 }
