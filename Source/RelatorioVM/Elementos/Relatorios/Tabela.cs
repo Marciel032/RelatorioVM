@@ -7,7 +7,7 @@ namespace RelatorioVM.Elementos.Relatorios
     internal class Tabela<T>
     {
         public string Titulo { get; set; }
-        public List<TabelaColuna> Colunas { get; set; }
+        public List<TabelaColuna<T>> Colunas { get; set; }
         public IEnumerable<T> Conteudo { get; set; }
         public List<TabelaTotal<T>> Totais { get; set; }
 
@@ -15,7 +15,7 @@ namespace RelatorioVM.Elementos.Relatorios
         {
             Titulo = string.Empty;
             Conteudo = conteudo;
-            Colunas = new List<TabelaColuna>();
+            Colunas = new List<TabelaColuna<T>>();
             Totais = new List<TabelaTotal<T>>();
         }
     }

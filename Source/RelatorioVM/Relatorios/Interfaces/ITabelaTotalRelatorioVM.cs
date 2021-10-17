@@ -11,8 +11,23 @@ namespace RelatorioVM.Relatorios.Interfaces
         /// Define o titulo que sera exibido junto aos totais.
         /// </summary>
         ITabelaTotalRelatorioVM<TConteudo> Titulo(string titulo);
-        ITabelaTotalRelatorioVM<TConteudo> Coluna(Expression<Func<TConteudo, decimal>> expressaoPropriedade, Expression<Func<TConteudo, decimal>> expressaoCalculo = null);
-        ITabelaTotalRelatorioVM<TConteudo> Coluna(Expression<Func<TConteudo, long>> expressaoPropriedade, Expression<Func<TConteudo, long>> expressaoCalculo = null);
+        /// <summary>
+        /// Define um totalizador manualmente
+        /// </summary>
+        /// <typeparam name="TPropriedade"></typeparam>
+        /// <param name="expressaoPropriedade">Coluna onde o total é exibido</param>
+        /// <param name="expressaoCalculo">Valor calculado para obter o totalizador</param>
+        /// <returns></returns>
+        ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, decimal>> expressaoCalculo);
+
+        /// <summary>
+        /// Define um totalizador manualmente
+        /// </summary>
+        /// <typeparam name="TPropriedade"></typeparam>
+        /// <param name="expressaoPropriedade">Coluna onde o total é exibido</param>
+        /// <param name="expressaoCalculo">Valor calculado para obter o totalizador</param>
+        /// <returns></returns>
+        ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, long>> expressaoCalculo);
 
     }
 }

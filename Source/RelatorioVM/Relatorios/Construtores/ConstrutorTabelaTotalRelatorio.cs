@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 
 namespace RelatorioVM.Relatorios.Construtores
@@ -31,14 +32,24 @@ namespace RelatorioVM.Relatorios.Construtores
             return _totais;
         }
 
-        public ITabelaTotalRelatorioVM<TConteudo> Coluna(Expression<Func<TConteudo, decimal>> expressaoPropriedade, Expression<Func<TConteudo, decimal>> expressaoCalculo = null)
+        public ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, decimal>> expressaoCalculo = null)
         {
+            var propriedade = expressaoPropriedade.ObterPropriedade();
+            var total = ObterOuAdicionarTotal(propriedade);
+
+            if (expressaoCalculo != null)
+                _totais.Totais[propriedade.Name].Propriedade.FuncaoPropriedade = (origem) => expressaoCalculo.Compile()(origem);
 
             return this;
         }
 
-        public ITabelaTotalRelatorioVM<TConteudo> Coluna(Expression<Func<TConteudo, long>> expressaoPropriedade, Expression<Func<TConteudo, long>> expressaoCalculo = null)
+        public ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, long>> expressaoCalculo = null)
         {
+            var propriedade = expressaoPropriedade.ObterPropriedade();
+            var total = ObterOuAdicionarTotal(propriedade);
+
+            if (expressaoCalculo != null)
+                _totais.Totais[propriedade.Name].Propriedade.FuncaoPropriedade = (origem) => expressaoCalculo.Compile()(origem);
 
             return this;
         }
@@ -47,6 +58,15 @@ namespace RelatorioVM.Relatorios.Construtores
         {
             _totais.Titulo = titulo;
             return this;
+        }
+
+        private TabelaColunaTotal<TConteudo> ObterOuAdicionarTotal(PropertyInfo propriedade) {
+            if (_totais.Totais.TryGetValue(propriedade.Name, out var total))
+                return total;
+
+            total = propriedade.ObterTotalTabela<TConteudo>();
+            _totais.Totais.Add(total.Identificador, total);
+            return total;
         }
     }
 }

@@ -14,12 +14,12 @@ namespace RelatorioVM.Extensoes
             return true;
         }
 
-        public static TabelaColuna ObterColunaTabela(this PropertyInfo propriedade) {
-            var coluna = new TabelaColuna();
+        public static TabelaColuna<T> ObterColunaTabela<T>(this PropertyInfo propriedade) {
+            var coluna = new TabelaColuna<T>();
 
             coluna.Identificador = propriedade.Name;            
             coluna.Titulo = propriedade.ObterNome();
-            coluna.Propriedade = propriedade;
+            coluna.Propriedade = new Propriedade<T>(propriedade);
             coluna.AlinhamentoHorizontal = propriedade.ObterAlinhamentoHorizontal();
 
             return coluna;
@@ -46,10 +46,7 @@ namespace RelatorioVM.Extensoes
 
             total.Identificador = propriedade.Name;
             total.AlinhamentoHorizontal = propriedade.ObterAlinhamentoHorizontal();
-            total.Propriedade = new Propriedade<T>()
-            {
-                PropriedadeInformacao = propriedade
-            };
+            total.Propriedade = new Propriedade<T>(propriedade);
 
             return total;
         }

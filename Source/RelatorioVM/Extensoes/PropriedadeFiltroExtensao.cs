@@ -22,10 +22,7 @@ namespace RelatorioVM.Extensoes
             filtro.Identificador = propriedade.Name;            
             filtro.Nome = propriedade.ObterNome();
             filtro.Valor = string.Empty;
-            filtro.Propriedade = new Propriedade<T>()
-            {
-                PropriedadeInformacao = propriedade
-            };
+            filtro.Propriedade = new Propriedade<T>(propriedade);
 
             return filtro;
         }

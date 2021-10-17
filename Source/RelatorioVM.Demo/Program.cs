@@ -62,7 +62,8 @@ namespace RelatorioVM.Demo
                         .Titulo("Descrição da tabela de testes")
                         .Totalizar(totais => {
                             totais
-                                .Titulo("Titulo dos totais");
+                                .Titulo("Titulo dos totais")
+                                .Coluna(x => x.Data, x => (decimal)x.FilialCodigo / (decimal)x.PessoaCodigo);
                         });
                 })
                 .Titulo("Teste de relatório")

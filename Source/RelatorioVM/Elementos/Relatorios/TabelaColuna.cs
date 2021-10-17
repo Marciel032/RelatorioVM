@@ -1,4 +1,5 @@
 ﻿using RelatorioVM.Dominio.Enumeradores;
+using RelatorioVM.Elementos.Propriedades;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -6,11 +7,11 @@ using System.Text;
 
 namespace RelatorioVM.Elementos.Relatorios
 {
-    internal class TabelaColuna
+    internal class TabelaColuna<T>
     {
         public string Identificador { get; set; }
         public string Titulo { get; set; }
-        public PropertyInfo Propriedade { get; set; }
+        public Propriedade<T> Propriedade { get; set; }
         public TipoAlinhamentoHorizontal AlinhamentoHorizontal { get; set; }
 
         public TabelaColuna()

@@ -65,9 +65,8 @@ namespace RelatorioVM.Relatorios.Construtores
         {
             var filtro = Obterfiltro(propriedadeExpressao);
             if (filtro != null)
-                filtro.PropriedadeComplemento = new Propriedade<T>() { 
-                    PropriedadeInformacao = propriedadeComplementoExpressao.ObterPropriedade(),
-                    FuncaoPropriedade = (T) => propriedadeComplementoExpressao.Compile()(_filtroVM)
+                filtro.PropriedadeComplemento = new Propriedade<T>(null) {
+                    FuncaoPropriedade = (origem) => propriedadeComplementoExpressao.Compile()(origem)
                 };
 
             if (ignorar)

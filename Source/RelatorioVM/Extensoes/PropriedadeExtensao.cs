@@ -18,19 +18,5 @@ namespace RelatorioVM.Extensoes
 
             return propriedade.Name;
         }
-
-        public static string ObterValorConvertido(this PropertyInfo propriedade, object origem, OpcoesFormatacao formato)
-        {
-            var tipo = propriedade.PropertyType.ObterTipoNaoNullo();
-            var conversor = ConversorValor.ObterConversor(tipo);
-            return conversor.Converter(propriedade.GetValue(origem), formato);
-        }
-
-        public static string ObterValorConvertido<T>(this Propriedade<T> propriedade, T origem, OpcoesFormatacao formato)
-        {
-            var tipo = propriedade.PropriedadeInformacao.PropertyType.ObterTipoNaoNullo();
-            var conversor = ConversorValor.ObterConversor(tipo);
-            return conversor.Converter(propriedade.ObterValor(origem), formato);
-        }
     }
 }
