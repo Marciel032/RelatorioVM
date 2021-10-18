@@ -88,11 +88,24 @@ for (int i = 0; i < 10; i++)
 
 Utilize o construtor para obter o html, passando a sua lista como conteudo
 ```csharp
-var relatorio = relatorioConstrutor
+relatorioConstrutor
     .AdicionarTabela(itens)
     .Titulo("Teste de relatório")
-    .Construir();
+    .Construir()
+    .GerarHtml();
+```
 
+Tambem é possível fazer agrupamento e totalização de valores
+```csharp
+relatorioConstrutor
+    .AdicionarTabela(itens, tabela => {
+        tabela
+            .Agrupar(agrupar => agrupar.Coluna(x => x.FilialCodigo))
+            .Totalizar(totalizar => totalizar.Coluna(x => x.Valor, x => x.Valor));
+    })
+    .Titulo("Teste de relatório")
+    .Construir()
+    .GerarHtml();
 ```
 
 
