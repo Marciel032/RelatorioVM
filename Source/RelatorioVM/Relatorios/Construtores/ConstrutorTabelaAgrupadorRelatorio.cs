@@ -14,12 +14,12 @@ namespace RelatorioVM.Relatorios.Construtores
     internal class ConstrutorTabelaAgrupadorRelatorio<TConteudo>: ITabelaAgrupadorRelatorioVM<TConteudo>
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
-        private TabelaAgrupador _agrupador;
+        private TabelaAgrupador<TConteudo> _agrupador;
 
         public ConstrutorTabelaAgrupadorRelatorio(ConfiguracaoRelatorio configuracaoRelatorio)
         {
             _configuracaoRelatorio = configuracaoRelatorio;
-            _agrupador = new TabelaAgrupador();
+            _agrupador = new TabelaAgrupador<TConteudo>(_configuracaoRelatorio);
         }
 
         public ITabelaAgrupadorRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade)
@@ -34,7 +34,7 @@ namespace RelatorioVM.Relatorios.Construtores
             return this;
         }
 
-        public TabelaAgrupador Construir() {
+        public TabelaAgrupador<TConteudo> Construir() {
             return _agrupador;
         }
     }

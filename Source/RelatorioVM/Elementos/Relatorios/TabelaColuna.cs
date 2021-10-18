@@ -13,12 +13,14 @@ namespace RelatorioVM.Elementos.Relatorios
         public string Titulo { get; set; }
         public Propriedade<T> Propriedade { get; set; }
         public TipoAlinhamentoHorizontal AlinhamentoHorizontal { get; set; }
+        public bool Visivel { get; set; }
 
         public TabelaColuna()
         {
             Identificador = string.Empty;
             Titulo = string.Empty;
             AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Centro;
+            Visivel = true;
         }
     }
 }

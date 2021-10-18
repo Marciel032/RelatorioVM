@@ -27,6 +27,11 @@ namespace RelatorioVM.Relatorios.Construtores
 
         public TabelaElemento<TConteudo> Construir()
         {
+            foreach (var agrupador in _tabela.Agrupadores)
+            {
+                agrupador.Colunas = agrupador.ObterColunasAgrupamento(_tabela.Colunas);
+                agrupador.Colunas.ForEach(x => x.Visivel = false);                
+            }
             return new TabelaElemento<TConteudo>(_configuracaoRelatorio, _tabela);
         }
 

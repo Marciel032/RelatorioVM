@@ -49,7 +49,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 .CriarLinhaTabela()
                 .Style("border", "1px solid #777");
 
-            foreach (var coluna in _tabela.Colunas.Values)
+            foreach (var coluna in _tabela.ObterColunasVisiveis())
             {
                 linhaCabecalho.CriarColunaCabecalhoTabela()
                      .Style("text-align", coluna.AlinhamentoHorizontal.ObterDescricao())
@@ -71,33 +71,28 @@ namespace RelatorioVM.Elementos.Relatorios
                 AdicionarConteudoAgrupado(corpoTabela, _tabela.Conteudo, _tabela.Agrupadores.ToList());
         }
 
-        private void AdicionarConteudoAgrupado(HtmlTag corpoTabela, IEnumerable<T> conteudo, List<TabelaAgrupador> agrupadores) {
+        private void AdicionarConteudoAgrupado(HtmlTag corpoTabela, IEnumerable<T> conteudo, List<TabelaAgrupador<T>> agrupadores) {
             if (agrupadores.Count == 0)
                 return;
 
             var agrupador = agrupadores[0];
             agrupadores.RemoveAt(0);
 
-            var itens = agrupador.AgruparConteudo(conteudo, _tabela.Colunas);
-            foreach (var item in itens) {
-                /*
-                var linhaAgrupamento = corpoTabela.CriarLinhaTabela();
-                foreach (var grupo in item.Key)
-                    linhaAgrupamento.CriarColunaTabela()
-                        .Text(grupo.Key);
-                */
+            var itens = agrupador.AgruparConteudo(conteudo);
+            foreach (var item in itens) {         
+                corpoTabela.Append(agrupador.CriarCabecalhoAgrupamento(item.First(), _tabela.ObterQuantidadeColunasVisiveis()));
                 if (agrupadores.Count > 0)
                     AdicionarConteudoAgrupado(corpoTabela, item, agrupadores.ToList());
                 else
                     AdicionarConteudoItens(corpoTabela, item);
             }
-        }
+        }        
 
         private void AdicionarConteudoItens(HtmlTag corpoTabela, IEnumerable<T> itens) {
             foreach (var conteudo in itens)
             {
                 var linha = corpoTabela.CriarLinhaTabela();
-                foreach (var coluna in _tabela.Colunas.Values)
+                foreach (var coluna in _tabela.ObterColunasVisiveis())
                 {
                     linha.CriarColunaTabela()
                         .Style("text-align", coluna.AlinhamentoHorizontal.ObterDescricao())
@@ -114,7 +109,7 @@ namespace RelatorioVM.Elementos.Relatorios
 
         private void AdicionarTotais(HtmlTag tabela)
         {
-            if (_tabela.Colunas.Count == 0)
+            if (_tabela.ObterQuantidadeColunasVisiveis() == 0)
                 return;
 
             if (_tabela.Totais.Count == 0)
@@ -130,14 +125,14 @@ namespace RelatorioVM.Elementos.Relatorios
                         .Style("font-weight", "bold")
                         .CriarColunaTabela()
                         .Text(total.Titulo)                                                
-                        .Attr("colspan", _tabela.Colunas.Count);
+                        .Attr("colspan", _tabela.ObterQuantidadeColunasVisiveis());
                 }
 
                 var linhaTotal = tabela.CriarLinhaTabela()                    
                     .Style("font-weight", "bold")
                     .Style("border-top", "1px solid #888");
 
-                foreach (var coluna in _tabela.Colunas.Values)
+                foreach (var coluna in _tabela.ObterColunasVisiveis())
                 {
                     if (total.Totais.ContainsKey(coluna.Identificador))
                     {
@@ -163,7 +158,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 .CriarLinhaTabela()
                 .CriarColunaCabecalhoTabela()
                 .Text(_tabela.Titulo)
-                .Attr("colspan", _tabela.Colunas.Count)
+                .Attr("colspan", _tabela.ObterQuantidadeColunasVisiveis())
                 .Style("text-align", TipoAlinhamentoHorizontal.Esquerda.ObterDescricao());
         }        
     }    

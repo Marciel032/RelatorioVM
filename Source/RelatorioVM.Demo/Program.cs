@@ -63,8 +63,8 @@ namespace RelatorioVM.Demo
                         .Titulo("Descrição da tabela de testes")
                         .Agrupar(agrupamento => {
                             agrupamento
-                                .Coluna(x => x.FilialCodigo)
-                                .Coluna(x => x.PessoaCodigo);
+                                .Coluna(x => x.FilialCodigo);
+                                //.Coluna(x => x.PessoaCodigo);
                         })
                       /*  .Agrupar(x => x.Coluna(y => y.PessoaCodigo))*/
                         .Totalizar(totais => {
