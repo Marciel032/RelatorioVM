@@ -1,7 +1,7 @@
 # RelatorioVM
 
-![GitHub repo size](https://img.shields.io/github/repo-size/Marciel032/RelatorioVM?style=for-the-badge)
-![GitHub language count](https://img.shields.io/github/languages/count/Marciel032/RelatorioVM?style=for-the-badge)
+![GitHub code size](https://img.shields.io/github/languages/code-size/marciel032/relatoriovm?style=for-the-badge)
+![Nuget version](https://img.shields.io/nuget/v/RelatorioVM?style=for-the-badge)
 ![GitHub forks](https://img.shields.io/github/forks/Marciel032/RelatorioVM?style=for-the-badge)
 ![Bitbucket open issues](https://img.shields.io/bitbucket/issues/Marciel032/RelatorioVM?style=for-the-badge)
 ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/Marciel032/RelatorioVM?style=for-the-badge)
@@ -14,8 +14,9 @@
 
 O projeto ainda está em desenvolvimento e as próximas atualizações serão voltadas nas seguintes tarefas:
 
-- [x] Criar totalizadores
-- [x] Criar agrupamentos e seus totalizadores
+- [x] Criar totalizadores.
+- [x] Criar agrupamentos e seus totalizadores.
+- [ ] Permitir customizar as colunas exibidas na tabela.
 - [ ] Permitir customizar as fontes e estilos dos textos.
 
 ## 💻 Pré-requisitos
