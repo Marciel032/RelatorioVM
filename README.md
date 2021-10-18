@@ -57,7 +57,7 @@ Agradecemos às seguintes pessoas que contribuíram para este projeto:
 <table>
   <tr>
     <td align="center">
-      <a href="https://avatars3.githubusercontent.com/Marciel032">
+      <a href="https://github.com/Marciel032">
         <img src="https://avatars3.githubusercontent.com/Marciel032" width="100px;" alt="Marciel Grützmann"/><br>
         <sub>
           <b>Marciel Grützmann</b>
