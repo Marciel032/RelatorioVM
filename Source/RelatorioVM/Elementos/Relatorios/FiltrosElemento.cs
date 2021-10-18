@@ -27,11 +27,12 @@ namespace RelatorioVM.Elementos.Relatorios
                 .Style("font-family", "Courier new")
                 .Style("font-size", "14px");
 
+            var quantidadeDeFiltrosNaLinha = Math.Clamp(Filtros.Count, 1, _configuracaoRelatorio.Cabecalho.QuantidadeDeFiltrosPorLinha);
             tabela
                 .CriarLinhaTabela()
                 .CriarColunaTabela()
                 .Text("Filtros")
-                .Attr("colspan", _configuracaoRelatorio.Cabecalho.QuantidadeDeFiltrosPorLinha * 2);
+                .Attr("colspan", quantidadeDeFiltrosNaLinha * 2);
             
             foreach (var filtros in Filtros.CriarGruposDe(_configuracaoRelatorio.Cabecalho.QuantidadeDeFiltrosPorLinha)) {
                 var linha = tabela.CriarLinhaTabela()
