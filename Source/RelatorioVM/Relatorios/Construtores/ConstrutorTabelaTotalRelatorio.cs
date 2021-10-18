@@ -1,7 +1,7 @@
 ﻿using RelatorioVM.Dominio.Configuracoes;
+using RelatorioVM.Dominio.Interfaces;
 using RelatorioVM.Elementos.Relatorios;
 using RelatorioVM.Extensoes;
-using RelatorioVM.Relatorios.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -61,7 +61,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 .Attr("width", "100%");
         }
 
-        private HtmlTag ObterValorTag<T>(Filtro<T> filtro) {
+        private HtmlTag ObterValorTag(Filtro<T> filtro) {
             if (!string.IsNullOrWhiteSpace(filtro.ValorComplemento))
                 return ObterValorComComplemento(filtro);
 
@@ -69,7 +69,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 .Text(filtro.Valor);
         }
 
-        private HtmlTag ObterValorComComplemento<T>(Filtro<T> filtro) {
+        private HtmlTag ObterValorComComplemento(Filtro<T> filtro) {
             return new HtmlTag("strong")
                 .Text(filtro.Valor)                
                 .After(

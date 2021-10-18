@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RelatorioVM.Relatorios.Interfaces
+namespace RelatorioVM.Dominio.Interfaces
 {
     public interface IGeradorRelatorioVM
     {
-        byte[] Gerar();
         string GerarHtml();
     }
 }

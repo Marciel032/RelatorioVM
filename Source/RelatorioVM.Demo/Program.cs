@@ -2,8 +2,8 @@
 using RelatorioVM.Demo.Modelos;
 using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Dominio.Enumeradores;
+using RelatorioVM.Dominio.Interfaces;
 using RelatorioVM.Extensoes;
-using RelatorioVM.Relatorios.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -70,19 +70,7 @@ namespace RelatorioVM.Demo
                 .Titulo("Teste de relatório")
                 .Construir();
 
-            var pathPdf = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Replace(".tmp",".pdf"));
-
-            File.WriteAllBytes(pathPdf, relatorio.Gerar());
-
-            new Process
-            {
-                StartInfo = new ProcessStartInfo(pathPdf)
-                {
-                    UseShellExecute = true
-                }
-            }.Start();
-
-            /*
+            
             var pathHtml = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Replace(".tmp", ".html"));
 
             File.WriteAllText(pathHtml, relatorio.GerarHtml());
@@ -93,14 +81,14 @@ namespace RelatorioVM.Demo
                 {
                     UseShellExecute = true
                 }
-            }.Start();*/
+            }.Start();
         }
 
         static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((_, services) =>
                     services.UtilizarRelatorioVM(options => {
-                        options
+                     /*   options
                             .UsarOrientacao(TipoOrientacao.Retrato)                            
                             .ConfigurarFormatacao(formato => {
                                 formato.CasasDecimais = 3;
@@ -115,7 +103,7 @@ namespace RelatorioVM.Demo
                                 rodape
                                     .Esquerda().ImprimirTexto("Infogen Sistemas")
                                     .Direita().ImprimirTexto("www.infogen.com.br");
-                            });
+                            });*/
                     }));
     }
 }

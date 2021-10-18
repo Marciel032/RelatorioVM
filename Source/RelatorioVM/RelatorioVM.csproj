@@ -2,22 +2,24 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <Company>Infogen Sistemas</Company>
+    <Authors>Marciel Grutzmann</Authors>
+    <Version>1.0.0.1</Version>
+    <PackageTags>report builder relatorio view model</PackageTags>
+    <Description>Permite gerar relatórios em html, a partir de view models</Description>
+    <RepositoryUrl>https://github.com/Marciel032/RelatorioVM</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Marciel032/RelatorioVM</PackageProjectUrl>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DinkToPdf" Version="1.0.8" />
     <PackageReference Include="HtmlTags" Version="8.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RelatorioVM.Dominio\RelatorioVM.Dominio.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="libwkhtmltox.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

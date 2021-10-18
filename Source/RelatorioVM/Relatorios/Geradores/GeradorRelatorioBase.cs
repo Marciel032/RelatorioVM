@@ -1,10 +1,8 @@
-﻿using DinkToPdf;
-using HtmlTags;
-using RelatorioVM.ConversoresPdf.Interfaces;
+﻿using HtmlTags;
 using RelatorioVM.Dominio.Configuracoes;
+using RelatorioVM.Dominio.Interfaces;
 using RelatorioVM.Extensoes;
 using RelatorioVM.Relatorios.Estruturas;
-using RelatorioVM.Relatorios.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,13 +13,11 @@ namespace RelatorioVM.Relatorios.Geradores
     {
         private EstruturaRelatorio _estrutura;
         private ConfiguracaoRelatorio _configuracao;
-        private IConversorPdf _conversor;
 
-        public GeradorRelatorioBase(EstruturaRelatorio estrutura, ConfiguracaoRelatorio configuracao, IConversorPdf conversor)
+        public GeradorRelatorioBase(EstruturaRelatorio estrutura, ConfiguracaoRelatorio configuracao)
         {
             _estrutura = estrutura;
             _configuracao = configuracao;
-            _conversor = conversor;
         }
 
         public string GerarHtml() {
@@ -61,21 +57,6 @@ namespace RelatorioVM.Relatorios.Geradores
             _estrutura.AdicionarHtml(corpo);
 
             return relatorio.ToHtmlString();
-        }
-
-        public byte[] Gerar()
-        {            
-            var documento = new ObjectSettings()
-            {
-                HtmlContent = GerarHtml()
-            };
-            documento.Configurar(_configuracao);
-
-            var pdf = new HtmlToPdfDocument();
-            pdf.Configurar(_configuracao);
-            pdf.Objects.Add(documento);
-
-            return _conversor.Converter(pdf);
         }
     }
 }

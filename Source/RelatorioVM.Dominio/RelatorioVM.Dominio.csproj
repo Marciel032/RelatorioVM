@@ -2,6 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <Authors>Marciel Grutzmann</Authors>
+    <Company>Infogen Sistemas</Company>
+    <Description>Abstrações para o pacote RelatorioVM</Description>
+    <PackageProjectUrl>https://github.com/Marciel032/RelatorioVM</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Marciel032/RelatorioVM</RepositoryUrl>
+    <PackageTags>report builder relatorio view model</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Version>1.0.0.1</Version>
   </PropertyGroup>
 
 </Project>

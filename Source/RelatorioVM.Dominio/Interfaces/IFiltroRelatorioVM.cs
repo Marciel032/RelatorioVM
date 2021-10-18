@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace RelatorioVM.Relatorios.Interfaces
+namespace RelatorioVM.Dominio.Interfaces
 {
     public interface IFiltroRelatorioVM<T>
     {

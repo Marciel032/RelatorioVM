@@ -1,10 +1,9 @@
-﻿using RelatorioVM.ConversoresPdf.Interfaces;
-using RelatorioVM.Dominio.Configuracoes;
+﻿using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Dominio.Configuracoes.Interfaces;
+using RelatorioVM.Dominio.Interfaces;
 using RelatorioVM.Infraestruturas;
 using RelatorioVM.Relatorios.Estruturas;
 using RelatorioVM.Relatorios.Fabricas;
-using RelatorioVM.Relatorios.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,12 +14,10 @@ namespace RelatorioVM.Relatorios.Construtores
     {
         private EstruturaRelatorio _estruturaRelatorio;
         private ConfiguracaoRelatorio _configuracaoRelatorio;
-        private IConversorPdf _conversor;
 
-        public ConstrutorRelatorio(IConversorPdf conversor)
+        public ConstrutorRelatorio()
         {
             _configuracaoRelatorio = Configuracao.ConfiguracaoRelatorio.Clone();
-            _conversor = conversor;
             _estruturaRelatorio = new EstruturaRelatorio(_configuracaoRelatorio);
                         
         }
@@ -63,7 +60,7 @@ namespace RelatorioVM.Relatorios.Construtores
 
         public IGeradorRelatorioVM Construir()
         {
-            return GeradorRelatorioFabrica.Criar(_estruturaRelatorio, _configuracaoRelatorio, _conversor);
+            return GeradorRelatorioFabrica.Criar(_estruturaRelatorio, _configuracaoRelatorio);
         }        
     }
 }

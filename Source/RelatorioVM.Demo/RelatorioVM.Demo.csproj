@@ -14,4 +14,10 @@
     <ProjectReference Include="..\RelatorioVM\RelatorioVM.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="libwkhtmltox.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
