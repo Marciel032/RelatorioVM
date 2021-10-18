@@ -50,10 +50,52 @@ public class HomeController : Controller
 }
 ```
 
-Utilize o construtor para obter o html
+Crie uma view model para informar ao construtor do relatório qual a estrutura que você quer imprimir
 ```csharp
+public class ExemploSimplesItemViewModel
+{
+    [DisplayName("Filial")]
+    public int FilialCodigo { get; set; }
+
+    [DisplayName("Pessoa código")]
+    public int PessoaCodigo { get; set; }
+
+    public PessoaViewModel Pessoa { get; set; }
+
+    public DateTime Data { get; set; }
+    public decimal Valor { get; set; }
+}
+```
+
+Popule uma lista da sua view model, com os dados que deseja imprimir
+```csharp
+var itens = new List<ExemploSimplesItemViewModel>();
+for (int i = 0; i < 10; i++)
+{
+    itens.Add(new ExemploSimplesItemViewModel()
+    {
+        Data = DateTime.Now,
+        FilialCodigo = new Random().Next(1, 10),
+        PessoaCodigo = new Random().Next(1, 10),
+        Valor = (decimal)new Random().NextDouble() * 100m,
+        Pessoa = new PessoaViewModel() { 
+            Codigo = new Random().Next(),
+            Nome = "Teste"
+        }
+    });
+}
+```
+
+Utilize o construtor para obter o html, passando a sua lista como conteudo
+```csharp
+var relatorio = relatorioConstrutor
+    .AdicionarTabela(itens)
+    .Titulo("Teste de relatório")
+    .Construir();
 
 ```
+
+
 
 ## 🤝 Colaboradores
 
