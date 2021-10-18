@@ -8,5 +8,6 @@ namespace RelatorioVM.Relatorios.Interfaces
     public interface ITabelaAgrupadorRelatorioVM<TConteudo>
     {
         ITabelaAgrupadorRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade);
+        ITabelaAgrupadorRelatorioVM<TConteudo> Totalizar(bool totalizar = true);
     }
 }

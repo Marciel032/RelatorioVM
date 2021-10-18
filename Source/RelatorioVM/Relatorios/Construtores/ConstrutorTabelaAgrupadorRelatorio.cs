@@ -22,6 +22,11 @@ namespace RelatorioVM.Relatorios.Construtores
             _agrupador = new TabelaAgrupador<TConteudo>(_configuracaoRelatorio);
         }
 
+        public TabelaAgrupador<TConteudo> Construir()
+        {
+            return _agrupador;
+        }
+
         public ITabelaAgrupadorRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade)
         {
             var propriedade = expressaoPropriedade.ObterPropriedadeBase();
@@ -32,10 +37,12 @@ namespace RelatorioVM.Relatorios.Construtores
             else
                 _agrupador.Agrupadores.Add(colunaAgrupador.Identificador, colunaAgrupador);
             return this;
-        }
+        }        
 
-        public TabelaAgrupador<TConteudo> Construir() {
-            return _agrupador;
+        public ITabelaAgrupadorRelatorioVM<TConteudo> Totalizar(bool totalizar = true)
+        {
+            _agrupador.Totalizar = totalizar;
+            return this;
         }
     }
 }

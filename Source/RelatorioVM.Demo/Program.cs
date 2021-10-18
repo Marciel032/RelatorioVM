@@ -31,7 +31,7 @@ namespace RelatorioVM.Demo
                 Itens = new List<ExemploSimplesItemViewModel>(),                
             };
 
-            for (int i = 0; i < 200; i++)
+            for (int i = 0; i < 100; i++)
             {
                 viewModel.Itens.Add(new ExemploSimplesItemViewModel()
                 {
@@ -61,17 +61,11 @@ namespace RelatorioVM.Demo
                 .AdicionarTabela(viewModel.Itens, tabela => {
                     tabela
                         .Titulo("Descrição da tabela de testes")
-                        .Agrupar(agrupamento => {
-                            agrupamento
-                                .Coluna(x => x.FilialCodigo);
-                                //.Coluna(x => x.PessoaCodigo);
-                        })
-                      /*  .Agrupar(x => x.Coluna(y => y.PessoaCodigo))*/
-                        .Totalizar(totais => {
-                            totais
-                                .Titulo("Titulo dos totais")
-                                .Coluna(x => x.Data, x => (decimal)x.FilialCodigo / (decimal)x.PessoaCodigo);
-                        });
+                        .Agrupar(agrupar => 
+                            agrupar
+                                .Coluna(x => x.FilialCodigo)
+                         )
+                        .Totalizar();
                 })
                 .Titulo("Teste de relatório")
                 .Construir();

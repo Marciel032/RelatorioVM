@@ -47,5 +47,9 @@ namespace RelatorioVM.Elementos.Relatorios
         public void Zerar() {
             Valor = null;
         }
+
+        public TabelaColunaTotal<T> Clonar() {
+            return MemberwiseClone() as TabelaColunaTotal<T>;
+        }
     }
 }

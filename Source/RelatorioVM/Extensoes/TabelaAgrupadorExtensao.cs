@@ -12,6 +12,22 @@ namespace RelatorioVM.Extensoes
 {
     internal static class TabelaAgrupadorExtensao
     {
+        public static void CalcularTotais<T>(this TabelaAgrupador<T> agrupador, T conteudo)
+        {
+            if (!agrupador.Totalizar)
+                return;
+
+            agrupador.Totais.CalcularTotais(conteudo);
+        }
+
+        public static void AdicionarTotaisHtml<T>(this TabelaAgrupador<T> agrupador, HtmlTag tabelaHtml, Tabela<T> tabela, OpcoesFormatacao formatacao)
+        {
+            if (!agrupador.Totalizar)
+                return;
+
+            agrupador.Totais.AdicionarTotaisHtml(tabelaHtml, tabela, formatacao);
+        }
+
         public static IEnumerable<IGrouping<IDictionary<string, object>, T>> AgruparConteudo<T>(this TabelaAgrupador<T> agrupador, IEnumerable<T> conteudo)
         {
             Func<T, IDictionary<string, object>> agrupamentoFuncao = (item) =>
@@ -35,23 +51,31 @@ namespace RelatorioVM.Extensoes
             return conteudo.GroupBy(agrupamentoFuncao, new DicionarioComparador());
         }
 
-        public static HtmlTag CriarCabecalhoAgrupamento<T>(this TabelaAgrupador<T> agrupador, T item, int quantidadeDeColunas)
+        public static void AdicionarCabecalhoAgrupamento<T>(this TabelaAgrupador<T> agrupador, HtmlTag tabelaHtml, T item, int quantidadeDeColunas)
         {
-            var linhaTabela = new HtmlTag("tr")
+            var titulo = agrupador.ObterTituloAgrupamento(item);
+            tabelaHtml.CriarLinhaTabela()
                 .Style("font-weight", "bold")
-                .Style("border-bottom", "1px solid #888");
-
-            var colunaTabela = linhaTabela
+                .Style("border-bottom", "1px solid #888")
                 .CriarColunaTabela()
-                .Attr("colspan", quantidadeDeColunas);
+                .Attr("colspan", quantidadeDeColunas)
+                .Text(titulo);
 
+            agrupador.AjustarTituloComplementoTotais(titulo);
+        }
+
+        public static string ObterTituloAgrupamento<T>(this TabelaAgrupador<T> agrupador, T item) {
             var textoCabecaho = string.Empty;
             foreach (var coluna in agrupador.Colunas)
                 textoCabecaho += $"{coluna.Titulo}:{coluna.Propriedade.ObterValorConvertido(item, agrupador.ObterOpcoesFormatacao())}   ";
+            return textoCabecaho;
+        }
 
-            colunaTabela.Text(textoCabecaho);
+        public static void AjustarTituloComplementoTotais<T>(this TabelaAgrupador<T> agrupador, string titulo)
+        {
+            foreach (var total in agrupador.Totais)
+                total.TituloComplemento = titulo;
 
-            return linhaTabela;
         }
 
         public static List<TabelaColuna<T>> ObterColunasAgrupamento<T>(this TabelaAgrupador<T> agrupador, Dictionary<string, TabelaColuna<T>> colunas) {

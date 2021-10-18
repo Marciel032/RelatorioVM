@@ -30,7 +30,9 @@ namespace RelatorioVM.Relatorios.Construtores
             foreach (var agrupador in _tabela.Agrupadores)
             {
                 agrupador.Colunas = agrupador.ObterColunasAgrupamento(_tabela.Colunas);
-                agrupador.Colunas.ForEach(x => x.Visivel = false);                
+                agrupador.Colunas.ForEach(x => x.Visivel = false);
+                foreach (var total in _tabela.Totais)
+                    agrupador.Totais.Add(total.Clonar());
             }
             return new TabelaElemento<TConteudo>(_configuracaoRelatorio, _tabela);
         }
