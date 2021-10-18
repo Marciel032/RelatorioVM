@@ -69,21 +69,9 @@ public class ExemploSimplesItemViewModel
 
 Popule uma lista da sua view model, com os dados que deseja imprimir
 ```csharp
-var itens = new List<ExemploSimplesItemViewModel>();
-for (int i = 0; i < 10; i++)
-{
-    itens.Add(new ExemploSimplesItemViewModel()
-    {
-        Data = DateTime.Now,
-        FilialCodigo = new Random().Next(1, 10),
-        PessoaCodigo = new Random().Next(1, 10),
-        Valor = (decimal)new Random().NextDouble() * 100m,
-        Pessoa = new PessoaViewModel() { 
-            Codigo = new Random().Next(),
-            Nome = "Teste"
-        }
-    });
-}
+var itens = new List<ExemploSimplesItemViewModel>(){
+    ...
+};
 ```
 
 Utilize o construtor para obter o html, passando a sua lista como conteudo
