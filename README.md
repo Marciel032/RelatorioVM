@@ -82,6 +82,8 @@ relatorioConstrutor
     .Construir()
     .GerarHtml();
 ```
+<img src="Documentacao/Imagens/RelatorioSimples.png" alt="exemplo imagem">
+
 
 Tambem é possível fazer agrupamento e totalização de valores
 ```csharp
@@ -95,7 +97,7 @@ relatorioConstrutor
     .Construir()
     .GerarHtml();
 ```
-
+<img src="Documentacao/Imagens/RelatorioAgrupado.png" alt="exemplo imagem">
 
 
 ## 🤝 Colaboradores
