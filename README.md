@@ -1,7 +1,7 @@
 # RelatorioVM
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/Marciel032/RelatorioVM?style=for-the-badge)
-![GitHub language count](https://img.shields.io/github/languages/count/Marciel032/RelatorioVM?style=for-the-badge)
+![Nuget version](https://img.shields.io/nuget/v/RelatorioVM?style=for-the-badge)
 ![GitHub forks](https://img.shields.io/github/forks/Marciel032/RelatorioVM?style=for-the-badge)
 ![Bitbucket open issues](https://img.shields.io/bitbucket/issues/Marciel032/RelatorioVM?style=for-the-badge)
 ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/Marciel032/RelatorioVM?style=for-the-badge)
