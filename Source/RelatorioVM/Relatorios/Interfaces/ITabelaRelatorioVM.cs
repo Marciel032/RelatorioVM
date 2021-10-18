@@ -8,5 +8,6 @@ namespace RelatorioVM.Relatorios.Interfaces
     {
         ITabelaRelatorioVM<TConteudo> Titulo(string titulo);
         ITabelaRelatorioVM<TConteudo> Totalizar(Action<ITabelaTotalRelatorioVM<TConteudo>> opcoes = null);
+        ITabelaRelatorioVM<TConteudo> Agrupar(Action<ITabelaAgrupadorRelatorioVM<TConteudo>> opcoes);
     }
 }

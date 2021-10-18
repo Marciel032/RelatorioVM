@@ -1,4 +1,5 @@
 ﻿using HtmlTags;
+using RelatorioVM.Comparadores;
 using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Dominio.Enumeradores;
 using RelatorioVM.Elementos.Interfaces;
@@ -6,6 +7,8 @@ using RelatorioVM.Extensoes;
 using RelatorioVM.Infraestruturas;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
+using System.Linq;
 using System.Text;
 
 namespace RelatorioVM.Elementos.Relatorios
@@ -46,7 +49,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 .CriarLinhaTabela()
                 .Style("border", "1px solid #777");
 
-            foreach (var coluna in _tabela.Colunas)
+            foreach (var coluna in _tabela.Colunas.Values)
             {
                 linhaCabecalho.CriarColunaCabecalhoTabela()
                      .Style("text-align", coluna.AlinhamentoHorizontal.ObterDescricao())
@@ -57,10 +60,45 @@ namespace RelatorioVM.Elementos.Relatorios
         }
 
         private void AdicionarConteudo(HtmlTag tabela) {
+            foreach (var total in _tabela.Totais)
+                foreach (var colunaTotal in total.Totais)
+                    colunaTotal.Value.Zerar();
+
             var corpoTabela = tabela.CriarCorpoTabela();
-            foreach (var conteudo in _tabela.Conteudo) {
+            if (_tabela.Agrupadores.Count == 0)
+                AdicionarConteudoItens(corpoTabela, _tabela.Conteudo);
+            else
+                AdicionarConteudoAgrupado(corpoTabela, _tabela.Conteudo, _tabela.Agrupadores.ToList());
+        }
+
+        private void AdicionarConteudoAgrupado(HtmlTag corpoTabela, IEnumerable<T> conteudo, List<TabelaAgrupador> agrupadores) {
+            if (agrupadores.Count == 0)
+                return;
+
+            var agrupador = agrupadores[0];
+            agrupadores.RemoveAt(0);
+
+            var itens = agrupador.AgruparConteudo(conteudo, _tabela.Colunas);
+            foreach (var item in itens) {
+                /*
+                var linhaAgrupamento = corpoTabela.CriarLinhaTabela();
+                foreach (var grupo in item.Key)
+                    linhaAgrupamento.CriarColunaTabela()
+                        .Text(grupo.Key);
+                */
+                if (agrupadores.Count > 0)
+                    AdicionarConteudoAgrupado(corpoTabela, item, agrupadores.ToList());
+                else
+                    AdicionarConteudoItens(corpoTabela, item);
+            }
+        }
+
+        private void AdicionarConteudoItens(HtmlTag corpoTabela, IEnumerable<T> itens) {
+            foreach (var conteudo in itens)
+            {
                 var linha = corpoTabela.CriarLinhaTabela();
-                foreach (var coluna in _tabela.Colunas) {
+                foreach (var coluna in _tabela.Colunas.Values)
+                {
                     linha.CriarColunaTabela()
                         .Style("text-align", coluna.AlinhamentoHorizontal.ObterDescricao())
                         .Style("padding-left", "3px")
@@ -68,9 +106,9 @@ namespace RelatorioVM.Elementos.Relatorios
                         .Text(coluna.Propriedade.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                 }
 
-                foreach (var total in _tabela.Totais) 
-                    foreach (var colunaTotal in total.Totais) 
-                        colunaTotal.Value.Calcular(conteudo);                                    
+                foreach (var total in _tabela.Totais)
+                    foreach (var colunaTotal in total.Totais)
+                        colunaTotal.Value.Calcular(conteudo);
             }
         }
 
@@ -99,7 +137,7 @@ namespace RelatorioVM.Elementos.Relatorios
                     .Style("font-weight", "bold")
                     .Style("border-top", "1px solid #888");
 
-                foreach (var coluna in _tabela.Colunas)
+                foreach (var coluna in _tabela.Colunas.Values)
                 {
                     if (total.Totais.ContainsKey(coluna.Identificador))
                     {
@@ -109,7 +147,6 @@ namespace RelatorioVM.Elementos.Relatorios
                             .Style("padding-left", "3px")
                             .Style("padding-right", "3px")
                             .Text(totalColuna.ObterValorConvertido(_configuracaoRelatorio.Formatacao));
-                        totalColuna.Zerar();
                     }
                     else
                         linhaTotal
@@ -128,6 +165,6 @@ namespace RelatorioVM.Elementos.Relatorios
                 .Text(_tabela.Titulo)
                 .Attr("colspan", _tabela.Colunas.Count)
                 .Style("text-align", TipoAlinhamentoHorizontal.Esquerda.ObterDescricao());
-        }
-    }
+        }        
+    }    
 }

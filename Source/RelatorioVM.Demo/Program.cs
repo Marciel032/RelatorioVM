@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace RelatorioVM.Demo
 {
@@ -30,14 +31,14 @@ namespace RelatorioVM.Demo
                 Itens = new List<ExemploSimplesItemViewModel>(),                
             };
 
-            for (int i = 0; i < 150; i++)
+            for (int i = 0; i < 200; i++)
             {
                 viewModel.Itens.Add(new ExemploSimplesItemViewModel()
                 {
                     Data = DateTime.Now,
-                    FilialCodigo = new Random().Next(),
-                    PessoaCodigo = new Random().Next(),
-                    Valor = (decimal)new Random().NextDouble(),
+                    FilialCodigo = new Random().Next(1, 10),
+                    PessoaCodigo = new Random().Next(1, 10),
+                    Valor = (decimal)new Random().NextDouble() * 100m,
                     Pessoa = new PessoaViewModel() { 
                         Codigo = new Random().Next(),
                         Nome = "Teste"
@@ -60,6 +61,12 @@ namespace RelatorioVM.Demo
                 .AdicionarTabela(viewModel.Itens, tabela => {
                     tabela
                         .Titulo("Descrição da tabela de testes")
+                        .Agrupar(agrupamento => {
+                            agrupamento
+                                .Coluna(x => x.FilialCodigo)
+                                .Coluna(x => x.PessoaCodigo);
+                        })
+                      /*  .Agrupar(x => x.Coluna(y => y.PessoaCodigo))*/
                         .Totalizar(totais => {
                             totais
                                 .Titulo("Titulo dos totais")
@@ -81,7 +88,7 @@ namespace RelatorioVM.Demo
                 }
             }.Start();
 
-            
+            /*
             var pathHtml = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Replace(".tmp", ".html"));
 
             File.WriteAllText(pathHtml, relatorio.GerarHtml());
@@ -92,7 +99,7 @@ namespace RelatorioVM.Demo
                 {
                     UseShellExecute = true
                 }
-            }.Start();
+            }.Start();*/
         }
 
         static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -100,9 +107,9 @@ namespace RelatorioVM.Demo
                 .ConfigureServices((_, services) =>
                     services.UtilizarRelatorioVM(options => {
                         options
-                            .UsarOrientacao(TipoOrientacao.Retrato)
+                            .UsarOrientacao(TipoOrientacao.Retrato)                            
                             .ConfigurarFormatacao(formato => {
-                                formato.CasasDecimais = 2;
+                                formato.CasasDecimais = 3;
                             })
                             .ConfigurarCabecalho(cabecalho => {
                                 cabecalho

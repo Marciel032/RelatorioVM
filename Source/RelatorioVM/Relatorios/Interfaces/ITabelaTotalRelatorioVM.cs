@@ -28,7 +28,7 @@ namespace RelatorioVM.Relatorios.Interfaces
         /// <param name="expressaoCalculo">Valor calculado para obter o totalizador</param>
         /// <returns></returns>
         ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, long>> expressaoCalculo);
-        
+
         /// <summary>
         /// Ignora uma coluna especifica
         /// </summary>

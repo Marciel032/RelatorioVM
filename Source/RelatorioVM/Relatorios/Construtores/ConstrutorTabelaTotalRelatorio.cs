@@ -16,7 +16,7 @@ namespace RelatorioVM.Relatorios.Construtores
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
         private TabelaTotal<TConteudo> _totais;
 
-        public ConstrutorTabelaTotalRelatorio(ConfiguracaoRelatorio configuracaoRelatorio, IEnumerable<TConteudo> conteudo)
+        public ConstrutorTabelaTotalRelatorio(ConfiguracaoRelatorio configuracaoRelatorio)
         {
             _configuracaoRelatorio = configuracaoRelatorio;
             _totais = new TabelaTotal<TConteudo>(
@@ -32,24 +32,24 @@ namespace RelatorioVM.Relatorios.Construtores
             return _totais;
         }
 
-        public ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, decimal>> expressaoCalculo = null)
+        public ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, decimal>> expressaoCalculo)
         {
             var propriedade = expressaoPropriedade.ObterPropriedadeBase();
             var total = ObterOuAdicionarTotal(propriedade);
 
             if (expressaoCalculo != null)
-                _totais.Totais[propriedade.Name].Propriedade.FuncaoPropriedade = (origem) => expressaoCalculo.Compile()(origem);
+                total.Propriedade.FuncaoPropriedade = (origem) => expressaoCalculo.Compile()(origem);
 
             return this;
         }
 
-        public ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, long>> expressaoCalculo = null)
+        public ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, long>> expressaoCalculo)
         {
             var propriedade = expressaoPropriedade.ObterPropriedadeBase();
             var total = ObterOuAdicionarTotal(propriedade);
 
             if (expressaoCalculo != null)
-                _totais.Totais[propriedade.Name].Propriedade.FuncaoPropriedade = (origem) => expressaoCalculo.Compile()(origem);
+                total.Propriedade.FuncaoPropriedade = (origem) => expressaoCalculo.Compile()(origem);
 
             return this;
         }

@@ -22,8 +22,8 @@ namespace RelatorioVM.Relatorios.Construtores
                 .ObterPropriedades()
                 .Where(x => x.PodeSerColunaTabela())
                 .Select(x => x.ObterColunaTabela<TConteudo>())
-                .ToList();
-        }
+                .ToDictionary(x => x.Identificador);
+        }        
 
         public TabelaElemento<TConteudo> Construir()
         {
@@ -37,11 +37,21 @@ namespace RelatorioVM.Relatorios.Construtores
 
         public ITabelaRelatorioVM<TConteudo> Totalizar(Action<ITabelaTotalRelatorioVM<TConteudo>> opcoes = null)
         {
-            var totaisConstrutor = new ConstrutorTabelaTotalRelatorio<TConteudo>(_configuracaoRelatorio, _tabela.Conteudo);
+            var totaisConstrutor = new ConstrutorTabelaTotalRelatorio<TConteudo>(_configuracaoRelatorio);
             opcoes?.Invoke(totaisConstrutor);
             var total = totaisConstrutor.Construir();
             if(total.Totais.Count > 0)
                 _tabela.Totais.Add(total);
+            return this;
+        }
+
+        public ITabelaRelatorioVM<TConteudo> Agrupar(Action<ITabelaAgrupadorRelatorioVM<TConteudo>> opcoes)
+        {
+            var agrupadorConstrutor = new ConstrutorTabelaAgrupadorRelatorio<TConteudo>(_configuracaoRelatorio);
+            opcoes?.Invoke(agrupadorConstrutor);
+            var agrupador = agrupadorConstrutor.Construir();
+            if(agrupador.Agrupadores.Count > 0)
+                _tabela.Agrupadores.Add(agrupador);
             return this;
         }
     }

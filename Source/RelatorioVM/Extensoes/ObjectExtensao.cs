@@ -9,6 +9,9 @@ namespace RelatorioVM.Extensoes
     public static class ObjectExtensao
     {
         public static string ObterValorConvertido(this object valor, OpcoesFormatacao formato) {
+            if (valor == null)
+                return formato.ValorNulavel;
+
             var tipo = valor.GetType().ObterTipoNaoNullo();
             var conversor = ConversorValor.ObterConversor(tipo);
             return conversor.Converter(valor, formato);
