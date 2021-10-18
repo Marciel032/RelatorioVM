@@ -50,6 +50,11 @@ public class HomeController : Controller
 }
 ```
 
+Utilize o construtor para obter o html
+```csharp
+
+```
+
 ## 🤝 Colaboradores
 
 Agradecemos às seguintes pessoas que contribuíram para este projeto:
