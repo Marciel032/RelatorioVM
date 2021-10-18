@@ -8,7 +8,7 @@
 
 
 > Permite criar relatórios em html, baseado em view models. Faz a leitura das propriedades dos objetos e monta automaticamente as colunas. 
-> Tambem permite adicionar agrupamentos e totalizadores.
+> Também permite adicionar agrupamentos e totalizadores.
 
 ### Ajustes e melhorias
 
@@ -38,7 +38,7 @@ Inicialize no Startup.cs
 services.UtilizarRelatorioVM();
 ```
 
-Receba o construtor do relatorio no controlador
+Receba o construtor do relatório no controlador
 ```csharp
 public class HomeController : Controller
 {
@@ -74,7 +74,7 @@ var itens = new List<ExemploSimplesItemViewModel>(){
 };
 ```
 
-Utilize o construtor para obter o html, passando a sua lista como conteudo
+Utilize o construtor para obter o html, passando a sua lista como conteúdo
 ```csharp
 relatorioConstrutor
     .AdicionarTabela(itens)
