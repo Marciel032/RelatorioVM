@@ -31,7 +31,7 @@ PM> Install-Package RelatorioVM
 
 ## ☕ Usando RelatorioVM
 
-Para usar <nome_do_projeto>, siga estas etapas:
+Para usar RelatorioVM, siga estas etapas:
 
 Inicialize no Startup.cs
 ```csharp
