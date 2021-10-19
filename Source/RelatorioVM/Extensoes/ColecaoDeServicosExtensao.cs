@@ -3,7 +3,9 @@ using RelatorioVM.Configuradores;
 using RelatorioVM.Conversores;
 using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Dominio.Configuracoes.Interfaces;
+using RelatorioVM.Dominio.Interfaces;
 using RelatorioVM.Infraestruturas;
+using RelatorioVM.Relatorios.Construtores;
 using RelatorioVM.Relatorios.Fabricas;
 using System;
 
@@ -13,9 +15,7 @@ namespace RelatorioVM.Extensoes
     {
         public static IConfiguradorRelatorio UtilizarRelatorioVM(this IServiceCollection colecaoDeServicos)
         {
-            colecaoDeServicos.AddSingleton((provedorDeServicos) => { 
-                return ConstrutorRelatorioFabrica.Criar(); 
-            });
+            colecaoDeServicos.AddScoped<IRelatorioVM, ConstrutorRelatorio>();
 
             ConversorValor.DefinirConversor<DateTime>(new ConversorDataHora());
             ConversorValor.DefinirConversor<decimal>(new ConversorDecimal());
