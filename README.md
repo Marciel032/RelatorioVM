@@ -100,6 +100,10 @@ relatorioConstrutor
 ```
 <img src="Documentacao/Imagens/RelatorioAgrupado.png" alt="exemplo imagem">
 
+### 📘 Mais detalhes na [Wiki](https://github.com/Marciel032/RelatorioVM/wiki)
+
+
+
 
 ## 🤝 Colaboradores
 
