@@ -1,4 +1,5 @@
 ﻿using HtmlTags;
+using RelatorioVM.Dominio.Enumeradores;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -39,6 +40,22 @@ namespace RelatorioVM.Extensoes
         public static HtmlTag CriarColunaCabecalhoTabela(this HtmlTag tag)
         {
             return new HtmlTag("th", tag);
+        }
+
+        public static HtmlTag DefinirAlinhamentoHorizontal(this HtmlTag tag, TipoAlinhamentoHorizontal alinhamento)
+        {
+            if (alinhamento != TipoAlinhamentoHorizontal.Esquerda)
+                tag.Style("text-align", alinhamento.ObterDescricao());
+
+            return tag;
+        }
+
+        public static HtmlTag ExpandirColuna(this HtmlTag tag, int colunas)
+        {
+            if (colunas > 0)
+                tag.Attr("colspan", colunas);
+
+            return tag;
         }
     }
 }

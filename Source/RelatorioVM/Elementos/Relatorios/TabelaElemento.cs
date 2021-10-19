@@ -27,42 +27,38 @@ namespace RelatorioVM.Elementos.Relatorios
         public bool ProcessarHtml(HtmlTag pai) {            
             var tabela = CriarTabela(pai);
             AdicionarCabecalho(tabela);
-            AdicionarConteudo(tabela);
-            AdicionarTotais(tabela);
+            var corpoTabela = tabela.CriarCorpoTabela();
+            AdicionarConteudo(corpoTabela);
+            AdicionarTotais(tabela, corpoTabela);
             return true;
         }
 
         private HtmlTag CriarTabela(HtmlTag pai) { 
             return pai
                 .CriarTabela()
-                .Style("width", "100%")
-                .Style("font-family", "courier new");
+                .AddClass("tabela-conteudo");
         }
 
         private void AdicionarCabecalho(HtmlTag tabela) {
-            var cabecalho = tabela.CriarCabecalhoTabela()
-                    .Style("display", "table-header-group");
+            var cabecalho = tabela.CriarCabecalhoTabela();
 
             AdicionarTitulo(cabecalho);
 
             var linhaCabecalho = cabecalho
                 .CriarLinhaTabela()
-                .Style("border", "1px solid #777");
+                .AddClass("tr-cabecalho");
 
             foreach (var coluna in _tabela.ObterColunasVisiveis())
             {
                 linhaCabecalho.CriarColunaCabecalhoTabela()
-                     .Style("text-align", coluna.AlinhamentoHorizontal.ObterDescricao())
-                     .Style("padding-left", "3px")
-                     .Style("padding-right", "3px")
-                     .Text(coluna.Titulo);
+                    .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal)
+                    .Text(coluna.Titulo);
             }
         }
 
-        private void AdicionarConteudo(HtmlTag tabela) {
+        private void AdicionarConteudo(HtmlTag corpoTabela) {
             _tabela.Totais.ZerarTotais();
-
-            var corpoTabela = tabela.CriarCorpoTabela();
+            
             if (_tabela.Agrupadores.Count == 0)
                 AdicionarConteudoItens(corpoTabela, _tabela.Conteudo);
             else
@@ -105,18 +101,16 @@ namespace RelatorioVM.Elementos.Relatorios
             foreach (var coluna in _tabela.ObterColunasVisiveis())
             {
                 linha.CriarColunaTabela()
-                    .Style("text-align", coluna.AlinhamentoHorizontal.ObterDescricao())
-                    .Style("padding-left", "3px")
-                    .Style("padding-right", "3px")
+                    .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal)                    
                     .Text(coluna.Propriedade.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
             }
 
             _tabela.Totais.CalcularTotais(conteudo);           
         }
 
-        private void AdicionarTotais(HtmlTag tabela)
+        private void AdicionarTotais(HtmlTag tabela, HtmlTag corpoTabela)
         {
-            _tabela.Totais.AdicionarTotaisHtml(tabela, _tabela, _configuracaoRelatorio.Formatacao);           
+            _tabela.Totais.AdicionarTotaisHtml(corpoTabela, _tabela, _configuracaoRelatorio.Formatacao);           
         }
 
         private void AdicionarTitulo(HtmlTag cabecalho) {
@@ -126,9 +120,9 @@ namespace RelatorioVM.Elementos.Relatorios
             cabecalho
                 .CriarLinhaTabela()
                 .CriarColunaCabecalhoTabela()
-                .Text(_tabela.Titulo)
-                .Attr("colspan", _tabela.ObterQuantidadeColunasVisiveis())
-                .Style("text-align", TipoAlinhamentoHorizontal.Esquerda.ObterDescricao());
+                .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda)
+                .ExpandirColuna(_tabela.ObterQuantidadeColunasVisiveis())
+                .Text(_tabela.Titulo);
         }        
     }    
 }

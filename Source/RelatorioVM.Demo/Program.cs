@@ -46,7 +46,7 @@ namespace RelatorioVM.Demo
                 });
             }
 
-            var relatorioConstrutor = host.Services.GetService(typeof(IRelatorioVM)) as IRelatorioVM;
+            var relatorioConstrutor = host.Services.GetService(typeof(IRelatorioVM)) as IRelatorioVM;            
 
             var relatorio = relatorioConstrutor
                 .Filtros(viewModel, opcoes => {
@@ -70,18 +70,15 @@ namespace RelatorioVM.Demo
                 .Titulo("Teste de relatório")
                 .Construir();
 
+            var cronometro = new Stopwatch();
+            cronometro.Start();
+            var html = relatorio.GerarHtml();
+            cronometro.Stop();
+            Console.WriteLine($"Tempo gerando relatório: {cronometro.ElapsedMilliseconds}. Tamanho html: {html.Length}");
             
             var pathHtml = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Replace(".tmp", ".html"));
-
-            File.WriteAllText(pathHtml, relatorio.GerarHtml());
-
-            new Process
-            {
-                StartInfo = new ProcessStartInfo(pathHtml)
-                {
-                    UseShellExecute = true
-                }
-            }.Start();
+            File.WriteAllText(pathHtml, html);
+            new Process{StartInfo = new ProcessStartInfo(pathHtml){UseShellExecute = true}}.Start();
         }
 
         static IHostBuilder CreateHostBuilder(string[] args) =>

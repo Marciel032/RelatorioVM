@@ -38,15 +38,14 @@ namespace RelatorioVM.Extensoes
                 if (!string.IsNullOrWhiteSpace(titulo))
                 {
                     tabelaHtml.CriarLinhaTabela()
-                        .Style("font-weight", "bold")
+                        .AddClass("tr-totais-titulo")
                         .CriarColunaTabela()
-                        .Text(titulo)
-                        .Attr("colspan", tabela.ObterQuantidadeColunasVisiveis());
+                        .ExpandirColuna(tabela.ObterQuantidadeColunasVisiveis())
+                        .Text(titulo);
                 }
 
                 var linhaTotal = tabelaHtml.CriarLinhaTabela()
-                    .Style("font-weight", "bold")
-                    .Style("border-top", "1px solid #888");
+                    .AddClass("tr-totais");
 
                 foreach (var coluna in tabela.ObterColunasVisiveis())
                 {
@@ -54,9 +53,7 @@ namespace RelatorioVM.Extensoes
                     {
                         var totalColuna = total.Totais[coluna.Identificador];
                         linhaTotal.CriarColunaTabela()
-                            .Style("text-align", coluna.AlinhamentoHorizontal.ObterDescricao())
-                            .Style("padding-left", "3px")
-                            .Style("padding-right", "3px")
+                            .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal)
                             .Text(totalColuna.ObterValorConvertido(formatacao));
                     }
                     else
