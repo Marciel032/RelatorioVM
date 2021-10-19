@@ -67,7 +67,8 @@ namespace RelatorioVM.Demo
                             agrupar
                                 .Coluna(x => x.FilialCodigo)
                          )
-                        .Totalizar();
+                        .Totalizar()
+                        .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa);
                 })
                 .Titulo("Teste de relatório")
                 .Construir();

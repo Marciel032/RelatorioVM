@@ -8,6 +8,6 @@ namespace RelatorioVM.Dominio.Atributos
     public class ColunaRelatorioAttribute: Attribute
     {
         public string Titulo { get; set; } = string.Empty;
-        public bool Ignorar { get; set; } = false;
+        public bool Visivel { get; set; } = true;
     }
 }

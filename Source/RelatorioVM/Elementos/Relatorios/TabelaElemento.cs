@@ -102,7 +102,7 @@ namespace RelatorioVM.Elementos.Relatorios
             {
                 linha.CriarColunaTabela()
                     .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal)                    
-                    .Text(coluna.Propriedade.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
+                    .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
             }
 
             _tabela.Totais.CalcularTotais(conteudo);           

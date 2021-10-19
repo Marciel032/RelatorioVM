@@ -13,7 +13,8 @@ namespace RelatorioVM.Demo.Modelos
 
         [DisplayName("Filial")]
         public int FilialCodigo { get; set; }
-        
+
+        [ColunaRelatorio(Titulo = "Pessoa")]
         public int PessoaCodigo { get; set; }
 
         public PessoaViewModel Pessoa { get; set; }        

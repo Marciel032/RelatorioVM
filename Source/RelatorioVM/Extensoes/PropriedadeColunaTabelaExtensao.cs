@@ -30,7 +30,7 @@ namespace RelatorioVM.Extensoes
             {
                 if (!string.IsNullOrWhiteSpace(colunaAtributo.Titulo))
                     coluna.Titulo = colunaAtributo.Titulo;
-                if (colunaAtributo.Ignorar)
+                if (!colunaAtributo.Visivel)
                     coluna.Visivel = false;
             }
 

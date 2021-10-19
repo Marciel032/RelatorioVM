@@ -1,11 +1,14 @@
 ﻿using RelatorioVM.Dominio.Configuracoes;
+using RelatorioVM.Dominio.Enumeradores;
 using RelatorioVM.Dominio.Interfaces;
+using RelatorioVM.Elementos.Propriedades;
 using RelatorioVM.Elementos.Relatorios;
 using RelatorioVM.Extensoes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 
 namespace RelatorioVM.Relatorios.Construtores
@@ -64,11 +67,72 @@ namespace RelatorioVM.Relatorios.Construtores
         }
 
         public ITabelaRelatorioVM<TConteudo> Ignorar<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao) {
-            var propriedade = propriedadeExpressao.ObterPropriedadeBase();
-            if (_tabela.Colunas.TryGetValue(propriedade.Name, out var coluna))
+            if (ObterColuna(propriedadeExpressao, out var coluna))
                 coluna.Visivel = false;
 
             return this;
+        }
+
+        public ITabelaRelatorioVM<TConteudo> ComplementarValor<TPropriedade, TPropriedadeComplemento>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Expression<Func<TConteudo, TPropriedadeComplemento>> propriedadeComplementoExpressao, bool ignorar = true)
+        {
+            if (!ObterColuna(propriedadeExpressao, out var coluna))
+                return this;
+
+            coluna.PropriedadeComplemento = new Propriedade<TConteudo>(propriedadeExpressao.ObterPropriedadeBase())
+                {
+                    FuncaoPropriedade = (origem) => propriedadeComplementoExpressao.Compile()(origem)
+                };
+
+            if (!coluna.AlinhamentoDefinidoManualmente)
+                coluna.AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Esquerda;
+
+            if (ignorar)
+                Ignorar(propriedadeComplementoExpressao);
+
+            return this;
+        }
+
+        public ITabelaRelatorioVM<TConteudo> ComplementarValor<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Func<TPropriedade, string> funcao)
+        {
+            if (funcao == null)
+                return this;
+
+            if (!ObterColuna(propriedadeExpressao, out var coluna))
+                return this;
+
+            coluna.PropriedadeComplemento = new Propriedade<TConteudo>(propriedadeExpressao.ObterPropriedadeBase())
+            {
+                FuncaoPropriedade = (origem) => funcao(propriedadeExpressao.Compile()(origem))
+            };
+
+            if (!coluna.AlinhamentoDefinidoManualmente)
+                coluna.AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Esquerda;
+
+            return this;
+        }
+
+        public ITabelaRelatorioVM<TConteudo> ComplementarValor<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Func<TConteudo, TPropriedade, string> funcao)
+        {
+            if (funcao == null)
+                return this;
+
+            if (!ObterColuna(propriedadeExpressao, out var coluna))
+                return this;
+
+            coluna.PropriedadeComplemento = new Propriedade<TConteudo>(propriedadeExpressao.ObterPropriedadeBase())
+            {
+                FuncaoPropriedade = (origem) => funcao(origem, propriedadeExpressao.Compile()(origem))
+            };
+
+            if (!coluna.AlinhamentoDefinidoManualmente)
+                coluna.AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Esquerda;
+
+            return this;
+        }
+
+        private bool ObterColuna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, out TabelaColuna<TConteudo> coluna) {
+            var propriedade = propriedadeExpressao.ObterPropriedadeBase();
+            return _tabela.Colunas.TryGetValue(propriedade.Name, out coluna);
         }
     }
 }

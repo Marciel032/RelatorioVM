@@ -1,13 +1,6 @@
-﻿using RelatorioVM.Dominio.Atributos;
-using RelatorioVM.Dominio.Conversores;
-using RelatorioVM.Elementos.Propriedades;
-using RelatorioVM.Infraestruturas;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using System.Text;
 
 namespace RelatorioVM.Extensoes
 {
