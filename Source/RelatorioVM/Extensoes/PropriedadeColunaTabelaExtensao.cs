@@ -4,6 +4,7 @@ using RelatorioVM.Elementos.Propriedades;
 using RelatorioVM.Elementos.Relatorios;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -27,6 +28,8 @@ namespace RelatorioVM.Extensoes
             var colunaAtributo = propriedade.GetCustomAttribute<ColunaRelatorioAttribute>();
             if (colunaAtributo != null)
             {
+                if (!string.IsNullOrWhiteSpace(colunaAtributo.Titulo))
+                    coluna.Titulo = colunaAtributo.Titulo;
                 if (colunaAtributo.Ignorar)
                     coluna.Visivel = false;
             }

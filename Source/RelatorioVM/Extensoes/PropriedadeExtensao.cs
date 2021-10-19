@@ -13,11 +13,7 @@ namespace RelatorioVM.Extensoes
 {
     internal static class PropriedadeExtensao
     {
-        public static string ObterNome(this PropertyInfo propriedade) {
-            var atributoColuna = propriedade.GetCustomAttribute<ColunaRelatorioAttribute>();
-            if (atributoColuna != null && !string.IsNullOrWhiteSpace(atributoColuna.Nome))
-                return atributoColuna.Nome;
-
+        public static string ObterNome(this PropertyInfo propriedade) {            
             var atributoDisplayName = propriedade.GetCustomAttribute<DisplayNameAttribute>();
             if (atributoDisplayName != null && !string.IsNullOrWhiteSpace(atributoDisplayName.DisplayName))
                 return atributoDisplayName.DisplayName;
@@ -26,7 +22,7 @@ namespace RelatorioVM.Extensoes
             if (atributoDisplay != null && !string.IsNullOrWhiteSpace(atributoDisplay.Name))
                 return atributoDisplay.Name;            
 
-            return propriedade.Name;
+            return propriedade.Name.SepararCamelCase();
         }
     }
 }

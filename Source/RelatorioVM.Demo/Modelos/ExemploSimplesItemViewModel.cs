@@ -8,20 +8,19 @@ namespace RelatorioVM.Demo.Modelos
 {
     public class ExemploSimplesItemViewModel
     {
-        [ColunaRelatorio(Nome = "Nome de teste")]
+        [ColunaRelatorio(Titulo = "Nome de teste")]
         public DateTime Data { get; set; }
 
         [DisplayName("Filial")]
         public int FilialCodigo { get; set; }
-
-        [DisplayName("Pessoa código")]
+        
         public int PessoaCodigo { get; set; }
 
         public PessoaViewModel Pessoa { get; set; }        
 
         public bool Ativo { get; set; }
 
-        [ColunaRelatorio(Nome = "Situação")]
+        [ColunaRelatorio(Titulo = "Situação")]
         public TipoSituacao Situacao { get; set; }
 
         public decimal Valor { get; set; }        
