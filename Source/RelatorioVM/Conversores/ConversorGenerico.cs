@@ -13,15 +13,20 @@ namespace RelatorioVM.Conversores
         public string Converter(object valor, OpcoesFormatacao opcoes)
         {
             if (valor == null)
-                return "";
+                return opcoes.ValorNulavel;
 
-            if (valor.GetType().IsClass && valor.GetType() != typeof(string))
-                return ConverterClasse(valor, opcoes);
+            var tipo = valor.GetType().ObterTipoNaoNullo();
+
+            if (tipo.BaseType == typeof(Enum))
+                return ConverterEnumerador(valor, opcoes, tipo);
+
+            if (tipo.IsClass && tipo != typeof(string))
+                return ConverterClasse(valor, opcoes, tipo);
 
             return valor.ToString();
         }
 
-        private string ConverterClasse(object valor, OpcoesFormatacao opcoes) {
+        private string ConverterClasse(object valor, OpcoesFormatacao opcoes, Type tipo) {
             var propriedadeDescricao = valor.GetType()
                 .ObterPropriedades()
                 .FirstOrDefault(x => x.PropertyType == typeof(string));
@@ -31,6 +36,11 @@ namespace RelatorioVM.Conversores
             else
                 return opcoes.ValorNulavel;
 
+        }
+
+        private string ConverterEnumerador(object valor, OpcoesFormatacao opcoes, Type tipo)
+        {
+            return ((Enum)valor).ObterDescricao();
         }
     }
 }
