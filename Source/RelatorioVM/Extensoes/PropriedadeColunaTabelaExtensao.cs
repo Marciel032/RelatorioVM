@@ -1,4 +1,5 @@
-﻿using RelatorioVM.Dominio.Enumeradores;
+﻿using RelatorioVM.Dominio.Atributos;
+using RelatorioVM.Dominio.Enumeradores;
 using RelatorioVM.Elementos.Propriedades;
 using RelatorioVM.Elementos.Relatorios;
 using System;
@@ -14,13 +15,21 @@ namespace RelatorioVM.Extensoes
             return true;
         }
 
-        public static TabelaColuna<T> ObterColunaTabela<T>(this PropertyInfo propriedade) {
+        public static TabelaColuna<T> ObterColunaTabela<T>(this PropertyInfo propriedade) {            
             var coluna = new TabelaColuna<T>();
 
             coluna.Identificador = propriedade.Name;            
             coluna.Titulo = propriedade.ObterNome();
             coluna.Propriedade = new Propriedade<T>(propriedade);
             coluna.AlinhamentoHorizontal = propriedade.ObterAlinhamentoHorizontal();
+            coluna.Visivel = true;
+
+            var colunaAtributo = propriedade.GetCustomAttribute<ColunaRelatorioAttribute>();
+            if (colunaAtributo != null)
+            {
+                if (colunaAtributo.Ignorar)
+                    coluna.Visivel = false;
+            }
 
             return coluna;
         }

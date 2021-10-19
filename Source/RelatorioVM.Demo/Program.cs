@@ -42,7 +42,9 @@ namespace RelatorioVM.Demo
                     Pessoa = new PessoaViewModel() { 
                         Codigo = new Random().Next(),
                         Nome = "Teste"
-                    }
+                    },
+                    Ativo = new Random().Next(1, 3) == 1,
+                    Situacao = (TipoSituacao)new Random().Next(0, 4)
                 });
             }
 

@@ -11,13 +11,21 @@ namespace RelatorioVM.Extensoes
     public static class EnumExtensao
     {
         public static string ObterDescricao(this Enum enumerador) {
-            var atributoDescricao = enumerador.GetType()
+            var atributoDisplay = enumerador.GetType()
                             .GetMember(enumerador.ToString())
                             .FirstOrDefault()
                             .GetCustomAttribute<DisplayAttribute>();
 
-            if (atributoDescricao != null)
-                return atributoDescricao.Name;
+            if (atributoDisplay != null)
+                return atributoDisplay.Name;
+
+            var atributoNome = enumerador.GetType()
+                            .GetMember(enumerador.ToString())
+                            .FirstOrDefault()
+                            .GetCustomAttribute<DisplayNameAttribute>();
+
+            if (atributoNome != null)
+                return atributoNome.DisplayName;
 
             return enumerador.ToString();
         }
