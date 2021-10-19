@@ -5,6 +5,7 @@ using RelatorioVM.Extensoes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace RelatorioVM.Relatorios.Construtores
@@ -59,6 +60,14 @@ namespace RelatorioVM.Relatorios.Construtores
             var agrupador = agrupadorConstrutor.Construir();
             if(agrupador.Agrupadores.Count > 0)
                 _tabela.Agrupadores.Add(agrupador);
+            return this;
+        }
+
+        public ITabelaRelatorioVM<TConteudo> Ignorar<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao) {
+            var propriedade = propriedadeExpressao.ObterPropriedadeBase();
+            if (_tabela.Colunas.TryGetValue(propriedade.Name, out var coluna))
+                coluna.Visivel = false;
+
             return this;
         }
     }

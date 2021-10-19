@@ -19,6 +19,7 @@ namespace RelatorioVM.Extensoes
 
             ConversorValor.DefinirConversor<DateTime>(new ConversorDataHora());
             ConversorValor.DefinirConversor<decimal>(new ConversorDecimal());
+            ConversorValor.DefinirConversor<bool>(new ConversorBooleano());
 
             return new ConfiguradorRelatorio();
         }

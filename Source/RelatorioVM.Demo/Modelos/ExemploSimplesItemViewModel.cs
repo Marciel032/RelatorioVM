@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelatorioVM.Dominio.Atributos;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -15,7 +16,11 @@ namespace RelatorioVM.Demo.Modelos
 
         public PessoaViewModel Pessoa { get; set; }
 
+        [ColunaRelatorio(Nome = "Nome de teste")]
         public DateTime Data { get; set; }
-        public decimal Valor { get; set; }
+
+        public bool Ativo { get; set; }
+
+        public decimal Valor { get; set; }        
     }
 }
