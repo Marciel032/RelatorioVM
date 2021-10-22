@@ -69,6 +69,7 @@ table.tabela-conteudo {
     border-bottom: 1px solid #888; 
     font-weight: bold; 
 }
+hr { margin-top: 20px; margin-bottom: 20px; }
 @page {
     @top-center { content: element(titulo) }
 }".Replace(Environment.NewLine, " "));            

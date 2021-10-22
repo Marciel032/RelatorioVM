@@ -1,6 +1,7 @@
 ﻿using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Dominio.Configuracoes.Interfaces;
 using RelatorioVM.Dominio.Interfaces;
+using RelatorioVM.Elementos.Complementares;
 using RelatorioVM.Infraestruturas;
 using RelatorioVM.Relatorios.Estruturas;
 using RelatorioVM.Relatorios.Fabricas;
@@ -61,6 +62,11 @@ namespace RelatorioVM.Relatorios.Construtores
         public IRelatorioVM AdicionarComponenteCustomizado(IElementoRelatorioVM elemento)
         {
             _estruturaRelatorio.Elementos.Add(elemento);
+            return this;
+        }
+
+        public IRelatorioVM AdicionarLinhaHorizontal() {
+            _estruturaRelatorio.Elementos.Add(new LinhaHorizontalElemento());
             return this;
         }
 

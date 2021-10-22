@@ -71,6 +71,7 @@ namespace RelatorioVM.Demo
                         .Totalizar()
                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa);
                 })      
+                .AdicionarLinhaHorizontal()
                 .AdicionarComponenteCustomizado(new ComponenteCustomizado())
                 .Titulo("Teste de relatório")
                 .Construir();
