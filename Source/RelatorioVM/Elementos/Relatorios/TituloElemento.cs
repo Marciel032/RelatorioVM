@@ -1,24 +1,24 @@
 ﻿using HtmlTags;
-using RelatorioVM.Elementos.Interfaces;
+using RelatorioVM.Dominio.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace RelatorioVM.Elementos.Relatorios
 {
-    internal class TituloElemento: IElemento
+    internal class TituloElemento: IElementoRelatorioVM
     {
         public string Texto { get; set; }
 
-        public bool ProcessarHtml(HtmlTag pai) {
+        public string ObterHtml() {
             if (string.IsNullOrWhiteSpace(Texto))
-                return false;
+                return string.Empty;
 
-            new HtmlTag("h3", pai)                
+            var titulo = new HtmlTag("h3")                
                 .AddClass("titulo")
                 .Text(Texto);
 
-            return true;
+            return titulo.ToHtmlString();
         }
     }
 }

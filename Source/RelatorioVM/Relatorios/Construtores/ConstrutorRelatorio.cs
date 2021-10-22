@@ -28,7 +28,7 @@ namespace RelatorioVM.Relatorios.Construtores
             {
                 var construtorTabela = new ConstrutorTabelaRelatorio<TConteudo>(_configuracaoRelatorio, conteudo);
                 opcoes?.Invoke(construtorTabela);
-                _estruturaRelatorio.Tabelas.Add(construtorTabela.Construir());
+                _estruturaRelatorio.Elementos.Add(construtorTabela.Construir());
             }
 
             return this;
@@ -55,6 +55,12 @@ namespace RelatorioVM.Relatorios.Construtores
         public IRelatorioVM Titulo(string titulo)
         {
             _estruturaRelatorio.Titulo.Texto = titulo;
+            return this;
+        }
+
+        public IRelatorioVM AdicionarComponenteCustomizado(IElementoRelatorioVM elemento)
+        {
+            _estruturaRelatorio.Elementos.Add(elemento);
             return this;
         }
 

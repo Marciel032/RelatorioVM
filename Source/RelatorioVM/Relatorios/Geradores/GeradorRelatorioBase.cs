@@ -71,7 +71,7 @@ table.tabela-conteudo {
 }
 @page {
     @top-center { content: element(titulo) }
-}".Replace(Environment.NewLine, " "));
+}".Replace(Environment.NewLine, " "));            
 
             var relatorio = new HtmlTag("html")
                 .Append(

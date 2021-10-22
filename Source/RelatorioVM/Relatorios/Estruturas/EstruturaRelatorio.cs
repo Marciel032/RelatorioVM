@@ -1,6 +1,6 @@
 ﻿using HtmlTags;
 using RelatorioVM.Dominio.Configuracoes;
-using RelatorioVM.Elementos.Interfaces;
+using RelatorioVM.Dominio.Interfaces;
 using RelatorioVM.Elementos.Relatorios;
 using System;
 using System.Collections.Generic;
@@ -12,21 +12,21 @@ namespace RelatorioVM.Relatorios.Estruturas
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
         public TituloElemento Titulo { get; set; }
-        public IElemento Filtro { get; set; }
-        public List<IElemento> Tabelas { get; set; }
+        public IElementoRelatorioVM Filtro { get; set; }
+        public List<IElementoRelatorioVM> Elementos { get; set; }
 
         public EstruturaRelatorio(ConfiguracaoRelatorio configuracaoRelatorio)
         {
             _configuracaoRelatorio = configuracaoRelatorio;
 
             Titulo = new TituloElemento();
-            Tabelas = new List<IElemento>();
+            Elementos = new List<IElementoRelatorioVM>();
         }
 
         public void AdicionarHtml(HtmlTag parent) {
-            Titulo.ProcessarHtml(parent);
-            Filtro?.ProcessarHtml(parent);
-            Tabelas.ForEach(x => x.ProcessarHtml(parent));
+            parent.AppendHtml(Titulo.ObterHtml());
+            parent.AppendHtml(Filtro?.ObterHtml());            
+            Elementos.ForEach(x => parent.AppendHtml(x.ObterHtml()));
         }
     }
 }

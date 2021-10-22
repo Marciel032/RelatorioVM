@@ -2,7 +2,7 @@
 using RelatorioVM.Comparadores;
 using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Dominio.Enumeradores;
-using RelatorioVM.Elementos.Interfaces;
+using RelatorioVM.Dominio.Interfaces;
 using RelatorioVM.Extensoes;
 using RelatorioVM.Infraestruturas;
 using System;
@@ -13,7 +13,7 @@ using System.Text;
 
 namespace RelatorioVM.Elementos.Relatorios
 {
-    internal class TabelaElemento<T>: IElemento
+    internal class TabelaElemento<T>: IElementoRelatorioVM
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
         private Tabela<T> _tabela;
@@ -24,18 +24,17 @@ namespace RelatorioVM.Elementos.Relatorios
             _tabela = tabela;
         }
 
-        public bool ProcessarHtml(HtmlTag pai) {            
-            var tabela = CriarTabela(pai);
+        public string ObterHtml() {            
+            var tabela = CriarTabela();
             AdicionarCabecalho(tabela);
             var corpoTabela = tabela.CriarCorpoTabela();
             AdicionarConteudo(corpoTabela);
             AdicionarTotais(tabela, corpoTabela);
-            return true;
+            return tabela.ToHtmlString();
         }
 
-        private HtmlTag CriarTabela(HtmlTag pai) { 
-            return pai
-                .CriarTabela()
+        private HtmlTag CriarTabela() { 
+            return new HtmlTag("table")
                 .AddClass("tabela-conteudo");
         }
 

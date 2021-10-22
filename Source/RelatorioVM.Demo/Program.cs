@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
+using RelatorioVM.Demo.ComponentesCustomizados;
 using RelatorioVM.Demo.Modelos;
 using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Dominio.Enumeradores;
@@ -69,7 +70,8 @@ namespace RelatorioVM.Demo
                          )
                         .Totalizar()
                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa);
-                })
+                })      
+                .AdicionarComponenteCustomizado(new ComponenteCustomizado())
                 .Titulo("Teste de relatório")
                 .Construir();
 

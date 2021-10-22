@@ -1,6 +1,6 @@
 ﻿using HtmlTags;
 using RelatorioVM.Dominio.Configuracoes;
-using RelatorioVM.Elementos.Interfaces;
+using RelatorioVM.Dominio.Interfaces;
 using RelatorioVM.Extensoes;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text;
 
 namespace RelatorioVM.Elementos.Relatorios
 {
-    internal class FiltrosElemento<T>: IElemento
+    internal class FiltrosElemento<T>: IElementoRelatorioVM
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
         public List<Filtro<T>> Filtros { get; set; }
@@ -19,11 +19,11 @@ namespace RelatorioVM.Elementos.Relatorios
             Filtros = new List<Filtro<T>>();
         }
 
-        public bool ProcessarHtml(HtmlTag pai) {
+        public string ObterHtml() {
             if (Filtros.Count == 0)
-                return false;
+                return string.Empty;
 
-            var tabela = CriarTabela(pai)
+            var tabela = CriarTabela()
                 .Style("font-family", "Courier new")
                 .Style("font-size", "14px");
 
@@ -53,12 +53,11 @@ namespace RelatorioVM.Elementos.Relatorios
                 }
             }
 
-            return true;
+            return tabela.ToHtmlString();
         }
 
-        private HtmlTag CriarTabela(HtmlTag pai) { 
-            return pai
-                .CriarTabela()
+        private HtmlTag CriarTabela() { 
+            return new HtmlTag("table")
                 .Attr("width", "100%");
         }
 
