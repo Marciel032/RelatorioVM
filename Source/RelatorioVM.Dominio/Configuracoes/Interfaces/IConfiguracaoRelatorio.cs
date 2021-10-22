@@ -9,6 +9,7 @@ namespace RelatorioVM.Dominio.Configuracoes.Interfaces
     public interface IConfiguracaoRelatorio
     {
         IConfiguracaoRelatorio UsarOrientacao(TipoOrientacao orientacao);
+        IConfiguracaoRelatorio ConfigurarConteudo(Action<IConfiguracaoConteudoRelatorio> conteudo);
         IConfiguracaoRelatorio ConfigurarCabecalho(Action<IConfiguracaoCabecalhoRelatorio> cabecalho);
         IConfiguracaoRelatorio ConfigurarRodape(Action<IConfiguracaoRodapeRelatorio> rodape);
         IConfiguracaoRelatorio ConfigurarFormatacao(Action<OpcoesFormatacao> configurarFormatacao);

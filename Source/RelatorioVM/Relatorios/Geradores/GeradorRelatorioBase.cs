@@ -23,7 +23,10 @@ namespace RelatorioVM.Relatorios.Geradores
         public string GerarHtml() {
             var estilo = new HtmlTag("style")
                 .AppendHtml(
-@"* { font-family: courier new;}                    
+@"* { font-family: courier new;}  
+body{
+  -webkit-print-color-adjust:exact;
+}
 table { 
     page-break-inside:auto;
     border-collapse: collapse;
@@ -51,6 +54,9 @@ table.tabela-conteudo {
     padding-left: 3px;
     padding-right: 3px;
     text-align: left;
+}
+.tabela-conteudo .tr-zebra td {
+    background-color: #f2f2f2;
 }
 .tabela-conteudo .tr-totais-titulo td { 
     font-weight: bold; 

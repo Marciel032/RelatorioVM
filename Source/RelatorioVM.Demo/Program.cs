@@ -88,6 +88,10 @@ namespace RelatorioVM.Demo
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((_, services) =>
                     services.UtilizarRelatorioVM(options => {
+                        options.ConfigurarConteudo(conteudo =>
+                        {
+                            conteudo.Zebrado = false;
+                        });
                      /*   options
                             .UsarOrientacao(TipoOrientacao.Retrato)                            
                             .ConfigurarFormatacao(formato => {

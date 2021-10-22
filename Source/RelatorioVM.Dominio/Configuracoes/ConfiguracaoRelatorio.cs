@@ -15,6 +15,8 @@ namespace RelatorioVM.Dominio.Configuracoes
 
         public ConfiguracaoRodapeRelatorio Rodape { get; set; }
 
+        public ConfiguracaoConteudoRelatorio Conteudo { get; set; }
+
         public OpcoesFormatacao Formatacao { get; set; }
 
         public ConfiguracaoRelatorio()
@@ -22,6 +24,7 @@ namespace RelatorioVM.Dominio.Configuracoes
             Orientacao = TipoOrientacao.Retrato;
             Cabecalho = new ConfiguracaoCabecalhoRelatorio();
             Rodape = new ConfiguracaoRodapeRelatorio();
+            Conteudo = new ConfiguracaoConteudoRelatorio();
             Formatacao = new OpcoesFormatacao();
         }
 
@@ -54,7 +57,14 @@ namespace RelatorioVM.Dominio.Configuracoes
             ConfiguracaoRelatorio clone = MemberwiseClone() as ConfiguracaoRelatorio;
             clone.Cabecalho = Cabecalho.Clone();
             clone.Rodape = Rodape.Clone();
+            clone.Conteudo = Conteudo.Clone();
             return clone;
+        }
+
+        public IConfiguracaoRelatorio ConfigurarConteudo(Action<IConfiguracaoConteudoRelatorio> configurarConteudo)
+        {
+            configurarConteudo?.Invoke(Conteudo);
+            return this;
         }
     }
 }

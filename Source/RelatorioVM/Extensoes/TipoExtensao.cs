@@ -20,6 +20,9 @@ namespace RelatorioVM.Extensoes
 
         public static bool EhInteiro(this Type tipo)
         {
+            if (tipo.EhEnumerador())
+                return false;
+
             switch (Type.GetTypeCode(tipo.ObterTipoNaoNullo()))
             {
                 case TypeCode.Byte:
@@ -37,7 +40,7 @@ namespace RelatorioVM.Extensoes
         }
 
         public static bool EhDecimal(this Type tipo)
-        {
+        {           
             switch (Type.GetTypeCode(tipo.ObterTipoNaoNullo()))
             {
                 case TypeCode.Decimal:
@@ -47,6 +50,10 @@ namespace RelatorioVM.Extensoes
                 default:
                     return false;
             }
+        }
+
+        public static bool EhEnumerador(this Type tipo) {
+            return tipo.IsEnum;
         }
     }
 }

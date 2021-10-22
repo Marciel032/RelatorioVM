@@ -79,30 +79,33 @@ namespace RelatorioVM.Elementos.Relatorios
                 agrupador.AdicionarCabecalhoAgrupamento(corpoTabela, itensGrupo.First(), _tabela.ObterQuantidadeColunasVisiveis());
                 if (agrupadores.Count > 0)
                     AdicionarConteudoAgrupado(corpoTabela, itensGrupo, agrupadores.ToList());
-                else                    
-                    foreach (var item in itensGrupo)
-                    {
-                        AdicionarConteudoItem(corpoTabela, item);
-                        agrupador.CalcularTotais(item);
-                    }
+                else
+                    AdicionarConteudoItens(corpoTabela, itensGrupo, (item) => { agrupador.CalcularTotais(item); });
 
                 agrupador.AdicionarTotaisHtml(corpoTabela, _tabela, _configuracaoRelatorio.Formatacao);
             }
         }        
 
-        private void AdicionarConteudoItens(HtmlTag corpoTabela, IEnumerable<T> itens) {
+        private void AdicionarConteudoItens(HtmlTag corpoTabela, IEnumerable<T> itens, Action<T> onDepoisAdicionarConteudo = null) {
+            bool zebra = false;
             foreach (var conteudo in itens)
-                AdicionarConteudoItem(corpoTabela, conteudo);
+            {
+                AdicionarConteudoItem(corpoTabela, conteudo, zebra);
+                zebra = !zebra;
+                onDepoisAdicionarConteudo?.Invoke(conteudo);
+            }
         }
 
-        private void AdicionarConteudoItem(HtmlTag corpoTabela, T conteudo)
+        private void AdicionarConteudoItem(HtmlTag corpoTabela, T conteudo, bool zebra)
         {
             var linha = corpoTabela.CriarLinhaTabela();
+            if (zebra && _configuracaoRelatorio.Conteudo.Zebrado)
+                linha.AddClass("tr-zebra");
             foreach (var coluna in _tabela.ObterColunasVisiveis())
             {
                 linha.CriarColunaTabela()
                     .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal)                    
-                    .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
+                    .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));                
             }
 
             _tabela.Totais.CalcularTotais(conteudo);           
