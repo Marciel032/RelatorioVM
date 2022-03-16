@@ -29,6 +29,9 @@ namespace RelatorioVM.Demo
                     Codigo = 1,
                     Nome = "Testes"
                 },
+                OperacaoCodigo = 5,
+                OperacaoNome = "VENDAS",
+                Usuario = "TESTES",
                 Itens = new List<ExemploSimplesItemViewModel>(),                
             };
 
@@ -53,24 +56,31 @@ namespace RelatorioVM.Demo
 
             var relatorio = relatorioConstrutor
                 .Filtros(viewModel, opcoes => {
-                    opcoes
+                    opcoes                    
                         .Ignorar(x => x.Itens)
                         .Nome(x => x.DataFinal, "Data final")
                         .Nome(x => x.PessoaCodigo, "Pessoa")
                         .ComplementarValor(x => x.FilialCodigo, x => x.FilialNome)
                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa.Nome)
-                        .FaixaDeValor(x => x.DataInicial, x => x.DataFinal);
+                        .ComplementarValor(x => x.OperacaoCodigo, x => x.OperacaoNome)
+                        .FaixaDeValor(x => x.DataInicial, x => x.DataFinal)
+                        .Nome(x => x.Usuario, "Usuário");
+                })
+                .AdicionarTabela(viewModel.Itens[0], tabela => {
+                    tabela
+                        .Titulo("Tabela exibindo valores na vertical")
+                        .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa);
                 })
                 .AdicionarTabela(viewModel.Itens, tabela => {
                     tabela
-                        .Titulo("Descrição da tabela de testes")
+                        .Titulo("Tabela exibindo valores na horizontal")
+                        .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)
                         .Agrupar(agrupar => 
                             agrupar
                                 .Coluna(x => x.FilialCodigo)
                          )
-                        .Totalizar()
-                        .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa);
-                })      
+                        .Totalizar();
+                })                  
                 .AdicionarLinhaHorizontal()
                 .AdicionarComponenteCustomizado(new ComponenteCustomizado())
                 .Titulo("Teste de relatório")
@@ -93,7 +103,7 @@ namespace RelatorioVM.Demo
                     services.UtilizarRelatorioVM(options => {
                         options.ConfigurarConteudo(conteudo =>
                         {
-                            conteudo.Zebrado = false;
+                            conteudo.Zebrado = true;
                         });
                      /*   options
                             .UsarOrientacao(TipoOrientacao.Retrato)                            

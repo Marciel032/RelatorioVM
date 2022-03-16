@@ -17,7 +17,9 @@ namespace RelatorioVM.Demo.Modelos
         [DisplayName("Data inicial")]
         public DateTime? DataInicial { get; set; }
         public DateTime? DataFinal { get; set; }
-
+        public int OperacaoCodigo { get; set; }
+        public string OperacaoNome { get; set; }
+        public string Usuario { get; set; }
         public List<ExemploSimplesItemViewModel> Itens { get; set; }
     }
 }

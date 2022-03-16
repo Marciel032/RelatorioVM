@@ -44,18 +44,22 @@ tfoot { display:table-footer-group }
     padding-top: 20px;                        
     position: running(titulo);
 }                    
-table.tabela-conteudo {
+table.tabela-conteudo,table.tabela-conteudo-vertical
+{
     width: 100%;
 }   
 .tabela-conteudo .tr-cabecalho {
     border: 1px solid #777;
 }
-.tabela-conteudo td,th {
+.tabela-conteudo-vertical .tr-cabecalho {
+    border-bottom: 1px solid #777;
+}
+.tabela-conteudo,.tabela-conteudo-vertical td,th {
     padding-left: 3px;
     padding-right: 3px;
     text-align: left;
 }
-.tabela-conteudo .tr-zebra td {
+.tabela-conteudo .tr-zebra,.tabela-conteudo-vertical .tr-zebra td {
     background-color: #f2f2f2;
 }
 .tabela-conteudo .tr-totais-titulo td { 
@@ -67,6 +71,9 @@ table.tabela-conteudo {
 }
 .tabela-conteudo .tr-grupo-titulo td { 
     border-bottom: 1px solid #888; 
+    font-weight: bold; 
+}
+.tabela-conteudo-vertical .td-titulo { 
     font-weight: bold; 
 }
 hr { margin-top: 20px; margin-bottom: 20px; }

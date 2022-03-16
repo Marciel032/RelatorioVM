@@ -13,12 +13,12 @@ using System.Text;
 
 namespace RelatorioVM.Elementos.Relatorios
 {
-    internal class TabelaElemento<T>: IElementoRelatorioVM
+    internal class TabelaHorizontalElemento<T>: IElementoRelatorioVM
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
         private Tabela<T> _tabela;
 
-        public TabelaElemento(ConfiguracaoRelatorio configuracaoRelatorio, Tabela<T> tabela)
+        public TabelaHorizontalElemento(ConfiguracaoRelatorio configuracaoRelatorio, Tabela<T> tabela)
         {
             _configuracaoRelatorio = configuracaoRelatorio;
             _tabela = tabela;

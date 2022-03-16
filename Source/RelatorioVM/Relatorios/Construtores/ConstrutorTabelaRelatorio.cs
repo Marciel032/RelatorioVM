@@ -13,10 +13,10 @@ using System.Text;
 
 namespace RelatorioVM.Relatorios.Construtores
 {
-    internal class ConstrutorTabelaRelatorio<TConteudo>: ITabelaRelatorioVM<TConteudo>
+    internal abstract class ConstrutorTabelaRelatorio<TConteudo>
     {
-        private ConfiguracaoRelatorio _configuracaoRelatorio;
-        private Tabela<TConteudo> _tabela;        
+        protected ConfiguracaoRelatorio _configuracaoRelatorio;
+        protected Tabela<TConteudo> _tabela;        
 
         public ConstrutorTabelaRelatorio(ConfiguracaoRelatorio configuracaoRelatorio, IEnumerable<TConteudo> conteudo)
         {
@@ -27,56 +27,39 @@ namespace RelatorioVM.Relatorios.Construtores
                 .Where(x => x.PodeSerColunaTabela())
                 .Select(x => x.ObterColunaTabela<TConteudo>())
                 .ToDictionary(x => x.Identificador);
-        }        
-
-        public TabelaElemento<TConteudo> Construir()
-        {
-            foreach (var agrupador in _tabela.Agrupadores)
-            {
-                agrupador.Colunas = agrupador.ObterColunasAgrupamento(_tabela.Colunas);
-                agrupador.Colunas.ForEach(x => x.Visivel = false);
-                foreach (var total in _tabela.Totais)
-                    agrupador.Totais.Add(total.Clonar());
-            }
-            return new TabelaElemento<TConteudo>(_configuracaoRelatorio, _tabela);
         }
 
-        public ITabelaRelatorioVM<TConteudo> Titulo(string titulo) {
+        protected void DefinirTitulo(string titulo) {
             _tabela.Titulo = titulo;
-            return this;
         }
 
-        public ITabelaRelatorioVM<TConteudo> Totalizar(Action<ITabelaTotalRelatorioVM<TConteudo>> opcoes = null)
+        protected void TotalizarConteudo(Action<ITabelaTotalRelatorioVM<TConteudo>> opcoes = null)
         {
             var totaisConstrutor = new ConstrutorTabelaTotalRelatorio<TConteudo>(_configuracaoRelatorio);
             opcoes?.Invoke(totaisConstrutor);
             var total = totaisConstrutor.Construir();
             if(total.Totais.Count > 0)
                 _tabela.Totais.Add(total);
-            return this;
         }
 
-        public ITabelaRelatorioVM<TConteudo> Agrupar(Action<ITabelaAgrupadorRelatorioVM<TConteudo>> opcoes)
+        protected void AgruparConteudo(Action<ITabelaAgrupadorRelatorioVM<TConteudo>> opcoes)
         {
             var agrupadorConstrutor = new ConstrutorTabelaAgrupadorRelatorio<TConteudo>(_configuracaoRelatorio);
             opcoes?.Invoke(agrupadorConstrutor);
             var agrupador = agrupadorConstrutor.Construir();
             if(agrupador.Agrupadores.Count > 0)
                 _tabela.Agrupadores.Add(agrupador);
-            return this;
         }
 
-        public ITabelaRelatorioVM<TConteudo> Ignorar<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao) {
+        protected void IgnorarColuna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao) {
             if (ObterColuna(propriedadeExpressao, out var coluna))
                 coluna.Visivel = false;
-
-            return this;
         }
 
-        public ITabelaRelatorioVM<TConteudo> ComplementarValor<TPropriedade, TPropriedadeComplemento>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Expression<Func<TConteudo, TPropriedadeComplemento>> propriedadeComplementoExpressao, bool ignorar = true)
+        public void ComplementarValorPropriedade<TPropriedade, TPropriedadeComplemento>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Expression<Func<TConteudo, TPropriedadeComplemento>> propriedadeComplementoExpressao, bool ignorar = true)
         {
             if (!ObterColuna(propriedadeExpressao, out var coluna))
-                return this;
+                return;
 
             coluna.PropriedadeComplemento = new Propriedade<TConteudo>(propriedadeExpressao.ObterPropriedadeBase())
                 {
@@ -87,18 +70,16 @@ namespace RelatorioVM.Relatorios.Construtores
                 coluna.AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Esquerda;
 
             if (ignorar)
-                Ignorar(propriedadeComplementoExpressao);
-
-            return this;
+                IgnorarColuna(propriedadeComplementoExpressao);
         }
 
-        public ITabelaRelatorioVM<TConteudo> ComplementarValor<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Func<TPropriedade, string> funcao)
+        public void ComplementarValorPropriedade<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Func<TPropriedade, string> funcao)
         {
             if (funcao == null)
-                return this;
+                return;
 
             if (!ObterColuna(propriedadeExpressao, out var coluna))
-                return this;
+                return;
 
             coluna.PropriedadeComplemento = new Propriedade<TConteudo>(propriedadeExpressao.ObterPropriedadeBase())
             {
@@ -107,17 +88,15 @@ namespace RelatorioVM.Relatorios.Construtores
 
             if (!coluna.AlinhamentoDefinidoManualmente)
                 coluna.AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Esquerda;
-
-            return this;
         }
 
-        public ITabelaRelatorioVM<TConteudo> ComplementarValor<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Func<TConteudo, TPropriedade, string> funcao)
+        public void ComplementarValorPropriedade<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Func<TConteudo, TPropriedade, string> funcao)
         {
             if (funcao == null)
-                return this;
+                return;
 
             if (!ObterColuna(propriedadeExpressao, out var coluna))
-                return this;
+                return;
 
             coluna.PropriedadeComplemento = new Propriedade<TConteudo>(propriedadeExpressao.ObterPropriedadeBase())
             {
@@ -126,8 +105,6 @@ namespace RelatorioVM.Relatorios.Construtores
 
             if (!coluna.AlinhamentoDefinidoManualmente)
                 coluna.AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Esquerda;
-
-            return this;
         }
 
         private bool ObterColuna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, out TabelaColuna<TConteudo> coluna) {

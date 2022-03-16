@@ -23,11 +23,23 @@ namespace RelatorioVM.Relatorios.Construtores
                         
         }
 
-        public IRelatorioVM AdicionarTabela<TConteudo>(IEnumerable<TConteudo> conteudo, Action<ITabelaRelatorioVM<TConteudo>> opcoes = null)
+        public IRelatorioVM AdicionarTabela<TConteudo>(IEnumerable<TConteudo> conteudo, Action<ITabelaHorizontalRelatorioVM<TConteudo>> opcoes = null)
         {
             if (conteudo != null)
             {
-                var construtorTabela = new ConstrutorTabelaRelatorio<TConteudo>(_configuracaoRelatorio, conteudo);
+                var construtorTabela = new ConstrutorTabelaHorizontalRelatorio<TConteudo>(_configuracaoRelatorio, conteudo);
+                opcoes?.Invoke(construtorTabela);
+                _estruturaRelatorio.Elementos.Add(construtorTabela.Construir());
+            }
+
+            return this;
+        }
+
+        public IRelatorioVM AdicionarTabela<TConteudo>(TConteudo conteudo, Action<ITabelaVerticalRelatorioVM<TConteudo>> opcoes = null)
+        {
+            if (conteudo != null)
+            {
+                var construtorTabela = new ConstrutorTabelaVerticalRelatorio<TConteudo>(_configuracaoRelatorio, new List<TConteudo>() { conteudo });
                 opcoes?.Invoke(construtorTabela);
                 _estruturaRelatorio.Elementos.Add(construtorTabela.Construir());
             }
