@@ -35,7 +35,7 @@ namespace RelatorioVM.Relatorios.Construtores
             return this;
         }
 
-        public IRelatorioVM AdicionarTabela<TConteudo>(TConteudo conteudo, Action<ITabelaVerticalRelatorioVM<TConteudo>> opcoes = null)
+        public IRelatorioVM AdicionarTabelaVertical<TConteudo>(TConteudo conteudo, Action<ITabelaVerticalRelatorioVM<TConteudo>> opcoes = null)
         {
             if (conteudo != null)
             {
@@ -43,6 +43,26 @@ namespace RelatorioVM.Relatorios.Construtores
                 opcoes?.Invoke(construtorTabela);
                 _estruturaRelatorio.Elementos.Add(construtorTabela.Construir());
             }
+
+            return this;
+        }
+
+        public IRelatorioVM AdicionarTabelaVertical<TConteudo>(IEnumerable<TConteudo> conteudo, Action<ITabelaVerticalRelatorioVM<TConteudo>> opcoes = null)
+        {
+            if (conteudo != null)
+            {
+                var construtorTabela = new ConstrutorTabelaVerticalRelatorio<TConteudo>(_configuracaoRelatorio, conteudo );
+                opcoes?.Invoke(construtorTabela);
+                _estruturaRelatorio.Elementos.Add(construtorTabela.Construir());
+            }
+
+            return this;
+        }
+
+        public IRelatorioVM AdicionarTabelaVertical<TConteudo>(List<TConteudo> conteudo, Action<ITabelaVerticalRelatorioVM<TConteudo>> opcoes = null)
+        {
+            if (conteudo != null)
+                AdicionarTabelaVertical(conteudo as IEnumerable<TConteudo>, opcoes);
 
             return this;
         }

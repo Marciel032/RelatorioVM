@@ -66,7 +66,7 @@ namespace RelatorioVM.Demo
                         .FaixaDeValor(x => x.DataInicial, x => x.DataFinal)
                         .Nome(x => x.Usuario, "Usuário");
                 })
-                .AdicionarTabela(viewModel.Itens[0], tabela => {
+                .AdicionarTabelaVertical(viewModel.Itens[0], tabela => {
                     tabela
                         .Titulo("Tabela exibindo valores na vertical")
                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa);
@@ -80,7 +80,7 @@ namespace RelatorioVM.Demo
                                 .Coluna(x => x.FilialCodigo)
                          )
                         .Totalizar();
-                })                  
+                })
                 .AdicionarLinhaHorizontal()
                 .AdicionarComponenteCustomizado(new ComponenteCustomizado())
                 .Titulo("Teste de relatório")

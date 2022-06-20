@@ -9,7 +9,9 @@ namespace RelatorioVM.Dominio.Interfaces
     {
         IRelatorioVM Filtros<TFiltro>(TFiltro filtros, Action<IFiltroRelatorioVM<TFiltro>> opcoes = null);
         IRelatorioVM AdicionarTabela<TConteudo>(IEnumerable<TConteudo> conteudo, Action<ITabelaHorizontalRelatorioVM<TConteudo>> opcoes = null);
-        IRelatorioVM AdicionarTabela<TConteudo>(TConteudo conteudo, Action<ITabelaVerticalRelatorioVM<TConteudo>> opcoes = null);
+        IRelatorioVM AdicionarTabelaVertical<TConteudo>(TConteudo conteudo, Action<ITabelaVerticalRelatorioVM<TConteudo>> opcoes = null);
+        IRelatorioVM AdicionarTabelaVertical<TConteudo>(IEnumerable<TConteudo> conteudo, Action<ITabelaVerticalRelatorioVM<TConteudo>> opcoes = null);
+        IRelatorioVM AdicionarTabelaVertical<TConteudo>(List<TConteudo> conteudo, Action<ITabelaVerticalRelatorioVM<TConteudo>> opcoes = null);
         IRelatorioVM AdicionarComponenteCustomizado(IElementoRelatorioVM elemento);
         IRelatorioVM AdicionarLinhaHorizontal();
         IRelatorioVM Configurar(Action<IConfiguracaoRelatorio> configuracao);
