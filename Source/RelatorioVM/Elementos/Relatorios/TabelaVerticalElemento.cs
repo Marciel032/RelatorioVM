@@ -50,23 +50,42 @@ namespace RelatorioVM.Elementos.Relatorios
 
         private void AdicionarConteudoColunas(HtmlTag corpoTabela, T conteudo)
         {
-            bool zebra = false;            
-            foreach (var coluna in _tabela.ObterColunasVisiveis())
+            bool zebra = false;
+            var colunasVisiveis = _tabela.ObterColunasVisiveis();
+            if (colunasVisiveis.Count() == 0)
+                return;
+
+            var colunasVerticais = colunasVisiveis.CriarGruposDe(_tabela.QuantidadeColunasVertical);
+            HtmlTag linha = null;
+            foreach (var colunaVertical in colunasVerticais)
             {
-                var linha = corpoTabela.CriarLinhaTabela();
+                linha = corpoTabela.CriarLinhaTabela();
                 if (zebra && _configuracaoRelatorio.Conteudo.Zebrado)
                     linha.AddClass("tr-zebra");
 
-                linha.CriarColunaTabela()
-                    .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Direita)
-                    .Text($"{coluna.Titulo}:")
-                    .AddClass("td-titulo");                   
+                foreach (var conteudoVertical in colunaVertical)
+                {                    
+                    linha.CriarColunaTabela()
+                        .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Direita)
+                        .Text($"{conteudoVertical.Titulo}:")
+                        .AddClass("td-titulo");
 
-                linha.CriarColunaTabela()
-                    .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda)                    
-                    .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
+                    linha.CriarColunaTabela()
+                        .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda)
+                        .Text(conteudoVertical.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
+                }
+                
                 zebra = !zebra;
-            }           
+            }
+
+            //Completa as colunas no final, para não ficar espaço vazio na ultima linha
+            var quantidadeColunasFaltantes = colunasVisiveis.Count() % _tabela.QuantidadeColunasVertical;
+            if (quantidadeColunasFaltantes > 0)
+                for (int i = 0; i < _tabela.QuantidadeColunasVertical - quantidadeColunasFaltantes; i++)
+                {
+                    linha.CriarColunaTabela();
+                    linha.CriarColunaTabela();
+                }
         }
 
         private void AdicionarTitulo(HtmlTag cabecalho) {
@@ -77,7 +96,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 .CriarLinhaTabela()
                 .CriarColunaCabecalhoTabela()
                 .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda)
-                .ExpandirColuna(2)
+                .ExpandirColuna(_tabela.QuantidadeColunasVertical * 2)
                 .Text(_tabela.Titulo)
                 .AddClass("tr-cabecalho");
         }        

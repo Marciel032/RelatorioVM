@@ -52,5 +52,12 @@ namespace RelatorioVM.Relatorios.Construtores
             ComplementarValorPropriedade(propriedadeExpressao, funcao);
             return this;
         }
+
+        public ITabelaVerticalRelatorioVM<TConteudo> QuantidadeColunasVerticais(int colunas = 1) {
+            if(colunas > 0)
+                _tabela.QuantidadeColunasVertical = colunas;
+            return this;
+        }
+
     }
 }

@@ -8,7 +8,7 @@ namespace RelatorioVM.Demo.Modelos
 {
     public class ExemploSimplesItemViewModel
     {
-        [ColunaRelatorio(Titulo = "Nome de teste")]
+        [ColunaRelatorio(Titulo = "Campo de data")]
         public DateTime Data { get; set; }
 
         [DisplayName("Filial")]

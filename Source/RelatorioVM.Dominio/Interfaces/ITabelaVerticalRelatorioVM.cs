@@ -34,5 +34,10 @@ namespace RelatorioVM.Dominio.Interfaces
         /// Adiciona o texto retornado pela função ao complemento do valor da coluna
         /// </summary>
         ITabelaVerticalRelatorioVM<TConteudo> ComplementarValor<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Func<TConteudo, TPropriedade, string> funcao);
+
+        /// <summary>
+        /// Define a quantidade de colunas em que o conteúdo será dividido
+        /// </summary>
+        ITabelaVerticalRelatorioVM<TConteudo> QuantidadeColunasVerticais(int colunas = 1);
     }
 }

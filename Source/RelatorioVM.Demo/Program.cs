@@ -71,6 +71,12 @@ namespace RelatorioVM.Demo
                         .Titulo("Tabela exibindo valores na vertical")
                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa);
                 })
+                .AdicionarTabelaVertical(viewModel.Itens[1], tabela => {
+                     tabela
+                         .Titulo("Tabela exibindo valores na vertical, com quantidade de colunas personalizada")
+                         .QuantidadeColunasVerticais(3)
+                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa);
+                 })
                 .AdicionarTabela(viewModel.Itens, tabela => {
                     tabela
                         .Titulo("Tabela exibindo valores na horizontal")
