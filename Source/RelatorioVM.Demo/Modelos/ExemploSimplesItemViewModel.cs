@@ -20,11 +20,12 @@ namespace RelatorioVM.Demo.Modelos
         public PessoaViewModel Pessoa { get; set; }        
 
         public bool Ativo { get; set; }
+        public decimal Valor { get; set; }
 
         [ColunaRelatorio(Titulo = "Situação")]
         public TipoSituacao Situacao { get; set; }
 
-        public decimal Valor { get; set; }        
+               
     }
 
     public enum TipoSituacao { 

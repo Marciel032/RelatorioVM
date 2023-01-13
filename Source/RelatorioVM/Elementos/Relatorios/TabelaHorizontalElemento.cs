@@ -103,7 +103,7 @@ namespace RelatorioVM.Elementos.Relatorios
             foreach (var coluna in _tabela.ObterColunasVisiveis())
             {
                 linha.CriarColunaTabela()
-                    .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal)                    
+                    .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal)
                     .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));                
             }
 

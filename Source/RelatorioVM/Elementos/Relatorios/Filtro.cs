@@ -13,6 +13,7 @@ namespace RelatorioVM.Elementos.Relatorios
         public string Valor { get; set; }   
         public string ValorComplemento { get; set; }
         public string Separador { get; set; }
+        
         public Propriedade<T> Propriedade { get; set; }
         public Propriedade<T> PropriedadeComplemento { get; set; }
 

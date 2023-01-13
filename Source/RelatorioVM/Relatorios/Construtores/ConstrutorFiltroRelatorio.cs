@@ -76,7 +76,7 @@ namespace RelatorioVM.Relatorios.Construtores
         public IFiltroRelatorioVM<T> FaixaDeValor<TPropriedade, TPropriedadeComplemento>(Expression<Func<T, TPropriedade>> propriedadeExpressao, Expression<Func<T, TPropriedadeComplemento>> propriedadeComplementoExpressao, bool ignorar = true)
         {
             ComplementarValor(propriedadeExpressao, propriedadeComplementoExpressao, ignorar);
-            Separador(propriedadeExpressao, "Até");
+            Separador(propriedadeExpressao, "até");
             return this;
         }
 
