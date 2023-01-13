@@ -16,7 +16,10 @@ O projeto ainda está em desenvolvimento e as próximas atualizações serão vo
 - [x] Criar totalizadores.
 - [x] Criar agrupamentos e seus totalizadores.
 - [ ] Permitir customizar as colunas exibidas na tabela.
-- [ ] Permitir customizar as fontes e estilos dos textos.
+- [x] Permitir customizar as fontes e estilos dos textos global.
+- [ ] Selecionar o alinhamento do campo.
+- [ ] Permitir customizar a ordem das colunas.
+- [ ] Permitir customizar a fonte dos textos para filtros, tabelas, totais (nome, tamanho, estilo) individualmente.
 
 ## 💻 Pré-requisitos
 
