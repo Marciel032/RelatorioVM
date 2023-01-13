@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelatorioVM.Dominio.Configuracoes.Formatacoes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,6 +7,8 @@ namespace RelatorioVM.Dominio.Conversores
 {
     public class OpcoesFormatacao
     {
+        private Dictionary<string, string> valorNulavelTipo;
+
         /// <summary>
         /// Define as casas decimais ao converter valores. Valor padrão: 2
         /// </summary>
@@ -26,7 +29,10 @@ namespace RelatorioVM.Dominio.Conversores
         /// </summary>
         public string ValorNulavel { get; set; }
 
-        private Dictionary<string, string> valorNulavelTipo;
+        /// <summary>
+        /// Fonte utilizada no relatório.
+        /// </summary>
+        public FonteEscrita Fonte { get; set; }
 
         public OpcoesFormatacao()
         {
@@ -36,6 +42,8 @@ namespace RelatorioVM.Dominio.Conversores
             ValorNulavel = string.Empty;
             valorNulavelTipo = new Dictionary<string, string>();
 
+            Fonte = new FonteEscrita();
+
             DefinirValorNulavelParaOTipo<DateTime>("__/__/____");
         }
 
@@ -44,7 +52,8 @@ namespace RelatorioVM.Dominio.Conversores
         /// </summary>
         /// <typeparam name="T">Tipo do valor a ser configurado</typeparam>
         /// <param name="valor">Texto que vai ser exibido sempre que o tipo for null</param>
-        public void DefinirValorNulavelParaOTipo<T>(string valor){
+        public void DefinirValorNulavelParaOTipo<T>(string valor)
+        {
             var nomeTipo = typeof(T).FullName;
             if (valorNulavelTipo.ContainsKey(nomeTipo))
                 valorNulavelTipo[nomeTipo] = valor;
@@ -52,14 +61,16 @@ namespace RelatorioVM.Dominio.Conversores
                 valorNulavelTipo.Add(nomeTipo, valor);
         }
 
-        public bool ObterValorNulavelParaOTipo(string tipo, out string valor) {
+        public bool ObterValorNulavelParaOTipo(string tipo, out string valor)
+        {
             valor = ValorNulavel;
-            if (valorNulavelTipo.ContainsKey(tipo)) {
+            if (valorNulavelTipo.ContainsKey(tipo))
+            {
                 valor = valorNulavelTipo[tipo];
                 return true;
             }
 
-            return !string.IsNullOrEmpty(ValorNulavel);            
+            return !string.IsNullOrEmpty(ValorNulavel);
         }
     }
 }

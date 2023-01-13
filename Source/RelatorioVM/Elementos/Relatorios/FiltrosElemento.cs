@@ -26,8 +26,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 return string.Empty;
 
             var tabela = CriarTabela()
-                .Style("font-family", "Courier new")
-                .Style("font-size", "14px");
+                .AddClass("tabela-filtro");
 
             var quantidadeDeFiltrosNaLinha = Math.Clamp(Filtros.Count, 1, _configuracaoRelatorio.Cabecalho.QuantidadeDeFiltrosPorLinha);
             tabela

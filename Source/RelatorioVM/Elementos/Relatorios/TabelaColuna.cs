@@ -1,4 +1,5 @@
-﻿using RelatorioVM.Dominio.Conversores;
+﻿using RelatorioVM.Dominio.Configuracoes.Formatacoes;
+using RelatorioVM.Dominio.Conversores;
 using RelatorioVM.Dominio.Enumeradores;
 using RelatorioVM.Elementos.Propriedades;
 using System;
@@ -17,7 +18,9 @@ namespace RelatorioVM.Elementos.Relatorios
         public TipoAlinhamentoHorizontal AlinhamentoHorizontal { get; set; }
         public bool AlinhamentoDefinidoManualmente { get; set; }
         public bool Visivel { get; set; }
-        public string Separador { get; set; }        
+        public string Separador { get; set; }
+        public FonteEscrita Fonte { get; set; }
+        public int MargemBordas { get; set; }
 
         public TabelaColuna()
         {
@@ -27,6 +30,8 @@ namespace RelatorioVM.Elementos.Relatorios
             AlinhamentoDefinidoManualmente = false;
             Visivel = true;
             Separador = "-";
+            MargemBordas = 1;
+            Fonte = new FonteEscrita();
         }
 
         public string ObterValorConvertido(T origem, OpcoesFormatacao formatacao) {

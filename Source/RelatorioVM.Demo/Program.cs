@@ -90,10 +90,16 @@ namespace RelatorioVM.Demo
                 .AdicionarLinhaHorizontal()
                 .AdicionarComponenteCustomizado(new ComponenteCustomizado())
                 .Titulo("Teste de relatório")
+
                 .Configurar(configuracao => {
                     configuracao.ConfigurarFormatacao(formatacao =>
                     {
                         formatacao.DefinirValorNulavelParaOTipo<int>("-1");
+
+                        formatacao.Fonte.Nome = TipoFonteEscrita.ArialNarrow;
+                        formatacao.Fonte.Tamanho = 10;
+                        //formatacao.Fonte.Italico = true;
+                        
                     });
                 })
                 .Construir();
