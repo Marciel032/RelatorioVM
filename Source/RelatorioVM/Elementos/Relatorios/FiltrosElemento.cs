@@ -11,11 +11,13 @@ namespace RelatorioVM.Elementos.Relatorios
     internal class FiltrosElemento<T>: IElementoRelatorioVM
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
+        private readonly T _filtroVM;
         public List<Filtro<T>> Filtros { get; set; }
 
-        public FiltrosElemento(ConfiguracaoRelatorio configuracaoRelatorio)
+        public FiltrosElemento(T filtroVM, ConfiguracaoRelatorio configuracaoRelatorio)
         {
             _configuracaoRelatorio = configuracaoRelatorio;
+            _filtroVM = filtroVM;
             Filtros = new List<Filtro<T>>();
         }
 
@@ -39,6 +41,13 @@ namespace RelatorioVM.Elementos.Relatorios
                     .Style("border", "1px solid #888") ;
                 foreach (var filtro in filtros)
                 {
+                    if (string.IsNullOrWhiteSpace(filtro.Valor))
+                    { 
+                        filtro.Valor = filtro.Propriedade.ObterValorConvertido(_filtroVM, _configuracaoRelatorio.Formatacao);
+                        if (filtro.PropriedadeComplemento != null)
+                            filtro.ValorComplemento = filtro.PropriedadeComplemento.ObterValorConvertido(_filtroVM, _configuracaoRelatorio.Formatacao);
+                    }
+
                     linha.CriarColunaTabela()
                         .Style("text-align", "right")
                         .Append(

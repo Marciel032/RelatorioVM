@@ -40,7 +40,7 @@ namespace RelatorioVM.Elementos.Relatorios
         }
 
         public string ObterValorConvertido(OpcoesFormatacao formato) {
-            return Valor.ObterValorConvertido(formato);
+            return Valor.ObterValorConvertido(formato, Propriedade.PropriedadeInformacao.PropertyType);
            
         }
 

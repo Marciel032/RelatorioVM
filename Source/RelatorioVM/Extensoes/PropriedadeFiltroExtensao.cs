@@ -10,8 +10,8 @@ namespace RelatorioVM.Extensoes
     internal static class PropriedadeFiltroExtensao
     {
         public static bool PodeSerFiltro<TOrigem>(this PropertyInfo propriedade, TOrigem origem) {
-            if (propriedade.GetValue(origem) == null)
-                return false;
+            //if (propriedade.GetValue(origem) == null)
+            //    return false;
 
             return true;
         }

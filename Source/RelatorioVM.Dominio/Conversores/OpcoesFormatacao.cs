@@ -26,12 +26,40 @@ namespace RelatorioVM.Dominio.Conversores
         /// </summary>
         public string ValorNulavel { get; set; }
 
+        private Dictionary<string, string> valorNulavelTipo;
+
         public OpcoesFormatacao()
         {
             CasasDecimais = 2;
             FormatoData = "dd/MM/yyyy";
             FormatoDataHora = "dd/MM/yyyy HH:mm";
             ValorNulavel = string.Empty;
-        }        
+            valorNulavelTipo = new Dictionary<string, string>();
+
+            DefinirValorNulavelParaOTipo<DateTime>("__/__/____");
+        }
+
+        /// <summary>
+        /// Configura um texto padrão para conversões de valores nulos, por tipo.
+        /// </summary>
+        /// <typeparam name="T">Tipo do valor a ser configurado</typeparam>
+        /// <param name="valor">Texto que vai ser exibido sempre que o tipo for null</param>
+        public void DefinirValorNulavelParaOTipo<T>(string valor){
+            var nomeTipo = typeof(T).FullName;
+            if (valorNulavelTipo.ContainsKey(nomeTipo))
+                valorNulavelTipo[nomeTipo] = valor;
+            else
+                valorNulavelTipo.Add(nomeTipo, valor);
+        }
+
+        public bool ObterValorNulavelParaOTipo(string tipo, out string valor) {
+            valor = ValorNulavel;
+            if (valorNulavelTipo.ContainsKey(tipo)) {
+                valor = valorNulavelTipo[tipo];
+                return true;
+            }
+
+            return !string.IsNullOrEmpty(ValorNulavel);            
+        }
     }
 }

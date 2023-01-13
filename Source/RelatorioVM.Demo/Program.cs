@@ -24,7 +24,7 @@ namespace RelatorioVM.Demo
                 FilialNome = "Nome da filial",
                 PessoaCodigo = 5236,
                 DataFinal = DateTime.Now.Date,
-                DataInicial = DateTime.Now.Date,
+                DataInicial = null,
                 Pessoa = new PessoaViewModel() { 
                     Codigo = 1,
                     Nome = "Testes"
@@ -90,6 +90,12 @@ namespace RelatorioVM.Demo
                 .AdicionarLinhaHorizontal()
                 .AdicionarComponenteCustomizado(new ComponenteCustomizado())
                 .Titulo("Teste de relatório")
+                .Configurar(configuracao => {
+                    configuracao.ConfigurarFormatacao(formatacao =>
+                    {
+                        formatacao.DefinirValorNulavelParaOTipo<int>("-1");
+                    });
+                })
                 .Construir();
 
             var cronometro = new Stopwatch();

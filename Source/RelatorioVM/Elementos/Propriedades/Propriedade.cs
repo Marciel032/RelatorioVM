@@ -22,7 +22,7 @@ namespace RelatorioVM.Elementos.Propriedades
         }
 
         public string ObterValorConvertido(T origem, OpcoesFormatacao formato) {
-            return ObterValor(origem).ObterValorConvertido(formato);
+            return ObterValor(origem).ObterValorConvertido(formato, PropriedadeInformacao.PropertyType);
         }
 
         public Propriedade(PropertyInfo propriedadeInformacao)

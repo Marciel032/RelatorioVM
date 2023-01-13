@@ -30,17 +30,7 @@ namespace RelatorioVM.Relatorios.Construtores
         }        
 
         public FiltrosElemento<T> Construir() {
-            foreach (var filtro in _filtros.Values)
-            {
-                if (!string.IsNullOrWhiteSpace(filtro.Valor))
-                    continue;
-
-                filtro.Valor = filtro.Propriedade.ObterValorConvertido(_filtroVM, _configuracaoRelatorio.Formatacao);
-                if (filtro.PropriedadeComplemento != null)
-                    filtro.ValorComplemento = filtro.PropriedadeComplemento.ObterValorConvertido(_filtroVM, _configuracaoRelatorio.Formatacao);
-            }
-
-            return new FiltrosElemento<T>(_configuracaoRelatorio)
+            return new FiltrosElemento<T>(_filtroVM, _configuracaoRelatorio)
             {
                 Filtros = _filtros.Values.ToList()
             };
@@ -65,7 +55,7 @@ namespace RelatorioVM.Relatorios.Construtores
         {
             var filtro = Obterfiltro(propriedadeExpressao);
             if (filtro != null)
-                filtro.PropriedadeComplemento = new Propriedade<T>(null) {
+                filtro.PropriedadeComplemento = new Propriedade<T>(filtro.Propriedade.PropriedadeInformacao) {
                     FuncaoPropriedade = (origem) => propriedadeComplementoExpressao.Compile()(origem)
                 };
 
