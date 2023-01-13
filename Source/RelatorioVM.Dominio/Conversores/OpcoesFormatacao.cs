@@ -41,7 +41,6 @@ namespace RelatorioVM.Dominio.Conversores
             FormatoDataHora = "dd/MM/yyyy HH:mm";
             ValorNulavel = string.Empty;
             valorNulavelTipo = new Dictionary<string, string>();
-
             Fonte = new FonteEscrita();
 
             DefinirValorNulavelParaOTipo<DateTime>("__/__/____");

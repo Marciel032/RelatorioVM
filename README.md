@@ -117,6 +117,14 @@ Agradecemos às seguintes pessoas que contribuíram para este projeto:
           <b>Marciel Grützmann</b>
         </sub>
       </a>
-    </td>    
+    </td>  
+    <td align="center">
+      <a href="https://github.com/Marciel032">
+        <img src="https://avatars3.githubusercontent.com/UndPat" width="100px;" alt="Marciel Grützmann"/><br>
+        <sub>
+          <b>Patrick J. M. De Bastiani</b>
+        </sub>
+      </a>
+    </td> 
   </tr>
 </table>
