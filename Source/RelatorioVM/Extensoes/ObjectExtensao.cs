@@ -8,7 +8,7 @@ namespace RelatorioVM.Extensoes
 {
     public static class ObjectExtensao
     {
-        public static string ObterValorConvertido(this object valor, OpcoesFormatacao formato, Type tipo) {
+        public static string ObterValorConvertido(this object valor, ConfiguracaoFormatacaoRelatorio formato, Type tipo) {
             if (valor == null) {
                 if (formato.ObterValorNulavelParaOTipo(tipo.ObterTipoNaoNullo().FullName, out var valorNulo))
                     return valorNulo;

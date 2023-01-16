@@ -115,10 +115,10 @@ hr
             //construtorEstilo.Append($".tabela-conteudo {{ font-family: {_configuracao.Formatacao.Fonte.Nome.ObterDescricao()};}}");
             //construtorEstilo.Append($".tabela-conteudo-vertical {{ font-family: {_configuracao.Formatacao.Fonte.Nome.ObterDescricao()};}}");
 
-            construtorEstilo.Append(FormatarCSS(".titulo", _configuracao.Formatacao.Fonte));
-            construtorEstilo.Append(FormatarCSS(".tabela-filtro", _configuracao.Formatacao.Fonte));
-            construtorEstilo.Append(FormatarCSS(".tabela-conteudo", _configuracao.Formatacao.Fonte));
-            construtorEstilo.Append(FormatarCSS(".tabela-conteudo-vertical", _configuracao.Formatacao.Fonte));
+            construtorEstilo.Append(FormatarCSS(".titulo", _configuracao.Formatacao.FonteTitulo));
+            construtorEstilo.Append(FormatarCSS(".tabela-filtro", _configuracao.Formatacao.FonteConteudo));
+            construtorEstilo.Append(FormatarCSS(".tabela-conteudo", _configuracao.Formatacao.FonteConteudo));
+            construtorEstilo.Append(FormatarCSS(".tabela-conteudo-vertical", _configuracao.Formatacao.FonteConteudo));
 
             return construtorEstilo.ToString().Replace(Environment.NewLine, " ");
         }

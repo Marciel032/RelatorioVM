@@ -22,7 +22,7 @@ namespace RelatorioVM.Extensoes
                     colunaTotal.Value.Calcular(conteudo);
         }
 
-        public static void AdicionarTotaisHtml<T>(this List<TabelaTotal<T>> totais, HtmlTag tabelaHtml, Tabela<T> tabela, OpcoesFormatacao formatacao)
+        public static void AdicionarTotaisHtml<T>(this List<TabelaTotal<T>> totais, HtmlTag tabelaHtml, Tabela<T> tabela, ConfiguracaoFormatacaoRelatorio formatacao)
         {
             if (tabela.ObterQuantidadeColunasVisiveis() == 0)
                 return;

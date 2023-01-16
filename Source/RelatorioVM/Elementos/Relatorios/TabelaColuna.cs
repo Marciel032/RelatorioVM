@@ -34,7 +34,7 @@ namespace RelatorioVM.Elementos.Relatorios
             Fonte = new FonteEscrita();
         }
 
-        public string ObterValorConvertido(T origem, OpcoesFormatacao formatacao) {
+        public string ObterValorConvertido(T origem, ConfiguracaoFormatacaoRelatorio formatacao) {
             var valor = Propriedade.ObterValorConvertido(origem, formatacao);
             if (PropriedadeComplemento == null)
                 return valor;
