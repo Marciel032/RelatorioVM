@@ -10,7 +10,7 @@ namespace RelatorioVM.Conversores
 {
     internal class ConversorGenerico : IConversorValor
     {
-        public string Converter(object valor, OpcoesFormatacao opcoes)
+        public string Converter(object valor, ConfiguracaoFormatacaoRelatorio opcoes)
         {
             if (valor == null)
                 return opcoes.ValorNulavel;
@@ -26,7 +26,7 @@ namespace RelatorioVM.Conversores
             return valor.ToString();
         }
 
-        private string ConverterClasse(object valor, OpcoesFormatacao opcoes, Type tipo) {
+        private string ConverterClasse(object valor, ConfiguracaoFormatacaoRelatorio opcoes, Type tipo) {
             var propriedadeDescricao = valor.GetType()
                 .ObterPropriedades()
                 .FirstOrDefault(x => x.PropertyType == typeof(string));
@@ -38,7 +38,7 @@ namespace RelatorioVM.Conversores
 
         }
 
-        private string ConverterEnumerador(object valor, OpcoesFormatacao opcoes, Type tipo)
+        private string ConverterEnumerador(object valor, ConfiguracaoFormatacaoRelatorio opcoes, Type tipo)
         {
             return ((Enum)valor).ObterDescricao();
         }

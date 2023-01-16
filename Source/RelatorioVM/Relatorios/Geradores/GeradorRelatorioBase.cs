@@ -71,6 +71,14 @@ table.tabela-conteudo, table.tabela-conteudo-vertical
 .tabela-conteudo .tr-cabecalho {
     border: 1px solid #777;
 }
+.tabela-conteudo .td-valor-complemento {
+    text-align: right;
+    padding-right: 1px;
+}
+.tabela-conteudo .td-complemento {
+    text-align: left;
+    padding-left: 1px;
+}
 .tabela-conteudo-vertical .tr-cabecalho {
     border-bottom: 1px solid #777;
 }
@@ -115,10 +123,10 @@ hr
             //construtorEstilo.Append($".tabela-conteudo {{ font-family: {_configuracao.Formatacao.Fonte.Nome.ObterDescricao()};}}");
             //construtorEstilo.Append($".tabela-conteudo-vertical {{ font-family: {_configuracao.Formatacao.Fonte.Nome.ObterDescricao()};}}");
 
-            construtorEstilo.Append(FormatarCSS(".titulo", _configuracao.Formatacao.Fonte));
-            construtorEstilo.Append(FormatarCSS(".tabela-filtro", _configuracao.Formatacao.Fonte));
-            construtorEstilo.Append(FormatarCSS(".tabela-conteudo", _configuracao.Formatacao.Fonte));
-            construtorEstilo.Append(FormatarCSS(".tabela-conteudo-vertical", _configuracao.Formatacao.Fonte));
+            construtorEstilo.Append(FormatarCSS(".titulo", _configuracao.Formatacao.FonteTitulo));
+            construtorEstilo.Append(FormatarCSS(".tabela-filtro", _configuracao.Formatacao.FonteConteudo));
+            construtorEstilo.Append(FormatarCSS(".tabela-conteudo", _configuracao.Formatacao.FonteConteudo));
+            construtorEstilo.Append(FormatarCSS(".tabela-conteudo-vertical", _configuracao.Formatacao.FonteConteudo));
 
             return construtorEstilo.ToString().Replace(Environment.NewLine, " ");
         }

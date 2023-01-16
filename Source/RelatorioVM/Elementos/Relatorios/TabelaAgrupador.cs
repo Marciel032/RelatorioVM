@@ -22,7 +22,7 @@ namespace RelatorioVM.Elementos.Relatorios
             Totalizar = true;
         }
 
-        public OpcoesFormatacao ObterOpcoesFormatacao() {
+        public ConfiguracaoFormatacaoRelatorio ObterOpcoesFormatacao() {
             return _configuracaoRelatorio.Formatacao;
         }
     }

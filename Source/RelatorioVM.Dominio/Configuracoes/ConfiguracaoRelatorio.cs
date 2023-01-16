@@ -9,29 +9,20 @@ namespace RelatorioVM.Dominio.Configuracoes
 {
     public class ConfiguracaoRelatorio : IConfiguracaoRelatorio
     {
-        public TipoOrientacao Orientacao { get; set; }
-
         public ConfiguracaoCabecalhoRelatorio Cabecalho { get; set; }
 
         public ConfiguracaoRodapeRelatorio Rodape { get; set; }
 
         public ConfiguracaoConteudoRelatorio Conteudo { get; set; }
 
-        public OpcoesFormatacao Formatacao { get; set; }
+        public ConfiguracaoFormatacaoRelatorio Formatacao { get; set; }
 
         public ConfiguracaoRelatorio()
         {           
-            Orientacao = TipoOrientacao.Retrato;
             Cabecalho = new ConfiguracaoCabecalhoRelatorio();
             Rodape = new ConfiguracaoRodapeRelatorio();
             Conteudo = new ConfiguracaoConteudoRelatorio();
-            Formatacao = new OpcoesFormatacao();
-        }
-
-        public IConfiguracaoRelatorio UsarOrientacao(TipoOrientacao orientacao)
-        {
-            Orientacao = orientacao;
-            return this;
+            Formatacao = new ConfiguracaoFormatacaoRelatorio();
         }
 
         public IConfiguracaoRelatorio ConfigurarCabecalho(Action<IConfiguracaoCabecalhoRelatorio> configurarCabecalho)
@@ -46,7 +37,7 @@ namespace RelatorioVM.Dominio.Configuracoes
             return this;
         }
 
-        public IConfiguracaoRelatorio ConfigurarFormatacao(Action<OpcoesFormatacao> configurarFormatacao)
+        public IConfiguracaoRelatorio ConfigurarFormatacao(Action<IConfiguracaoFormatacaoRelatorio> configurarFormatacao)
         {
             configurarFormatacao?.Invoke(Formatacao);
             return this;
@@ -65,6 +56,6 @@ namespace RelatorioVM.Dominio.Configuracoes
         {
             configurarConteudo?.Invoke(Conteudo);
             return this;
-        }
+        }        
     }
 }

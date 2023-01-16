@@ -20,7 +20,7 @@ namespace RelatorioVM.Extensoes
             agrupador.Totais.CalcularTotais(conteudo);
         }
 
-        public static void AdicionarTotaisHtml<T>(this TabelaAgrupador<T> agrupador, HtmlTag tabelaHtml, Tabela<T> tabela, OpcoesFormatacao formatacao)
+        public static void AdicionarTotaisHtml<T>(this TabelaAgrupador<T> agrupador, HtmlTag tabelaHtml, Tabela<T> tabela, ConfiguracaoFormatacaoRelatorio formatacao)
         {
             if (!agrupador.Totalizar)
                 return;
@@ -66,7 +66,7 @@ namespace RelatorioVM.Extensoes
         public static string ObterTituloAgrupamento<T>(this TabelaAgrupador<T> agrupador, T item) {
             var textoCabecaho = string.Empty;
             foreach (var coluna in agrupador.Colunas)
-                textoCabecaho += $"{coluna.Titulo}:{coluna.ObterValorConvertido(item, agrupador.ObterOpcoesFormatacao())}   ";
+                textoCabecaho += $"{coluna.Titulo}:{coluna.ObterValorConvertidoComComplemento(item, agrupador.ObterOpcoesFormatacao())}   ";
             return textoCabecaho;
         }
 

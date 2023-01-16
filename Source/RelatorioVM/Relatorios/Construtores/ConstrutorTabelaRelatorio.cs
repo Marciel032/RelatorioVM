@@ -67,7 +67,7 @@ namespace RelatorioVM.Relatorios.Construtores
                 };
 
             if (!coluna.AlinhamentoDefinidoManualmente)
-                coluna.AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Esquerda;
+                coluna.AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Direita;
 
             if (ignorar)
                 IgnorarColuna(propriedadeComplementoExpressao);
@@ -87,7 +87,7 @@ namespace RelatorioVM.Relatorios.Construtores
             };
 
             if (!coluna.AlinhamentoDefinidoManualmente)
-                coluna.AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Esquerda;
+                coluna.AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Direita;
         }
 
         public void ComplementarValorPropriedade<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Func<TConteudo, TPropriedade, string> funcao)
@@ -104,7 +104,7 @@ namespace RelatorioVM.Relatorios.Construtores
             };
 
             if (!coluna.AlinhamentoDefinidoManualmente)
-                coluna.AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Esquerda;
+                coluna.AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Direita;
         }
 
         private bool ObterColuna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, out TabelaColuna<TConteudo> coluna) {

@@ -41,7 +41,7 @@ namespace RelatorioVM.Demo
                 {
                     Data = DateTime.Now,
                     FilialCodigo = new Random().Next(1, 10),
-                    PessoaCodigo = new Random().Next(1, 10),
+                    PessoaCodigo = new Random().Next(1, 20),
                     Valor = (decimal)new Random().NextDouble() * 100m,
                     Pessoa = new PessoaViewModel() { 
                         Codigo = new Random().Next(),
@@ -94,12 +94,15 @@ namespace RelatorioVM.Demo
                 .Configurar(configuracao => {
                     configuracao.ConfigurarFormatacao(formatacao =>
                     {
-                        formatacao.DefinirValorNulavelParaOTipo<int>("-1");
-
-                        formatacao.Fonte.Nome = TipoFonteEscrita.ArialNarrow;
-                        formatacao.Fonte.Tamanho = 10;
-                        //formatacao.Fonte.Italico = true;
-                        
+                        formatacao
+                            .DefinirValorNulavelParaOTipo<int>("-1")
+                            .UsarFonte(TipoFonteEscrita.ArialNarrow)
+                            .ConfigurarFonteConteudo(fonte => {
+                                fonte.Tamanho = 10;
+                            })
+                            .ConfigurarFonteTitulo(fonte => {
+                                fonte.Tamanho = 20;
+                            });                        
                     });
                 })
                 .Construir();

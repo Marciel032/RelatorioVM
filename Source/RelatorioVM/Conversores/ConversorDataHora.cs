@@ -8,7 +8,7 @@ namespace RelatorioVM.Conversores
 {
     internal class ConversorDataHora : IConversorValor
     {
-        public string Converter(object valor, OpcoesFormatacao opcoes)
+        public string Converter(object valor, ConfiguracaoFormatacaoRelatorio opcoes)
         {
             if (valor == null)
                 return opcoes.ValorNulavel;

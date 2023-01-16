@@ -4,6 +4,7 @@ using RelatorioVM.Dominio.Interfaces;
 using RelatorioVM.Extensoes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RelatorioVM.Elementos.Relatorios
@@ -34,8 +35,9 @@ namespace RelatorioVM.Elementos.Relatorios
                 .CriarColunaTabela()
                 .Text("Filtros")
                 .Attr("colspan", quantidadeDeFiltrosNaLinha * 2);
-            
-            foreach (var filtros in Filtros.CriarGruposDe(_configuracaoRelatorio.Cabecalho.QuantidadeDeFiltrosPorLinha)) {
+
+            var gruposFiltros = Filtros.CriarGruposDe(_configuracaoRelatorio.Cabecalho.QuantidadeDeFiltrosPorLinha).ToList();
+            foreach (var filtros in gruposFiltros) {
                 var linha = tabela.CriarLinhaTabela()
                     .Style("border", "1px solid #888") ;
                 foreach (var filtro in filtros)
@@ -59,6 +61,10 @@ namespace RelatorioVM.Elementos.Relatorios
                             ObterValorTag(filtro)
                         );
                 }
+
+
+                if (gruposFiltros.Count > 1)
+                    PreencherUltimaLinhaComColunasFaltando(linha, filtros.Count());
             }
 
             return tabela.ToHtmlString();
@@ -87,6 +93,15 @@ namespace RelatorioVM.Elementos.Relatorios
                     new HtmlTag("span")
                         .Text($" {filtro.Separador} ")
                 );
+        }
+
+        private void PreencherUltimaLinhaComColunasFaltando(HtmlTag linha, int filtrosLinha) {
+            if (filtrosLinha >= _configuracaoRelatorio.Cabecalho.QuantidadeDeFiltrosPorLinha)
+                return;
+
+            var filtrosFaltando = (_configuracaoRelatorio.Cabecalho.QuantidadeDeFiltrosPorLinha - filtrosLinha) * 2;
+            for (int i = 0; i < filtrosFaltando; i++)
+                linha.CriarColunaTabela().Append(new HtmlTag("span"));
         }
     }
 }

@@ -6,6 +6,6 @@ namespace RelatorioVM.Dominio.Conversores.Interfaces
 {
     public interface IConversorValor
     {
-        string Converter(object valor, OpcoesFormatacao opcoes);
+        string Converter(object valor, ConfiguracaoFormatacaoRelatorio opcoes);
     }
 }
