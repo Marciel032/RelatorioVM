@@ -22,6 +22,9 @@ namespace RelatorioVM.Elementos.Relatorios
         public FonteEscrita Fonte { get; set; }
         public int MargemBordas { get; set; }
 
+        public bool TemComplemento { get { return PropriedadeComplemento != null;  } }
+        public int QuantidadeColunasUtilizadas { get { return TemComplemento ? 2 : 1; } }
+
         public TabelaColuna()
         {
             Identificador = string.Empty;
@@ -35,12 +38,34 @@ namespace RelatorioVM.Elementos.Relatorios
         }
 
         public string ObterValorConvertido(T origem, ConfiguracaoFormatacaoRelatorio formatacao) {
-            var valor = Propriedade.ObterValorConvertido(origem, formatacao);
-            if (PropriedadeComplemento == null)
+            return Propriedade.ObterValorConvertido(origem, formatacao);
+        }
+
+        public string ObterComplementoConvertido(T origem, ConfiguracaoFormatacaoRelatorio formatacao)
+        {
+            if (!TemComplemento)
+                return formatacao.ValorNulavel;
+
+            return PropriedadeComplemento.ObterValorConvertido(origem, formatacao);
+        }
+
+        public string ObterValorConvertidoComComplemento(T origem, ConfiguracaoFormatacaoRelatorio formatacao)
+        {
+            var valor = ObterValorConvertido(origem, formatacao);
+            if (!TemComplemento)
                 return valor;
 
-            var valorComplemento = PropriedadeComplemento.ObterValorConvertido(origem, formatacao);
+            var valorComplemento = ObterComplementoConvertido(origem, formatacao);
             return $"{valor} {Separador} {valorComplemento}";
+        }
+
+        public string ObterSeparadorComComplementoConvertido(T origem, ConfiguracaoFormatacaoRelatorio formatacao)
+        {
+            if (!TemComplemento)
+                return Separador;
+
+            var valorComplemento = ObterComplementoConvertido(origem, formatacao);
+            return $"{Separador} {valorComplemento}";
         }
     }
 }

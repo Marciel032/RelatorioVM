@@ -59,6 +59,10 @@ namespace RelatorioVM.Extensoes
                     else
                         linhaTotal
                             .CriarColunaTabela();
+
+                    if(coluna.TemComplemento)
+                        for (int i = 1; i < coluna.QuantidadeColunasUtilizadas; i++)
+                            linhaTotal.CriarColunaTabela();
                 }
             }
         }

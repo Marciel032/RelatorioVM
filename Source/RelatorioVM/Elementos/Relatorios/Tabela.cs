@@ -29,7 +29,10 @@ namespace RelatorioVM.Elementos.Relatorios
         }
 
         public int ObterQuantidadeColunasVisiveis() {
-            return Colunas.Count(x => x.Value.Visivel);
+            return Colunas
+                .Where(x => x.Value.Visivel)
+                .Select(x => x.Value.QuantidadeColunasUtilizadas)
+                .Sum();
         }
 
         public IEnumerable<TabelaColuna<T>> ObterColunasVisiveis() {

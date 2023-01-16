@@ -49,9 +49,17 @@ namespace RelatorioVM.Elementos.Relatorios
 
             foreach (var coluna in _tabela.ObterColunasVisiveis())
             {
-                linhaCabecalho.CriarColunaCabecalhoTabela()
-                    .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal)
-                    .Text(coluna.Titulo);
+                var colunaHtml = linhaCabecalho.CriarColunaCabecalhoTabela();
+                if (coluna.TemComplemento)
+                {
+                    colunaHtml = linhaCabecalho.CriarColunaCabecalhoTabela();
+                    colunaHtml.ExpandirColuna(coluna.QuantidadeColunasUtilizadas - 1);
+                    colunaHtml.DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda);
+                }
+                else
+                    colunaHtml.DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal);
+
+                colunaHtml.Text(coluna.Titulo);
             }
         }
 
@@ -102,9 +110,18 @@ namespace RelatorioVM.Elementos.Relatorios
                 linha.AddClass("tr-zebra");
             foreach (var coluna in _tabela.ObterColunasVisiveis())
             {
-                linha.CriarColunaTabela()
-                    .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal)
-                    .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));                
+                var colunaHtml = linha.CriarColunaTabela();
+                if (coluna.TemComplemento) {
+                    colunaHtml.AddClass("td-valor-complemento");
+
+                    linha.CriarColunaTabela()
+                        .AddClass("td-complemento")
+                        .Text(coluna.ObterSeparadorComComplementoConvertido(conteudo, _configuracaoRelatorio.Formatacao));
+                }
+                else
+                    colunaHtml.DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal);
+
+                colunaHtml.Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));                
             }
 
             _tabela.Totais.CalcularTotais(conteudo);           

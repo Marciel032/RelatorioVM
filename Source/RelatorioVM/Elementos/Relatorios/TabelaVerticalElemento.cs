@@ -72,7 +72,7 @@ namespace RelatorioVM.Elementos.Relatorios
 
                     linha.CriarColunaTabela()
                         .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda)
-                        .Text(conteudoVertical.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
+                        .Text(conteudoVertical.ObterValorConvertidoComComplemento(conteudo, _configuracaoRelatorio.Formatacao));
                 }
                 
                 zebra = !zebra;
