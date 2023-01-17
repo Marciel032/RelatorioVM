@@ -104,6 +104,12 @@ namespace RelatorioVM.Relatorios.Construtores
                 coluna.Visivel = true;
         }
 
+        protected void ConfigurarColuna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Action<IColunaRelatorioVM<TConteudo>> configuracao)
+        {
+            if (ObterColuna(propriedadeExpressao, out var coluna))
+                configuracao?.Invoke(coluna);
+        }
+
         protected void DefinirTitulo(string titulo)
         {
             _tabela.Titulo = titulo;
@@ -112,7 +118,7 @@ namespace RelatorioVM.Relatorios.Construtores
         protected void DefinirTituloColuna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, string titulo)
         {
             if (ObterColuna(propriedadeExpressao, out var coluna))
-                coluna.Titulo = titulo;
+                coluna.TituloColuna = titulo;
         }
 
         protected void TotalizarConteudo(Action<ITabelaTotalRelatorioVM<TConteudo>> opcoes = null)

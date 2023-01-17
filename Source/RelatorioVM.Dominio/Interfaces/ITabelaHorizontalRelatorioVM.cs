@@ -28,6 +28,11 @@ namespace RelatorioVM.Dominio.Interfaces
         ITabelaHorizontalRelatorioVM<TConteudo> Exibir<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao);
 
         /// <summary>
+        /// Permite realizar configurações em uma coluna especifica
+        /// </summary>
+        ITabelaHorizontalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Action<IColunaRelatorioVM<TConteudo>> coluna);
+
+        /// <summary>
         /// Concatena o valor das duas propriedades informadas, resultando em "Valor - Descrição"
         /// </summary>
         /// <typeparam name="TPropriedade"></typeparam>

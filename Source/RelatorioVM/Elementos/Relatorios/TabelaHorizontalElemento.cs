@@ -55,7 +55,7 @@ namespace RelatorioVM.Elementos.Relatorios
                     
                 colunaHtml
                     .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal)
-                    .Text(coluna.Titulo);
+                    .Text(coluna.TituloColuna);
             }
         }
 

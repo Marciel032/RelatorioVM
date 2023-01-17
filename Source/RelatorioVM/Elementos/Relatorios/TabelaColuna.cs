@@ -1,6 +1,7 @@
 ﻿using RelatorioVM.Dominio.Configuracoes.Formatacoes;
 using RelatorioVM.Dominio.Conversores;
 using RelatorioVM.Dominio.Enumeradores;
+using RelatorioVM.Dominio.Interfaces;
 using RelatorioVM.Elementos.Propriedades;
 using System;
 using System.Collections.Generic;
@@ -9,10 +10,10 @@ using System.Text;
 
 namespace RelatorioVM.Elementos.Relatorios
 {
-    internal class TabelaColuna<T>
+    internal class TabelaColuna<T>: IColunaRelatorioVM<T>
     {
         public string Identificador { get; set; }
-        public string Titulo { get; set; }
+        public string TituloColuna { get; set; }
         public Propriedade<T> Propriedade { get; set; }
         public Propriedade<T> PropriedadeComplemento { get; set; }
         public TipoAlinhamentoHorizontal AlinhamentoHorizontal { get; set; }
@@ -28,7 +29,7 @@ namespace RelatorioVM.Elementos.Relatorios
         public TabelaColuna()
         {
             Identificador = string.Empty;
-            Titulo = string.Empty;
+            TituloColuna = string.Empty;
             AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Esquerda;
             AlinhamentoDefinidoManualmente = false;
             Visivel = true;
@@ -66,6 +67,12 @@ namespace RelatorioVM.Elementos.Relatorios
 
             var valorComplemento = ObterComplementoConvertido(origem, formatacao);
             return $"{Separador} {valorComplemento}";
+        }
+
+        public IColunaRelatorioVM<T> Titulo(string titulo)
+        {
+            TituloColuna = titulo;
+            return this;
         }
     }
 }

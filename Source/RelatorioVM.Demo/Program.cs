@@ -84,12 +84,20 @@ namespace RelatorioVM.Demo
                         .Titulo("Tabela exibindo valores na horizontal")
                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)
                         .ComplementarValor(x => x.Municipio, x => x.Estado)
+                        .Coluna(x => x.PessoaCodigo, coluna => {
+                            coluna
+                                .Titulo("Código - Pessoa");
+                        })
                         .Agrupar(agrupar => 
                             agrupar
                                 .Coluna(x => x.FilialCodigo)
                          )
                         .Totalizar(opcoes => {
-                            opcoes.Coluna(x => x.Valor, x => x.Valor);
+                            opcoes
+                                .Coluna(x => x.Valor, x => x.Valor, coluna => {
+                                    coluna
+                                        .Titulo("Valor total");
+                                });
                         });
                 })
                 .AdicionarLinhaHorizontal()

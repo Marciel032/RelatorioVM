@@ -20,7 +20,7 @@ namespace RelatorioVM.Extensoes
             var coluna = new TabelaColuna<T>();
 
             coluna.Identificador = propriedade.Name;            
-            coluna.Titulo = propriedade.ObterNome();
+            coluna.TituloColuna = propriedade.ObterNome();
             coluna.Propriedade = new Propriedade<T>(propriedade);
             coluna.AlinhamentoHorizontal = propriedade.ObterAlinhamentoHorizontal();
             coluna.Visivel = true;
@@ -29,7 +29,7 @@ namespace RelatorioVM.Extensoes
             if (colunaAtributo != null)
             {
                 if (!string.IsNullOrWhiteSpace(colunaAtributo.Titulo))
-                    coluna.Titulo = colunaAtributo.Titulo;
+                    coluna.TituloColuna = colunaAtributo.Titulo;
                 if (!colunaAtributo.Visivel)
                     coluna.Visivel = false;
             }
