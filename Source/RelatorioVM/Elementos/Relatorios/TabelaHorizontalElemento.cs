@@ -51,15 +51,11 @@ namespace RelatorioVM.Elementos.Relatorios
             {
                 var colunaHtml = linhaCabecalho.CriarColunaCabecalhoTabela();
                 if (coluna.TemComplemento)
-                {
-                    colunaHtml = linhaCabecalho.CriarColunaCabecalhoTabela();
-                    colunaHtml.ExpandirColuna(coluna.QuantidadeColunasUtilizadas - 1);
-                    colunaHtml.DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda);
-                }
-                else
-                    colunaHtml.DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal);
-
-                colunaHtml.Text(coluna.Titulo);
+                    colunaHtml.ExpandirColuna(coluna.QuantidadeColunasUtilizadas);
+                    
+                colunaHtml
+                    .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal)
+                    .Text(coluna.TituloColuna);
             }
         }
 

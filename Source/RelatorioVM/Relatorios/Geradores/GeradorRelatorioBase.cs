@@ -87,6 +87,9 @@ table.tabela-conteudo, table.tabela-conteudo-vertical
     padding-right: 3px;
     text-align: left;
 }
+.tabela-conteudo th {
+    border: 1px solid #777;
+}
 .tabela-conteudo td,th {
     padding-left: 3px;
     padding-right: 3px;

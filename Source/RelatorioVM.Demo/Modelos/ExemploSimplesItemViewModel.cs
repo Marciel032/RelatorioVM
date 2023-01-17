@@ -25,7 +25,11 @@ namespace RelatorioVM.Demo.Modelos
         [ColunaRelatorio(Titulo = "Situação")]
         public TipoSituacao Situacao { get; set; }
 
-               
+        [ColunaRelatorio(Titulo = "Município")]
+        public string Municipio { get; set; }
+        public string Estado { get; set; }
+
+
     }
 
     public enum TipoSituacao { 

@@ -19,9 +19,9 @@ namespace RelatorioVM.Conversores
             decimal numero = (decimal)valor;
 
             if (opcoes.CasasDecimais > 0)
-                return numero.ToString("0.".PadRight(opcoes.CasasDecimais + 2, '0'));
+                return numero.ToString($"N{opcoes.CasasDecimais}");
             else
-                return numero.ToString();
+                return numero.ToString("N");
         }
     }
 }

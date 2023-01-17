@@ -67,7 +67,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 {                    
                     linha.CriarColunaTabela()
                         .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Direita)
-                        .Text($"{conteudoVertical.Titulo}:")
+                        .Text($"{conteudoVertical.TituloColuna}:")
                         .AddClass("td-titulo");
 
                     linha.CriarColunaTabela()

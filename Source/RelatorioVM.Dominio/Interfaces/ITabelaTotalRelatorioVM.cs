@@ -11,14 +11,6 @@ namespace RelatorioVM.Dominio.Interfaces
         /// Define o titulo que sera exibido junto aos totais.
         /// </summary>
         ITabelaTotalRelatorioVM<TConteudo> Titulo(string titulo);
-        /// <summary>
-        /// Define um totalizador manualmente
-        /// </summary>
-        /// <typeparam name="TPropriedade"></typeparam>
-        /// <param name="expressaoPropriedade">Coluna onde o total é exibido</param>
-        /// <param name="expressaoCalculo">Valor calculado para obter o totalizador</param>
-        /// <returns></returns>
-        ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, decimal>> expressaoCalculo);
 
         /// <summary>
         /// Define um totalizador manualmente
@@ -27,7 +19,16 @@ namespace RelatorioVM.Dominio.Interfaces
         /// <param name="expressaoPropriedade">Coluna onde o total é exibido</param>
         /// <param name="expressaoCalculo">Valor calculado para obter o totalizador</param>
         /// <returns></returns>
-        ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, long>> expressaoCalculo);
+        ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, decimal>> expressaoCalculo, Action<IColunaTotalRelatorioVM<TConteudo>> configuracao = null);
+
+        /// <summary>
+        /// Define um totalizador manualmente
+        /// </summary>
+        /// <typeparam name="TPropriedade"></typeparam>
+        /// <param name="expressaoPropriedade">Coluna onde o total é exibido</param>
+        /// <param name="expressaoCalculo">Valor calculado para obter o totalizador</param>
+        /// <returns></returns>
+        ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, long>> expressaoCalculo, Action<IColunaTotalRelatorioVM<TConteudo>> configuracao = null);
 
         /// <summary>
         /// Ignora uma coluna especifica
