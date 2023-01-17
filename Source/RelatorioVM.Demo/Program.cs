@@ -42,13 +42,15 @@ namespace RelatorioVM.Demo
                     Data = DateTime.Now,
                     FilialCodigo = new Random().Next(1, 10),
                     PessoaCodigo = new Random().Next(1, 20),
-                    Valor = (decimal)new Random().NextDouble() * 100m,
+                    Valor = ((decimal)new Random().NextDouble() * 100000m) / 10,
                     Pessoa = new PessoaViewModel() { 
                         Codigo = new Random().Next(),
                         Nome = "Teste"
                     },
                     Ativo = new Random().Next(1, 3) == 1,
-                    Situacao = (TipoSituacao)new Random().Next(0, 4)
+                    Situacao = (TipoSituacao)new Random().Next(0, 4),
+                    Municipio = (new List<string>() { "UMA CIDADE", "OUTRA CIDADE", "MAIS UMA OUTRA CIDADE", "UMA OUTRA CIDADE QUALQUER" })[new Random().Next(0, 3)],
+                    Estado = (new List<string>() { "SC", "RS", "SP", "RJ" })[new Random().Next(0, 3)]
                 });
             }
 
@@ -78,14 +80,17 @@ namespace RelatorioVM.Demo
                          .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa);
                  })
                 .AdicionarTabela(viewModel.Itens, tabela => {
-                    tabela
+                    tabela                        
                         .Titulo("Tabela exibindo valores na horizontal")
                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)
+                        .ComplementarValor(x => x.Municipio, x => x.Estado)
                         .Agrupar(agrupar => 
                             agrupar
                                 .Coluna(x => x.FilialCodigo)
                          )
-                        .Totalizar();
+                        .Totalizar(opcoes => {
+                            opcoes.Coluna(x => x.Valor, x => x.Valor);
+                        });
                 })
                 .AdicionarLinhaHorizontal()
                 .AdicionarComponenteCustomizado(new ComponenteCustomizado())
@@ -95,6 +100,7 @@ namespace RelatorioVM.Demo
                     configuracao.ConfigurarFormatacao(formatacao =>
                     {
                         formatacao
+                            .DefinirQuantidadeCasasDecimais(3)
                             .DefinirValorNulavelParaOTipo<int>("-1")
                             .UsarFonte(TipoFonteEscrita.ArialNarrow)
                             .ConfigurarFonteConteudo(fonte => {

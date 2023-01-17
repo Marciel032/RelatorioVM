@@ -35,6 +35,12 @@ namespace RelatorioVM.Relatorios.Construtores
             return this;
         }
 
+        public ITabelaVerticalRelatorioVM<TConteudo> Exibir<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao)
+        {
+            ExibirColuna(propriedadeExpressao);
+            return this;
+        }
+
         public ITabelaVerticalRelatorioVM<TConteudo> ComplementarValor<TPropriedade, TPropriedadeComplemento>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Expression<Func<TConteudo, TPropriedadeComplemento>> propriedadeComplementoExpressao, bool ignorar = true)
         {
             ComplementarValorPropriedade(propriedadeExpressao, propriedadeComplementoExpressao, ignorar);
@@ -59,5 +65,10 @@ namespace RelatorioVM.Relatorios.Construtores
             return this;
         }
 
+        public ITabelaVerticalRelatorioVM<TConteudo> IgnorarTudo()
+        {
+            IgnorarTodasColunas();
+            return this;
+        }        
     }
 }

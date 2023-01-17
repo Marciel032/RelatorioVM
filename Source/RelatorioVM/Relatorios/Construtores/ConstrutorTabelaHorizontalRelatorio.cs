@@ -71,5 +71,17 @@ namespace RelatorioVM.Relatorios.Construtores
             ComplementarValorPropriedade(propriedadeExpressao, funcao);
             return this;
         }
+
+        public ITabelaHorizontalRelatorioVM<TConteudo> IgnorarTudo()
+        {
+            IgnorarTodasColunas();
+            return this;
+        }
+
+        public ITabelaHorizontalRelatorioVM<TConteudo> Exibir<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao)
+        {
+            ExibirColuna(propriedadeExpressao);
+            return this;
+        }
     }
 }

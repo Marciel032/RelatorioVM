@@ -32,24 +32,28 @@ namespace RelatorioVM.Relatorios.Construtores
             return _totais;
         }
 
-        public ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, decimal>> expressaoCalculo)
+        public ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, decimal>> expressaoCalculo, Action<IColunaTotalRelatorioVM<TConteudo>> configuracao = null)
         {
             var propriedade = expressaoPropriedade.ObterPropriedadeBase();
             var total = ObterOuAdicionarTotal(propriedade);
 
             if (expressaoCalculo != null)
                 total.Propriedade.FuncaoPropriedade = (origem) => expressaoCalculo.Compile()(origem);
+
+            configuracao?.Invoke(total);           
 
             return this;
         }
 
-        public ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, long>> expressaoCalculo)
+        public ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, long>> expressaoCalculo, Action<IColunaTotalRelatorioVM<TConteudo>> configuracao = null)
         {
             var propriedade = expressaoPropriedade.ObterPropriedadeBase();
             var total = ObterOuAdicionarTotal(propriedade);
 
             if (expressaoCalculo != null)
                 total.Propriedade.FuncaoPropriedade = (origem) => expressaoCalculo.Compile()(origem);
+
+            configuracao?.Invoke(total);
 
             return this;
         }

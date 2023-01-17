@@ -7,12 +7,25 @@ namespace RelatorioVM.Dominio.Interfaces
 {
     public interface ITabelaVerticalRelatorioVM<TConteudo>
     {
+        /// <summary>
+        /// Define um titulo para a tabela
+        /// </summary>
         ITabelaVerticalRelatorioVM<TConteudo> Titulo(string titulo);
 
         /// <summary>
-        /// Não exibe a coluna informada
+        /// Não exibe a propriedade informada
         /// </summary>
         ITabelaVerticalRelatorioVM<TConteudo> Ignorar<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao);
+
+        /// <summary>
+        /// Altera todas as propriedades para não serem exibidas. Isto permite informar manualmente qual propriedade sera exibida.
+        /// </summary>
+        ITabelaVerticalRelatorioVM<TConteudo> IgnorarTudo();
+
+        /// <summary>
+        /// Define que a propriedade informada será exibida
+        /// </summary>
+        ITabelaVerticalRelatorioVM<TConteudo> Exibir<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao);
 
         /// <summary>
         /// Concatena o valor das duas propriedades informadas, resultando em "Valor - Descrição"

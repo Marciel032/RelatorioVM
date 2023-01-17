@@ -1,5 +1,6 @@
 ﻿using RelatorioVM.Dominio.Conversores;
 using RelatorioVM.Dominio.Enumeradores;
+using RelatorioVM.Dominio.Interfaces;
 using RelatorioVM.Elementos.Propriedades;
 using RelatorioVM.Extensoes;
 using RelatorioVM.Infraestruturas;
@@ -10,17 +11,19 @@ using System.Text;
 
 namespace RelatorioVM.Elementos.Relatorios
 {
-    internal class TabelaColunaTotal<T>
+    internal class TabelaColunaTotal<T>: IColunaTotalRelatorioVM<T>
     {
         public string Identificador { get; set; }
         public Propriedade<T> Propriedade { get; set; }
         public TipoAlinhamentoHorizontal AlinhamentoHorizontal { get; set; }
+        public string TituloColuna { get; set; }
         public object Valor { get; set; }
 
         public TabelaColunaTotal()
         {
             Identificador = string.Empty;
             AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Direita;
+            TituloColuna = string.Empty;
             Zerar();
         }
 
@@ -50,6 +53,12 @@ namespace RelatorioVM.Elementos.Relatorios
 
         public TabelaColunaTotal<T> Clonar() {
             return MemberwiseClone() as TabelaColunaTotal<T>;
+        }
+
+        public IColunaTotalRelatorioVM<T> Titulo(string titulo)
+        {
+            TituloColuna = titulo;
+            return this;
         }
     }
 }
