@@ -33,6 +33,8 @@ namespace RelatorioVM.Extensoes
                     coluna.TituloColuna = colunaAtributo.Titulo;
                 if (!colunaAtributo.Visivel)
                     coluna.Visivel = false;
+                if (!string.IsNullOrWhiteSpace(colunaAtributo.Prefixo))
+                    coluna.Prefixo = colunaAtributo.Prefixo;
             }
 
             return coluna;
