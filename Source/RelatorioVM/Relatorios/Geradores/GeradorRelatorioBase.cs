@@ -71,11 +71,16 @@ table.tabela-conteudo, table.tabela-conteudo-vertical
 .tabela-conteudo .tr-cabecalho {
     border: 1px solid #777;
 }
-.tabela-conteudo .td-valor-complemento {
+.tabela-conteudo .td-v-comp {
     text-align: right;
     padding-right: 1px;
 }
-.tabela-conteudo .td-complemento {
+.tabela-conteudo .td-s-comp{
+    width: 0.1%;
+    padding-left: 1px;
+    padding-right: 1px;
+}
+.tabela-conteudo .td-comp {
     text-align: left;
     padding-left: 1px;
 }

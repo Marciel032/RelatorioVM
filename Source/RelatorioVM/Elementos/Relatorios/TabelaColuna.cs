@@ -25,7 +25,7 @@ namespace RelatorioVM.Elementos.Relatorios
         public int MargemBordas { get; set; }
 
         public bool TemComplemento { get { return PropriedadeComplemento != null;  } }
-        public int QuantidadeColunasUtilizadas { get { return TemComplemento ? 2 : 1; } }
+        public int QuantidadeColunasUtilizadas { get { return TemComplemento ? 3 : 1; } }
         public bool TemPrefixo { get { return !string.IsNullOrEmpty(Prefixo); } }
 
         public TabelaColuna()

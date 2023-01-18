@@ -112,6 +112,21 @@ namespace RelatorioVM.Demo
                 })
                 .AdicionarLinhaHorizontal()
                 .AdicionarComponenteCustomizado(new ComponenteCustomizado())
+                .AdicionarTabela(viewModel.Itens, tabela => {
+                    tabela
+                        .Titulo("Tabela com multiplos agrupamentos")
+                        .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)
+                        .ComplementarValor(x => x.Municipio, x => x.Estado)
+                        .Agrupar(agrupar => agrupar.Coluna(x => x.FilialCodigo))
+                        .Agrupar(agrupar => agrupar.Coluna(x => x.Ativo))
+                        .Totalizar(opcoes => {
+                            opcoes
+                                .Coluna(x => x.Valor, x => x.Valor, coluna => {
+                                    coluna
+                                        .Titulo("Valor total");
+                                });
+                        });
+                })
                 .Titulo("Teste de relatório")
 
                 .Configurar(configuracao => {
@@ -134,6 +149,7 @@ namespace RelatorioVM.Demo
             var cronometro = new Stopwatch();
             cronometro.Start();
             var html = relatorio.GerarHtml();
+            File.WriteAllText("c:/tmp/relatorio.html", html);
             cronometro.Stop();
             Console.WriteLine($"Tempo gerando relatório: {cronometro.ElapsedMilliseconds}. Tamanho html: {html.Length}");
             

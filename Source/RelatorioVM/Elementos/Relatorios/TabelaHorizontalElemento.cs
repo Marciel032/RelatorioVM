@@ -108,11 +108,13 @@ namespace RelatorioVM.Elementos.Relatorios
             {
                 var colunaHtml = linha.CriarColunaTabela();
                 if (coluna.TemComplemento) {
-                    colunaHtml.AddClass("td-valor-complemento");
-
+                    colunaHtml.AddClass("td-v-comp");
                     linha.CriarColunaTabela()
-                        .AddClass("td-complemento")
-                        .Text(coluna.ObterSeparadorComComplementoConvertido(conteudo, _configuracaoRelatorio.Formatacao));
+                        .AddClass("td-s-comp")
+                        .Text(coluna.Separador);
+                    linha.CriarColunaTabela()
+                        .AddClass("td-comp")
+                        .Text(coluna.ObterComplementoConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                 }
                 else
                     colunaHtml.DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontalColuna);
