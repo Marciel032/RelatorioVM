@@ -54,7 +54,7 @@ namespace RelatorioVM.Demo
                         Codigo = random.Next(),
                         Nome = "Teste"
                     },
-                    Ativo = new Random().Next(1, 3) == 1,ext(),
+                    Ativo = random.Next(1, 3) == 1,
                     Situacao = (TipoSituacao)random.Next(0, 4)
                 });
             }
@@ -64,7 +64,7 @@ namespace RelatorioVM.Demo
 
             var relatorioConstrutor = host.Services.GetService(typeof(IRelatorioVM)) as IRelatorioVM;
 
-            var fonteTeste = TipoFonteEscrita.TimesNewRoman;
+            var fonteTeste = TipoFonteEscrita.SystemUI;
 
             var relatorio = relatorioConstrutor
                 .Filtros(viewModel, opcoes =>
@@ -127,7 +127,6 @@ namespace RelatorioVM.Demo
                             {
                                 fonte.Tamanho = 10;
                                 fonte.Nome = fonteTeste;
-                                fonte.TipoPersonalizado = "fangsong";
                             })
                             .ConfigurarFonteTitulo(fonte =>
                             {

@@ -57,6 +57,8 @@ namespace RelatorioVM.Dominio.Enumeradores
         SansSerif,
         [Display(Name = "Serif")]
         Serif,
+        [Display(Name = "System-UI")]
+        SystemUI,
 
         [Display(Name = "Times New Roman")]
         TimesNewRoman,
