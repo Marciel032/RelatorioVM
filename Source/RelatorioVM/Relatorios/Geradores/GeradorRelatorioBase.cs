@@ -144,7 +144,13 @@ hr
             StringBuilder cssFormatado = new StringBuilder();
 
             if (fonte != null)
-                cssFormatado.Append(FormatarFonte(classe, fonte.Nome.ObterDescricao(), fonte.Tamanho, fonte.Italico, fonte.Negrito));
+            {
+                var nomeFonte = fonte.TipoPersonalizado;
+                if (nomeFonte == string.Empty)
+                    nomeFonte = fonte.Nome.ObterDescricao();
+
+                cssFormatado.Append(FormatarFonte(classe, nomeFonte, fonte.Tamanho, fonte.Italico, fonte.Negrito));
+            }
 
             //if (paddings != null)
             //    cssFormatado += FormatarPaddings();
