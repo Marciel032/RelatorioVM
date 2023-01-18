@@ -41,8 +41,7 @@ namespace RelatorioVM.Relatorios.Construtores
                     FuncaoPropriedade = (origem) => propriedadeComplementoExpressao.Compile()(origem)
                 };
 
-            if (!coluna.AlinhamentoDefinidoManualmente)
-                coluna.AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Centro;
+            coluna.AlinhamentoHorizontalTitulo = TipoAlinhamentoHorizontal.Centro;
 
             if (ignorar)
                 IgnorarColuna(propriedadeComplementoExpressao);
@@ -63,8 +62,7 @@ namespace RelatorioVM.Relatorios.Construtores
                 FuncaoPropriedade = (origem) => funcao(propriedadeExpressao.Compile()(origem))
             };
 
-            if (!coluna.AlinhamentoDefinidoManualmente)
-                coluna.AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Centro;
+            coluna.AlinhamentoHorizontalTitulo = TipoAlinhamentoHorizontal.Centro;
         }
 
         public void ComplementarValorPropriedade<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Func<TConteudo, TPropriedade, string> funcao)
@@ -82,8 +80,7 @@ namespace RelatorioVM.Relatorios.Construtores
                 FuncaoPropriedade = (origem) => funcao(origem, propriedadeExpressao.Compile()(origem))
             };
 
-            if (!coluna.AlinhamentoDefinidoManualmente)
-                coluna.AlinhamentoHorizontal = TipoAlinhamentoHorizontal.Centro;
+            coluna.AlinhamentoHorizontalTitulo = TipoAlinhamentoHorizontal.Centro;
         }
 
         protected void IgnorarTodasColunas()

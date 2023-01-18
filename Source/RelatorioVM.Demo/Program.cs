@@ -77,7 +77,12 @@ namespace RelatorioVM.Demo
                      tabela
                          .Titulo("Tabela exibindo valores na vertical, com quantidade de colunas personalizada")
                          .QuantidadeColunasVerticais(3)
-                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa);
+                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)
+                         .Coluna(x => x.Valor, coluna => {
+                             coluna
+                                .DefinirPrefixoColuna("R$ ")
+                                .DefinirTitulo("Valor moeda");
+                         });
                  })
                 .AdicionarTabela(viewModel.Itens, tabela => {
                     tabela                        
@@ -86,7 +91,12 @@ namespace RelatorioVM.Demo
                         .ComplementarValor(x => x.Municipio, x => x.Estado)
                         .Coluna(x => x.PessoaCodigo, coluna => {
                             coluna
-                                .Titulo("Código - Pessoa");
+                                .DefinirTitulo("Código - Pessoa");
+                        })
+                        .Coluna(x => x.Valor, coluna => {
+                            coluna
+                                .DefinirAlinhamentoHorizontalTitulo(TipoAlinhamentoHorizontal.Centro)
+                                .DefinirPrefixoColuna("R$");
                         })
                         .Agrupar(agrupar => 
                             agrupar

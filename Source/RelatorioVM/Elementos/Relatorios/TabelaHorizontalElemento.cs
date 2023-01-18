@@ -54,7 +54,7 @@ namespace RelatorioVM.Elementos.Relatorios
                     colunaHtml.ExpandirColuna(coluna.QuantidadeColunasUtilizadas);
                     
                 colunaHtml
-                    .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal)
+                    .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontalTitulo)
                     .Text(coluna.TituloColuna);
             }
         }
@@ -115,7 +115,7 @@ namespace RelatorioVM.Elementos.Relatorios
                         .Text(coluna.ObterSeparadorComComplementoConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                 }
                 else
-                    colunaHtml.DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal);
+                    colunaHtml.DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontalColuna);
 
                 colunaHtml.Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));                
             }

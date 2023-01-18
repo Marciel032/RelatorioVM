@@ -61,13 +61,16 @@ namespace RelatorioVM.Extensoes
                         var totalColuna = total.Totais[coluna.Identificador];
 
                         if (linhaTituloTotal != null)
-                            linhaTituloTotal.CriarColunaTabela()
-                                .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal)
+                            linhaTituloTotal.CriarColunaCabecalhoTabela()
+                                .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontalTitulo)
                                 .Text(totalColuna.TituloColuna);
 
+                        var valor = totalColuna.ObterValorConvertido(formatacao);
+                        if (coluna.TemPrefixo)
+                            valor = $"{coluna.Prefixo} {valor}";
                         linhaTotal.CriarColunaTabela()
-                            .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal)
-                            .Text(totalColuna.ObterValorConvertido(formatacao));                        
+                            .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontalColuna)
+                            .Text(valor);                        
                     }
                     else
                     {

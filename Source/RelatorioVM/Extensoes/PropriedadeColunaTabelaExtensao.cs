@@ -22,7 +22,8 @@ namespace RelatorioVM.Extensoes
             coluna.Identificador = propriedade.Name;            
             coluna.TituloColuna = propriedade.ObterNome();
             coluna.Propriedade = new Propriedade<T>(propriedade);
-            coluna.AlinhamentoHorizontal = propriedade.ObterAlinhamentoHorizontal();
+            coluna.AlinhamentoHorizontalTitulo = propriedade.ObterAlinhamentoHorizontal();
+            coluna.AlinhamentoHorizontalColuna = coluna.AlinhamentoHorizontalTitulo;
             coluna.Visivel = true;
 
             var colunaAtributo = propriedade.GetCustomAttribute<ColunaRelatorioAttribute>();

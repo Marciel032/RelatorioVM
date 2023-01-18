@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelatorioVM.Dominio.Enumeradores;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
@@ -10,6 +11,32 @@ namespace RelatorioVM.Dominio.Interfaces
         /// <summary>
         /// Define o titulo que sera exibido na coluna.
         /// </summary>
-        IColunaRelatorioVM<TConteudo> Titulo(string titulo);        
+        IColunaRelatorioVM<TConteudo> DefinirTitulo(string titulo);
+
+        /// <summary>
+        /// Define o alinhamento horizontal da coluna e do titulo.
+        /// </summary>
+        IColunaRelatorioVM<TConteudo> DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal alinhamento);
+
+        /// <summary>
+        /// Define o alinhamento horizontal do titulo. Isso não vai alterar o alinhamento da coluna.
+        /// </summary>
+        IColunaRelatorioVM<TConteudo> DefinirAlinhamentoHorizontalTitulo(TipoAlinhamentoHorizontal alinhamento);
+
+        /// <summary>
+        /// Define o alinhamento horizontal da coluna. Isso não vai alterar o alinhamento do titulo.
+        /// </summary>
+        IColunaRelatorioVM<TConteudo> DefinirAlinhamentoHorizontalColuna(TipoAlinhamentoHorizontal alinhamento);
+
+        /// <summary>
+        /// Define o separador utilizado em colunas com o valor complementado.
+        /// </summary>
+        IColunaRelatorioVM<TConteudo> DefinirSeparador(string separador);
+
+        /// <summary>
+        /// Define o prefixo exibido antes do valor em cada coluna. Ex. R$ 10,00
+        /// </summary>
+        IColunaRelatorioVM<TConteudo> DefinirPrefixoColuna(string prefixo);
+
     }
 }
