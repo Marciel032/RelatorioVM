@@ -65,25 +65,27 @@ namespace RelatorioVM.Elementos.Relatorios
             if (_tabela.Agrupadores.Count == 0)
                 AdicionarConteudoItens(corpoTabela, _tabela.Conteudo);
             else
-                AdicionarConteudoAgrupado(corpoTabela, _tabela.Conteudo, _tabela.Agrupadores.ToList());
+                AdicionarConteudoAgrupado(corpoTabela, _tabela.Conteudo, _tabela.Agrupadores, 0);
         }
 
-        private void AdicionarConteudoAgrupado(HtmlTag corpoTabela, IEnumerable<T> conteudo, List<TabelaAgrupador<T>> agrupadores) {
-            if (agrupadores.Count == 0)
+        private void AdicionarConteudoAgrupado(HtmlTag corpoTabela, IEnumerable<T> conteudo, List<TabelaAgrupador<T>> agrupadores, int indice) {
+            if (agrupadores.Count <= indice)
                 return;
 
-            var agrupador = agrupadores[0];
-            agrupadores.RemoveAt(0);
+            var agrupador = agrupadores[indice];
 
             var grupos = agrupador.AgruparConteudo(conteudo);
             foreach (var itensGrupo in grupos) {
                 agrupador.Totais.ZerarTotais();
 
                 agrupador.AdicionarCabecalhoAgrupamento(corpoTabela, itensGrupo.First(), _tabela.ObterQuantidadeColunasVisiveis());
-                if (agrupadores.Count > 0)
-                    AdicionarConteudoAgrupado(corpoTabela, itensGrupo, agrupadores.ToList());
+                if (agrupadores.Count > indice + 1)
+                    AdicionarConteudoAgrupado(corpoTabela, itensGrupo, agrupadores, indice + 1);
                 else
-                    AdicionarConteudoItens(corpoTabela, itensGrupo, (item) => { agrupador.CalcularTotais(item); });
+                    AdicionarConteudoItens(corpoTabela, itensGrupo, (item) => { 
+                        for (int i = 0; i <= indice; i++)
+                            agrupadores[i].CalcularTotais(item); 
+                    });
 
                 agrupador.AdicionarTotaisHtml(corpoTabela, _tabela, _configuracaoRelatorio.Formatacao);
             }
