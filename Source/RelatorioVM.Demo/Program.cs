@@ -101,6 +101,7 @@ namespace RelatorioVM.Demo
                         .Agrupar(agrupar => 
                             agrupar
                                 .Coluna(x => x.FilialCodigo)
+                                .Coluna(x => x.Ativo)
                          )
                         .Totalizar(opcoes => {
                             opcoes
