@@ -32,15 +32,17 @@ namespace RelatorioVM.Extensoes
                             UnidadeMedida = TipoUnidadeMedida.Pixel
                         });
 
-                    estilos.Add(new EstiloElemento()
+                    var estiloSeparador = new EstiloElemento()
                         .AdicionarClasse(classeTabela)
                         .AdicionarClasse($"{coluna.Identificador}-separador")
-                        .DefinirMedida(new EstiloElementoMedida() { 
+                        .DefinirMedida(new EstiloElementoMedida()
+                        {
                             Direcao = TipoDirecaoMedida.Largura,
                             Tamanho = 0,
                             UnidadeMedida = TipoUnidadeMedida.Percentual
                         })
-                        .DefinirPreenchimento(new EstiloElementoPreenchimento() { 
+                        .DefinirPreenchimento(new EstiloElementoPreenchimento()
+                        {
                             Direcao = TipoPreenchimento.Direita,
                             Tamanho = 1,
                             UnidadeMedida = TipoUnidadeMedida.Pixel
@@ -50,9 +52,20 @@ namespace RelatorioVM.Extensoes
                             Direcao = TipoPreenchimento.Esquerda,
                             Tamanho = 1,
                             UnidadeMedida = TipoUnidadeMedida.Pixel
-                        })
-                    );
-                    estilos.Add(new EstiloElemento()
+                        });
+                    if (coluna.PrecisaGerarEstiloCondensado())
+                        estiloSeparador.DefinirMedida(new EstiloElementoMedida()
+                        {
+                            Direcao = TipoDirecaoMedida.Largura,
+                            Tamanho = 0,
+                            UnidadeMedida = TipoUnidadeMedida.Percentual
+                        });
+
+                    if (coluna.PrecisaGerarEstiloQuebraDeLinha())
+                        estiloSeparador.DefinirEstiloManual("white-space: nowrap;");
+                    estilos.Add(estiloSeparador);
+
+                    var estiloComplemento = new EstiloElemento()
                         .AdicionarClasse(classeTabela)
                         .AdicionarClasse($"{coluna.Identificador}-complemento")
                         .DefinirAlinhamentoTexto(new EstiloAlinhamentoTexto() { Direcao = TipoAlinhamentoHorizontal.Esquerda })
@@ -61,8 +74,18 @@ namespace RelatorioVM.Extensoes
                             Direcao = TipoPreenchimento.Esquerda,
                             Tamanho = 1,
                             UnidadeMedida = TipoUnidadeMedida.Pixel
-                        })
-                    );
+                        });
+                    if (coluna.PrecisaGerarEstiloCondensado())
+                        estiloComplemento.DefinirMedida(new EstiloElementoMedida()
+                        {
+                            Direcao = TipoDirecaoMedida.Largura,
+                            Tamanho = 0,
+                            UnidadeMedida = TipoUnidadeMedida.Percentual
+                        });
+
+                    if (coluna.PrecisaGerarEstiloQuebraDeLinha())
+                        estiloComplemento.DefinirEstiloManual("white-space: nowrap;");
+                    estilos.Add(estiloComplemento);
                 }
                 else
                 {
@@ -71,13 +94,24 @@ namespace RelatorioVM.Extensoes
                         estiloColuna.DefinirAlinhamentoTexto(new EstiloAlinhamentoTexto() { Direcao = coluna.AlinhamentoHorizontalColuna });
                 }
 
+                if (coluna.PrecisaGerarEstiloCondensado())
+                    estiloColuna.DefinirMedida(new EstiloElementoMedida()
+                    {
+                        Direcao = TipoDirecaoMedida.Largura,
+                        Tamanho = 0,
+                        UnidadeMedida = TipoUnidadeMedida.Percentual
+                    });
+
+                if (coluna.PrecisaGerarEstiloQuebraDeLinha())
+                    estiloColuna.DefinirEstiloManual("white-space: nowrap;");
+
                 estilos.Add(estiloColuna);
             }
 
             return estilos;
         }
 
-        public static bool PrecisaGerarEstilo<T>(this TabelaColuna<T> coluna)
+        private static bool PrecisaGerarEstilo<T>(this TabelaColuna<T> coluna)
         {
             if (coluna.PrecisaGerarEstiloAlinhamentoHorizontalColuna())
                 return true;
@@ -85,18 +119,33 @@ namespace RelatorioVM.Extensoes
             if (coluna.PrecisaGerarEstiloComplementoColuna())
                 return true;
 
+            if (coluna.PrecisaGerarEstiloCondensado())
+                return true;
+
+            if (coluna.PrecisaGerarEstiloQuebraDeLinha())
+                return true;
 
             return false;
         }
 
-        public static bool PrecisaGerarEstiloAlinhamentoHorizontalColuna<T>(this TabelaColuna<T> coluna)
+        private static bool PrecisaGerarEstiloAlinhamentoHorizontalColuna<T>(this TabelaColuna<T> coluna)
         {
             return coluna.AlinhamentoHorizontalColuna != Dominio.Enumeradores.TipoAlinhamentoHorizontal.Esquerda;
         }
 
-        public static bool PrecisaGerarEstiloComplementoColuna<T>(this TabelaColuna<T> coluna)
+        private static bool PrecisaGerarEstiloComplementoColuna<T>(this TabelaColuna<T> coluna)
         {
-            return coluna.TemComplemento;
+            return coluna.TemComplemento && coluna.AlinhamentoHorizontalColuna == TipoAlinhamentoHorizontal.Centro;
+        }
+
+        private static bool PrecisaGerarEstiloCondensado<T>(this TabelaColuna<T> coluna)
+        {
+            return coluna.Condensado;
+        }
+
+        private static bool PrecisaGerarEstiloQuebraDeLinha<T>(this TabelaColuna<T> coluna)
+        {
+            return !coluna.PermiteQuebraDeLinha;
         }
     }
 }

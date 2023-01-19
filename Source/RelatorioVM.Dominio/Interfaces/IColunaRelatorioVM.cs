@@ -43,5 +43,10 @@ namespace RelatorioVM.Dominio.Interfaces
         /// </summary>
         IColunaRelatorioVM<TConteudo> DefinirCondensado(bool condensado);
 
+        /// <summary>
+        /// Quando a quebra de linha da coluna está ativa, o texto pode ser quebrado para diminuir o espaço utilizado pela coluna.
+        /// </summary>
+        IColunaRelatorioVM<TConteudo> PermitirQuebraDeLinha(bool quebraDeLinha);
+
     }
 }

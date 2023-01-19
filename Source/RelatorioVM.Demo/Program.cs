@@ -102,8 +102,9 @@ namespace RelatorioVM.Demo
                         .ComplementarValor(x => x.Municipio, x => x.Estado)
                         .Coluna(x => x.Valor, coluna => coluna.DefinirPrefixoColuna("R$"))
                         .Coluna(x => x.Municipio, coluna => coluna
-                            .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda)
-                            .DefinirSeparador("/"))
+                            .DefinirSeparador("/")
+                            .DefinirCondensado(true)
+                            .PermitirQuebraDeLinha(false))
                         .Agrupar(agrupar =>
                             agrupar
                                 .Coluna(x => x.FilialCodigo)

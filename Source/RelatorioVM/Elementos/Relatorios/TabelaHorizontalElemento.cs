@@ -143,6 +143,12 @@ namespace RelatorioVM.Elementos.Relatorios
                 })
             );
 
+            construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                .AdicionarClasse(_classeTabela)
+                .AdicionarClasseElemento("td:nth-child(2)")
+                .DefinirEstiloManual("font-weight: bold;")
+            );
+
             construtorEstilo.AdicionarEstilos(_tabela.ObterColunasVisiveis().ObterEstilos(_classeTabela));
             
             return construtorEstilo.ToString();

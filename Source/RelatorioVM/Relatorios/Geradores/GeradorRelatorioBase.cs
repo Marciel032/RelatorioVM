@@ -56,7 +56,7 @@ tr { page-break-inside:avoid; page-break-after:auto }
 .keep-together { page-break-inside:avoid; page-break-after:auto } 
 thead { display:table-header-group } 
 tfoot { display:table-footer-group } 
-.page-break  { page-break-before: always; }                    
+.page-break  { page-break-before: always; }
 hr
 {
     margin-top: 20px;
