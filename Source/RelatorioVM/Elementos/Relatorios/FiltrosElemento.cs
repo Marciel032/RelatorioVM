@@ -13,6 +13,7 @@ namespace RelatorioVM.Elementos.Relatorios
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
         private readonly T _filtroVM;
+        private int indiceElemento;
         public List<Filtro<T>> Filtros { get; set; }
 
         public FiltrosElemento(T filtroVM, ConfiguracaoRelatorio configuracaoRelatorio)
@@ -20,6 +21,11 @@ namespace RelatorioVM.Elementos.Relatorios
             _configuracaoRelatorio = configuracaoRelatorio;
             _filtroVM = filtroVM;
             Filtros = new List<Filtro<T>>();
+        }
+
+        public void DefinirIndiceElemento(int indice)
+        {
+            indiceElemento = indice;
         }
 
         public string ObterHtml() {
@@ -70,6 +76,11 @@ namespace RelatorioVM.Elementos.Relatorios
             return tabela.ToHtmlString();
         }
 
+        public string ObterEstilo()
+        {
+            return _configuracaoRelatorio.Formatacao.FonteConteudo.ObterEstilo("tabela-filtro");
+        }
+
         private HtmlTag CriarTabela() { 
             return new HtmlTag("table")
                 .Attr("width", "100%");
@@ -102,6 +113,6 @@ namespace RelatorioVM.Elementos.Relatorios
             var filtrosFaltando = (_configuracaoRelatorio.Cabecalho.QuantidadeDeFiltrosPorLinha - filtrosLinha) * 2;
             for (int i = 0; i < filtrosFaltando; i++)
                 linha.CriarColunaTabela().Append(new HtmlTag("span"));
-        }
+        }        
     }
 }

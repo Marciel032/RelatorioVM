@@ -38,5 +38,10 @@ namespace RelatorioVM.Dominio.Interfaces
         /// </summary>
         IColunaRelatorioVM<TConteudo> DefinirPrefixoColuna(string prefixo);
 
+        /// <summary>
+        /// Define o condensamento da coluna. Isso remove os espaços em branco na direita e esquerda da coluna.
+        /// </summary>
+        IColunaRelatorioVM<TConteudo> DefinirCondensado(bool condensado);
+
     }
 }

@@ -5,17 +5,17 @@ using System.Text;
 
 namespace RelatorioVM.Dominio.Enumeradores
 {
-    public enum TipoPreenchimento
+    public enum TipoBorda
     {
-        [Display(Name = "padding")]
+        [Display(Name = "border")]
         Tudo,
-        [Display(Name = "padding-left")]
+        [Display(Name = "border-left")]
         Esquerda,
-        [Display(Name = "padding-right")]
+        [Display(Name = "border-right")]
         Direita,
-        [Display(Name = "padding-top")]
+        [Display(Name = "border-top")]
         Topo,
-        [Display(Name = "padding-botton")]
+        [Display(Name = "border-bottom")]
         Fundo
     }
 }

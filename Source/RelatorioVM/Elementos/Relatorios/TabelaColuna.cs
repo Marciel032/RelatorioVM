@@ -23,6 +23,7 @@ namespace RelatorioVM.Elementos.Relatorios
         public string Prefixo { get; set; }
         public FonteEscrita Fonte { get; set; }
         public int MargemBordas { get; set; }
+        public bool Condensado { get; set; }
 
         public bool TemComplemento { get { return PropriedadeComplemento != null;  } }
         public int QuantidadeColunasUtilizadas { get { return TemComplemento ? 3 : 1; } }
@@ -107,6 +108,12 @@ namespace RelatorioVM.Elementos.Relatorios
         public IColunaRelatorioVM<T> DefinirPrefixoColuna(string prefixo)
         {
             Prefixo = prefixo;
+            return this;
+        }
+
+        public IColunaRelatorioVM<T> DefinirCondensado(bool condensado)
+        {
+            Condensado = condensado;
             return this;
         }
     }

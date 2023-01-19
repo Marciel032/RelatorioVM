@@ -29,7 +29,7 @@ namespace RelatorioVM.Relatorios.Construtores
             {
                 var construtorTabela = new ConstrutorTabelaHorizontalRelatorio<TConteudo>(_configuracaoRelatorio, conteudo);
                 opcoes?.Invoke(construtorTabela);
-                _estruturaRelatorio.Elementos.Add(construtorTabela.Construir());
+                _estruturaRelatorio.AdicionarElemento(construtorTabela.Construir());
             }
 
             return this;
@@ -41,7 +41,7 @@ namespace RelatorioVM.Relatorios.Construtores
             {
                 var construtorTabela = new ConstrutorTabelaVerticalRelatorio<TConteudo>(_configuracaoRelatorio, new List<TConteudo>() { conteudo });
                 opcoes?.Invoke(construtorTabela);
-                _estruturaRelatorio.Elementos.Add(construtorTabela.Construir());
+                _estruturaRelatorio.AdicionarElemento(construtorTabela.Construir());
             }
 
             return this;
@@ -53,7 +53,7 @@ namespace RelatorioVM.Relatorios.Construtores
             {
                 var construtorTabela = new ConstrutorTabelaVerticalRelatorio<TConteudo>(_configuracaoRelatorio, conteudo );
                 opcoes?.Invoke(construtorTabela);
-                _estruturaRelatorio.Elementos.Add(construtorTabela.Construir());
+                _estruturaRelatorio.AdicionarElemento(construtorTabela.Construir());
             }
 
             return this;
@@ -93,12 +93,12 @@ namespace RelatorioVM.Relatorios.Construtores
 
         public IRelatorioVM AdicionarComponenteCustomizado(IElementoRelatorioVM elemento)
         {
-            _estruturaRelatorio.Elementos.Add(elemento);
+            _estruturaRelatorio.AdicionarElemento(elemento);
             return this;
         }
 
         public IRelatorioVM AdicionarLinhaHorizontal() {
-            _estruturaRelatorio.Elementos.Add(new LinhaHorizontalElemento());
+            _estruturaRelatorio.AdicionarElemento(new LinhaHorizontalElemento());
             return this;
         }
 

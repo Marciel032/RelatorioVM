@@ -150,7 +150,6 @@ namespace RelatorioVM.Demo
             var cronometro = new Stopwatch();
             cronometro.Start();
             var html = relatorio.GerarHtml();
-            File.WriteAllText("c:/tmp/relatorio.html", html);
             cronometro.Stop();
             Console.WriteLine($"Tempo gerando relatório: {cronometro.ElapsedMilliseconds}. Tamanho html: {html.Length}");
             
