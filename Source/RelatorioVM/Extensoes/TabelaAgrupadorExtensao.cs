@@ -66,7 +66,11 @@ namespace RelatorioVM.Extensoes
         public static string ObterTituloAgrupamento<T>(this TabelaAgrupador<T> agrupador, T item) {
             var textoCabecaho = string.Empty;
             foreach (var coluna in agrupador.Colunas)
-                textoCabecaho += $"{coluna.TituloColuna}:{coluna.ObterValorConvertidoComComplemento(item, agrupador.ObterOpcoesFormatacao())}   ";
+            {
+                if (!string.IsNullOrEmpty(textoCabecaho))
+                    textoCabecaho += " - ";
+                textoCabecaho += $"{coluna.TituloColuna}:{coluna.ObterValorConvertidoComComplemento(item, agrupador.ObterOpcoesFormatacao())}";
+            }
             return textoCabecaho;
         }
 

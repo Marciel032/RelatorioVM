@@ -1,5 +1,7 @@
 ﻿using HtmlTags;
+using RelatorioVM.Dominio.Enumeradores;
 using RelatorioVM.Dominio.Interfaces;
+using RelatorioVM.Elementos.Estilos;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +12,10 @@ namespace RelatorioVM.Elementos.Relatorios
     {
         public string Texto { get; set; }
 
+        public void DefinirIndiceElemento(int indice)
+        {
+        }
+
         public string ObterHtml() {
             if (string.IsNullOrWhiteSpace(Texto))
                 return string.Empty;
@@ -19,6 +25,26 @@ namespace RelatorioVM.Elementos.Relatorios
                 .Text(Texto);
 
             return titulo.ToHtmlString();
+        }
+
+        public string ObterEstilo()
+        {
+            var estiloConstrutor = new EstiloConstrutor();
+
+            estiloConstrutor.AdicionarEstilo(new EstiloElemento()
+                .AdicionarClasse("titulo")
+                .DefinirEstiloManual("display: block;")
+                .DefinirEstiloManual("position: running(titulo);")
+                .DefinirEstiloManual("margin: 0px;")
+                .DefinirAlinhamentoTexto(new EstiloAlinhamentoTexto() { Direcao = TipoAlinhamentoHorizontal.Centro })
+                .DefinirPreenchimento(new EstiloElementoPreenchimento() { 
+                    Direcao = TipoPreenchimento.Topo,
+                    Tamanho = 20,
+                    UnidadeMedida = TipoUnidadeMedida.Pixel
+                })
+            );
+
+            return estiloConstrutor.ToString();
         }
     }
 }

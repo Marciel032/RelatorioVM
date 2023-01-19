@@ -8,6 +8,16 @@ namespace RelatorioVM.Elementos.Complementares
 {
     internal class LinhaHorizontalElemento : IElementoRelatorioVM
     {
+        public void DefinirIndiceElemento(int indice)
+        {
+            
+        }
+
+        public string ObterEstilo()
+        {
+            return string.Empty;
+        }
+
         public string ObterHtml()
         {
             return new HtmlTag("hr").ToHtmlString();

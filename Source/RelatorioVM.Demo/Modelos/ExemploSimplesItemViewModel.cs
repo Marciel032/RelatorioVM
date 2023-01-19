@@ -19,10 +19,10 @@ namespace RelatorioVM.Demo.Modelos
 
         public PessoaViewModel Pessoa { get; set; }        
 
-        public bool Ativo { get; set; }
+        public bool Ativo { get; set; }        
         public decimal Valor { get; set; }
 
-        [ColunaRelatorio(Titulo = "Situação")]
+        [ColunaRelatorio(Titulo = "Situação", Prefixo = "=>")]
         public TipoSituacao Situacao { get; set; }
 
         [ColunaRelatorio(Titulo = "Município")]
