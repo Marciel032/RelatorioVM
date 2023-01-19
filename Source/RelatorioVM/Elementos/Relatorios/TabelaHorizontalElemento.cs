@@ -143,6 +143,12 @@ namespace RelatorioVM.Elementos.Relatorios
                 })
             );
 
+            construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                .AdicionarClasse(_classeTabela)
+                .AdicionarClasseElemento("td:nth-child(2)")
+                .DefinirEstiloManual("font-weight: bold;")
+            );
+
             construtorEstilo.AdicionarEstilos(_tabela.ObterColunasVisiveis().ObterEstilos(_classeTabela));
             
             return construtorEstilo.ToString();
@@ -224,9 +230,11 @@ namespace RelatorioVM.Elementos.Relatorios
             foreach (var coluna in _tabela.ObterColunasVisiveis())
             {
                 var colunaHtml = linha.CriarColunaTabela();
-                if (coluna.TemComplemento)
+                if (coluna.TemComplemento && coluna.AlinhamentoHorizontalColuna == TipoAlinhamentoHorizontal.Centro)
                 {
-                    colunaHtml.AddClass($"{coluna.Identificador}-valor");
+                    colunaHtml
+                        .AddClass($"{coluna.Identificador}-valor")
+                        .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                     linha.CriarColunaTabela()
                         .AddClass($"{coluna.Identificador}-separador")
                         .Text(coluna.Separador);
@@ -234,10 +242,16 @@ namespace RelatorioVM.Elementos.Relatorios
                         .AddClass($"{coluna.Identificador}-complemento")
                         .Text(coluna.ObterComplementoConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                 }
-                else
-                    colunaHtml.AddClass(coluna.Identificador);
-
-                colunaHtml.Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));                
+                else if (coluna.TemComplemento) {
+                    colunaHtml
+                        .AddClass(coluna.Identificador)
+                        .Text(coluna.ObterValorConvertidoComComplemento(conteudo, _configuracaoRelatorio.Formatacao));
+                }
+                else {
+                    colunaHtml
+                        .AddClass(coluna.Identificador)
+                        .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
+                }               
             }
 
             _tabela.Totais.CalcularTotais(conteudo);           

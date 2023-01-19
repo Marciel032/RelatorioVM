@@ -101,9 +101,13 @@ namespace RelatorioVM.Demo
                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)
                         .ComplementarValor(x => x.Municipio, x => x.Estado)
                         .Coluna(x => x.Valor, coluna => coluna.DefinirPrefixoColuna("R$"))
+                        .Coluna(x => x.Municipio, coluna => coluna
+                            .DefinirSeparador("/")
+                            .DefinirCondensado(true)
+                            .PermitirQuebraDeLinha(false))
                         .Agrupar(agrupar =>
                             agrupar
-                                .Coluna(x => x.FilialCodigo)
+                                .Coluna(x => x.FilialCodigo, coluna => coluna.OcultarNoTotal())
                                 .Coluna(x => x.Ativo)
                          )
                         .Totalizar(opcoes => {
@@ -111,6 +115,10 @@ namespace RelatorioVM.Demo
                                 .Coluna(x => x.Valor, x => x.Valor, coluna => {
                                     coluna
                                         .Titulo("Valor total");
+                                })
+                                .Coluna(x => x.Municipio, x => 1, coluna => {
+                                    coluna
+                                        .Titulo("Quantidade");
                                 });
                         });
                 })

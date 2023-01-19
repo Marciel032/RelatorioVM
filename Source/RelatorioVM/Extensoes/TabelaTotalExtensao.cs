@@ -61,34 +61,31 @@ namespace RelatorioVM.Extensoes
                         var totalColuna = total.Totais[coluna.Identificador];
 
                         if (linhaTituloTotal != null)
+                        {
                             linhaTituloTotal.CriarColunaCabecalhoTabela()
                                 .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontalTitulo)
+                                .ExpandirColuna(coluna.QuantidadeColunasUtilizadas)
                                 .Text(totalColuna.TituloColuna);
+                        }
 
                         var valor = totalColuna.ObterValorConvertido(formatacao);
                         if (coluna.TemPrefixo)
                             valor = $"{coluna.Prefixo} {valor}";
                         linhaTotal.CriarColunaTabela()
                             .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontalColuna)
+                            .ExpandirColuna(coluna.QuantidadeColunasUtilizadas)
                             .Text(valor);                        
                     }
                     else
                     {
                         if (linhaTituloTotal != null)
-                            linhaTituloTotal.CriarColunaTabela();
+                            linhaTituloTotal.CriarColunaTabela()
+                                .ExpandirColuna(coluna.QuantidadeColunasUtilizadas);
 
                         linhaTotal
-                            .CriarColunaTabela();
+                            .CriarColunaTabela()
+                            .ExpandirColuna(coluna.QuantidadeColunasUtilizadas);
                     }
-
-                    if (coluna.TemComplemento)
-                        for (int i = 1; i < coluna.QuantidadeColunasUtilizadas; i++)
-                        {
-                            if (linhaTituloTotal != null)
-                                linhaTituloTotal.CriarColunaTabela();
-
-                            linhaTotal.CriarColunaTabela();
-                        }
                 }
             }
         }

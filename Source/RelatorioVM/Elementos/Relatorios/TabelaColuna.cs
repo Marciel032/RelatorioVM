@@ -24,9 +24,10 @@ namespace RelatorioVM.Elementos.Relatorios
         public FonteEscrita Fonte { get; set; }
         public int MargemBordas { get; set; }
         public bool Condensado { get; set; }
+        public bool PermiteQuebraDeLinha { get; set; }
 
         public bool TemComplemento { get { return PropriedadeComplemento != null;  } }
-        public int QuantidadeColunasUtilizadas { get { return TemComplemento ? 3 : 1; } }
+        public int QuantidadeColunasUtilizadas { get { return TemComplemento && AlinhamentoHorizontalColuna == TipoAlinhamentoHorizontal.Centro ? 3 : 1; } }
         public bool TemPrefixo { get { return !string.IsNullOrEmpty(Prefixo); } }
 
         public TabelaColuna()
@@ -39,6 +40,8 @@ namespace RelatorioVM.Elementos.Relatorios
             Separador = "-";
             MargemBordas = 1;
             Fonte = new FonteEscrita();
+            Condensado = false;
+            PermiteQuebraDeLinha = true;
         }
 
         public string ObterValorConvertido(T origem, ConfiguracaoFormatacaoRelatorio formatacao) {
@@ -65,15 +68,6 @@ namespace RelatorioVM.Elementos.Relatorios
 
             var valorComplemento = ObterComplementoConvertido(origem, formatacao);
             return $"{valor} {Separador} {valorComplemento}";
-        }
-
-        public string ObterSeparadorComComplementoConvertido(T origem, ConfiguracaoFormatacaoRelatorio formatacao)
-        {
-            if (!TemComplemento)
-                return Separador;
-
-            var valorComplemento = ObterComplementoConvertido(origem, formatacao);
-            return $"{Separador} {valorComplemento}";
         }
 
         public IColunaRelatorioVM<T> DefinirTitulo(string titulo)
@@ -114,6 +108,12 @@ namespace RelatorioVM.Elementos.Relatorios
         public IColunaRelatorioVM<T> DefinirCondensado(bool condensado)
         {
             Condensado = condensado;
+            return this;
+        }
+
+        public IColunaRelatorioVM<T> PermitirQuebraDeLinha(bool quebraDeLinha)
+        {
+            PermiteQuebraDeLinha = quebraDeLinha;
             return this;
         }
     }

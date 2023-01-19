@@ -52,7 +52,7 @@ namespace RelatorioVM.Extensoes
 
         public static HtmlTag ExpandirColuna(this HtmlTag tag, int colunas)
         {
-            if (colunas > 0)
+            if (colunas > 1)
                 tag.Attr("colspan", colunas);
 
             return tag;
