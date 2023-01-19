@@ -47,7 +47,7 @@ namespace RelatorioVM.Demo
                 {
                     Data = DateTime.Now,
                     FilialCodigo = random.Next(1, 10),
-                    PessoaCodigo = random.Next(1, 20),
+                    PessoaCodigo = random.Next(1, 2000),
                     Valor = (decimal)random.NextDouble() * 100m,
                     Pessoa = new PessoaViewModel()
                     {
