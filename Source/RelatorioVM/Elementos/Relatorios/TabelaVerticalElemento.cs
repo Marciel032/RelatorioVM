@@ -99,8 +99,6 @@ namespace RelatorioVM.Elementos.Relatorios
                 .DefinirEstiloManual("font-weight: bold;")
             );
 
-            construtorEstilo.AdicionarEstilos(_tabela.ObterColunasVisiveis().ObterEstilos(_classeTabela));
-
             return construtorEstilo.ToString();
         }
 

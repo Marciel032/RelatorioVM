@@ -12,7 +12,7 @@ namespace RelatorioVM.Extensoes
     internal static class TabelaColunaExtensao
     {
         public static List<EstiloElemento> ObterEstilos<T>(this IEnumerable<TabelaColuna<T>> colunas, string classeTabela) {
-            var estiloConstrutor = new StringBuilder();
+            var indiceColuna = 0;
             var estilos = new List<EstiloElemento>();
 
             foreach (var coluna in colunas) {

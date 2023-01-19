@@ -55,7 +55,9 @@ namespace RelatorioVM.Demo
                         Nome = "Teste"
                     },
                     Ativo = random.Next(1, 3) == 1,
-                    Situacao = (TipoSituacao)random.Next(0, 4)
+                    Situacao = (TipoSituacao)random.Next(0, 4),
+                    Municipio = (new List<string>() { "UMA CIDADE", "OUTRA CIDADE", "MAIS UMA OUTRA CIDADE", "UMA OUTRA CIDADE QUALQUER" })[new Random().Next(0, 3)],
+                    Estado = (new List<string>() { "SC", "RS", "SP", "RJ" })[new Random().Next(0, 3)]
                 });
             }
             #endregion
@@ -97,6 +99,8 @@ namespace RelatorioVM.Demo
                     tabela
                         .Titulo("Tabela exibindo valores na horizontal")
                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)
+                        .ComplementarValor(x => x.Municipio, x => x.Estado)
+                        .Coluna(x => x.Valor, coluna => coluna.DefinirPrefixoColuna("R$"))
                         .Agrupar(agrupar =>
                             agrupar
                                 .Coluna(x => x.FilialCodigo)

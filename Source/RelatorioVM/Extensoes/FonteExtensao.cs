@@ -13,8 +13,12 @@ namespace RelatorioVM.Extensoes
             fonteFormatada.Append($".{classe} ");
 
             fonteFormatada
-                .Append("{")
-                .Append($"font-family: {fonte.Nome.ObterDescricao()};");
+                .Append("{");
+
+            if (!string.IsNullOrEmpty(fonte.TipoPersonalizado))
+                fonteFormatada.Append($"font-family: {fonte.TipoPersonalizado};");
+            else
+                fonteFormatada.Append($"font-family: {fonte.Nome.ObterDescricao()};");
 
             if (fonte.Tamanho > 0)
                 fonteFormatada.Append($"font-size: {fonte.Tamanho}px;");

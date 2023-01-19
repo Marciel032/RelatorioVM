@@ -94,8 +94,10 @@ namespace RelatorioVM.Elementos.Estilos
             if (_fonte == null)
                 return;
 
-            estiloConstrutor
-                .Append($"font-family: {_fonte.Nome.ObterDescricao()};");
+            if(!string.IsNullOrEmpty(_fonte.TipoPersonalizado))
+                estiloConstrutor.Append($"font-family: {_fonte.TipoPersonalizado};");
+            else
+                estiloConstrutor.Append($"font-family: {_fonte.Nome.ObterDescricao()};");
 
             if (_fonte.Tamanho > 0)
                 estiloConstrutor.Append($"font-size: {_fonte.Tamanho}px;");
