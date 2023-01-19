@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace RelatorioVM.Demo
 {
@@ -18,47 +19,57 @@ namespace RelatorioVM.Demo
         static void Main(string[] args)
         {
             IHost host = CreateHostBuilder(args).Build();
+            Random random = new Random();
 
-            var viewModel = new ExemploSimplesViewModel() { 
+            #region Inicializar dados ViewModel
+            var viewModel = new ExemploSimplesViewModel()
+            {
                 FilialCodigo = 1,
                 FilialNome = "Nome da filial",
                 PessoaCodigo = 5236,
                 DataFinal = DateTime.Now.Date,
                 DataInicial = null,
-                Pessoa = new PessoaViewModel() { 
+                Pessoa = new PessoaViewModel()
+                {
                     Codigo = 1,
                     Nome = "Testes"
                 },
                 OperacaoCodigo = 5,
                 OperacaoNome = "VENDAS",
                 Usuario = "TESTES",
-                Itens = new List<ExemploSimplesItemViewModel>(),                
+                Itens = new List<ExemploSimplesItemViewModel>(),
             };
 
+            #region Inicializar itens
             for (int i = 0; i < 100; i++)
             {
                 viewModel.Itens.Add(new ExemploSimplesItemViewModel()
                 {
                     Data = DateTime.Now,
-                    FilialCodigo = new Random().Next(1, 10),
-                    PessoaCodigo = new Random().Next(1, 20),
-                    Valor = ((decimal)new Random().NextDouble() * 100000m) / 10,
-                    Pessoa = new PessoaViewModel() { 
-                        Codigo = new Random().Next(),
+                    FilialCodigo = random.Next(1, 10),
+                    PessoaCodigo = random.Next(1, 20),
+                    Valor = (decimal)random.NextDouble() * 100m,
+                    Pessoa = new PessoaViewModel()
+                    {
+                        Codigo = random.Next(),
                         Nome = "Teste"
                     },
-                    Ativo = new Random().Next(1, 3) == 1,
-                    Situacao = (TipoSituacao)new Random().Next(0, 4),
-                    Municipio = (new List<string>() { "UMA CIDADE", "OUTRA CIDADE", "MAIS UMA OUTRA CIDADE", "UMA OUTRA CIDADE QUALQUER" })[new Random().Next(0, 3)],
-                    Estado = (new List<string>() { "SC", "RS", "SP", "RJ" })[new Random().Next(0, 3)]
+                    Ativo = random.Next(1, 3) == 1,
+                    Situacao = (TipoSituacao)random.Next(0, 4)
                 });
             }
+            #endregion
 
-            var relatorioConstrutor = host.Services.GetService(typeof(IRelatorioVM)) as IRelatorioVM;            
+            #endregion
+
+            var relatorioConstrutor = host.Services.GetService(typeof(IRelatorioVM)) as IRelatorioVM;
+
+            var fonteTeste = TipoFonteEscrita.SystemUI;
 
             var relatorio = relatorioConstrutor
-                .Filtros(viewModel, opcoes => {
-                    opcoes                    
+                .Filtros(viewModel, opcoes =>
+                {
+                    opcoes
                         .Ignorar(x => x.Itens)
                         .Nome(x => x.DataFinal, "Data final")
                         .Nome(x => x.PessoaCodigo, "Pessoa")
@@ -68,37 +79,25 @@ namespace RelatorioVM.Demo
                         .FaixaDeValor(x => x.DataInicial, x => x.DataFinal)
                         .Nome(x => x.Usuario, "Usuário");
                 })
-                .AdicionarTabelaVertical(viewModel.Itens[0], tabela => {
+                .AdicionarTabelaVertical(viewModel.Itens[0], tabela =>
+                {
                     tabela
                         .Titulo("Tabela exibindo valores na vertical")
                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa);
                 })
-                .AdicionarTabelaVertical(viewModel.Itens[1], tabela => {
-                     tabela
-                         .Titulo("Tabela exibindo valores na vertical, com quantidade de colunas personalizada")
-                         .QuantidadeColunasVerticais(3)
-                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)
-                         .Coluna(x => x.Valor, coluna => {
-                             coluna
-                                .DefinirPrefixoColuna("R$ ")
-                                .DefinirTitulo("Valor moeda");
-                         });
-                 })
-                .AdicionarTabela(viewModel.Itens, tabela => {
-                    tabela                        
+                .AdicionarTabelaVertical(viewModel.Itens[1], tabela =>
+                {
+                    tabela
+                        .Titulo("Tabela exibindo valores na vertical, com quantidade de colunas personalizada")
+                        .QuantidadeColunasVerticais(3)
+                        .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa);
+                })
+                .AdicionarTabela(viewModel.Itens, tabela =>
+                {
+                    tabela
                         .Titulo("Tabela exibindo valores na horizontal")
                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)
-                        .ComplementarValor(x => x.Municipio, x => x.Estado)
-                        .Coluna(x => x.PessoaCodigo, coluna => {
-                            coluna
-                                .DefinirTitulo("Código - Pessoa");
-                        })
-                        .Coluna(x => x.Valor, coluna => {
-                            coluna
-                                .DefinirAlinhamentoHorizontalTitulo(TipoAlinhamentoHorizontal.Centro)
-                                .DefinirPrefixoColuna("R$");
-                        })
-                        .Agrupar(agrupar => 
+                        .Agrupar(agrupar =>
                             agrupar
                                 .Coluna(x => x.FilialCodigo)
                                 .Coluna(x => x.Ativo)
@@ -113,36 +112,26 @@ namespace RelatorioVM.Demo
                 })
                 .AdicionarLinhaHorizontal()
                 .AdicionarComponenteCustomizado(new ComponenteCustomizado())
-                .AdicionarTabela(viewModel.Itens, tabela => {
-                    tabela
-                        .Titulo("Tabela com multiplos agrupamentos")
-                        .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)
-                        .ComplementarValor(x => x.Municipio, x => x.Estado)
-                        .Agrupar(agrupar => agrupar.Coluna(x => x.FilialCodigo))
-                        .Agrupar(agrupar => agrupar.Coluna(x => x.Ativo))
-                        .Totalizar(opcoes => {
-                            opcoes
-                                .Coluna(x => x.Valor, x => x.Valor, coluna => {
-                                    coluna
-                                        .Titulo("Valor total");
-                                });
-                        });
-                })
-                .Titulo("Teste de relatório")
+                .Titulo($"Teste de relatório - Fonte {fonteTeste}")
 
-                .Configurar(configuracao => {
+                .Configurar(configuracao =>
+                {
                     configuracao.ConfigurarFormatacao(formatacao =>
                     {
                         formatacao
                             .DefinirQuantidadeCasasDecimais(3)
                             .DefinirValorNulavelParaOTipo<int>("-1")
+                            .DefinirValorNulavelParaOTipo<DateTime>("--/--/----")
                             .UsarFonte(TipoFonteEscrita.ArialNarrow)
-                            .ConfigurarFonteConteudo(fonte => {
+                            .ConfigurarFonteConteudo(fonte =>
+                            {
                                 fonte.Tamanho = 10;
+                                fonte.Nome = fonteTeste;
                             })
-                            .ConfigurarFonteTitulo(fonte => {
+                            .ConfigurarFonteTitulo(fonte =>
+                            {
                                 fonte.Tamanho = 20;
-                            });                        
+                            });
                     });
                 })
                 .Construir();
@@ -152,36 +141,37 @@ namespace RelatorioVM.Demo
             var html = relatorio.GerarHtml();
             cronometro.Stop();
             Console.WriteLine($"Tempo gerando relatório: {cronometro.ElapsedMilliseconds}. Tamanho html: {html.Length}");
-            
+
             var pathHtml = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Replace(".tmp", ".html"));
             File.WriteAllText(pathHtml, html);
-            new Process{StartInfo = new ProcessStartInfo(pathHtml){UseShellExecute = true}}.Start();
+            new Process { StartInfo = new ProcessStartInfo(pathHtml) { UseShellExecute = true } }.Start();
         }
 
         static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((_, services) =>
-                    services.UtilizarRelatorioVM(options => {
+                    services.UtilizarRelatorioVM(options =>
+                    {
                         options.ConfigurarConteudo(conteudo =>
                         {
                             conteudo.Zebrado = true;
                         });
-                     /*   options
-                            .UsarOrientacao(TipoOrientacao.Retrato)                            
-                            .ConfigurarFormatacao(formato => {
-                                formato.CasasDecimais = 3;
-                            })
-                            .ConfigurarCabecalho(cabecalho => {
-                                cabecalho
-                                    .Esquerda().ImprimirTexto("Nome da empresa")
-                                    .Centro().ImprimirDataHora()
-                                    .Direita().ImprimirNumeroDePaginas();
-                            })
-                            .ConfigurarRodape(rodape => {
-                                rodape
-                                    .Esquerda().ImprimirTexto("Infogen Sistemas")
-                                    .Direita().ImprimirTexto("www.infogen.com.br");
-                            });*/
+                        /*   options
+                               .UsarOrientacao(TipoOrientacao.Retrato)                            
+                               .ConfigurarFormatacao(formato => {
+                                   formato.CasasDecimais = 3;
+                               })
+                               .ConfigurarCabecalho(cabecalho => {
+                                   cabecalho
+                                       .Esquerda().ImprimirTexto("Nome da empresa")
+                                       .Centro().ImprimirDataHora()
+                                       .Direita().ImprimirNumeroDePaginas();
+                               })
+                               .ConfigurarRodape(rodape => {
+                                   rodape
+                                       .Esquerda().ImprimirTexto("Infogen Sistemas")
+                                       .Direita().ImprimirTexto("www.infogen.com.br");
+                               });*/
                     }));
     }
 }
