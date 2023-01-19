@@ -53,20 +53,29 @@ namespace RelatorioVM.Extensoes
 
         public static void AdicionarCabecalhoAgrupamento<T>(this TabelaAgrupador<T> agrupador, HtmlTag tabelaHtml, T item, int quantidadeDeColunas)
         {
-            var titulo = agrupador.ObterTituloAgrupamento(item);
+            var titulo = agrupador.ObterTituloAgrupamento(item, false);
             tabelaHtml.CriarLinhaTabela()
                 .AddClass("tr-grupo-titulo")
                 .CriarColunaTabela()
                 .ExpandirColuna(quantidadeDeColunas)                
                 .Text(titulo);
 
-            agrupador.AjustarTituloComplementoTotais(titulo);
+            agrupador.AjustarTituloComplementoTotais(agrupador.ObterTituloAgrupamento(item, true));
         }
 
-        public static string ObterTituloAgrupamento<T>(this TabelaAgrupador<T> agrupador, T item) {
+        public static string ObterTituloAgrupamento<T>(this TabelaAgrupador<T> agrupador, T item, bool tituloTotal) {
             var textoCabecaho = string.Empty;
             foreach (var coluna in agrupador.Colunas)
             {
+                if (!agrupador.Agrupadores.TryGetValue(coluna.Identificador, out var colunaAgrupador))
+                    continue;
+
+                if (!colunaAgrupador.ExibirTitulo && !tituloTotal)
+                    continue;
+
+                if (!colunaAgrupador.ExibirTotal && tituloTotal)
+                    continue;
+
                 if (!string.IsNullOrEmpty(textoCabecaho))
                     textoCabecaho += " - ";
                 textoCabecaho += $"{coluna.TituloColuna}:{coluna.ObterValorConvertidoComComplemento(item, agrupador.ObterOpcoesFormatacao())}";

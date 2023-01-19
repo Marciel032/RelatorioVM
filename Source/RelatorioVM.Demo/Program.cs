@@ -107,7 +107,7 @@ namespace RelatorioVM.Demo
                             .PermitirQuebraDeLinha(false))
                         .Agrupar(agrupar =>
                             agrupar
-                                .Coluna(x => x.FilialCodigo)
+                                .Coluna(x => x.FilialCodigo, coluna => coluna.OcultarNoTotal())
                                 .Coluna(x => x.Ativo)
                          )
                         .Totalizar(opcoes => {

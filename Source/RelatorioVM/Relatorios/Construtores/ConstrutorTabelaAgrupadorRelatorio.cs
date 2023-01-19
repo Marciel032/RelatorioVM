@@ -27,10 +27,12 @@ namespace RelatorioVM.Relatorios.Construtores
             return _agrupador;
         }
 
-        public ITabelaAgrupadorRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade)
+        public ITabelaAgrupadorRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Action<IColunaAgrupadorRelatorioVM> configuraColuna = null)
         {
             var propriedade = expressaoPropriedade.ObterPropriedadeBase();
             var colunaAgrupador = new TabelaColunaAgrupador(propriedade.Name);
+
+            configuraColuna?.Invoke(colunaAgrupador);
 
             if (_agrupador.Agrupadores.ContainsKey(colunaAgrupador.Identificador))
                 _agrupador.Agrupadores[colunaAgrupador.Identificador] = colunaAgrupador;
