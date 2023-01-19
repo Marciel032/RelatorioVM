@@ -3,6 +3,7 @@ using RelatorioVM.Comparadores;
 using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Dominio.Enumeradores;
 using RelatorioVM.Dominio.Interfaces;
+using RelatorioVM.Elementos.Estilos;
 using RelatorioVM.Extensoes;
 using RelatorioVM.Infraestruturas;
 using System;
@@ -17,11 +18,20 @@ namespace RelatorioVM.Elementos.Relatorios
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
         private Tabela<T> _tabela;
+        private int _indiceElemento;
+        private string _classeTabela;
 
         public TabelaHorizontalElemento(ConfiguracaoRelatorio configuracaoRelatorio, Tabela<T> tabela)
         {
             _configuracaoRelatorio = configuracaoRelatorio;
             _tabela = tabela;
+            _classeTabela = "tch";
+        }
+
+        public void DefinirIndiceElemento(int indice)
+        {
+            _indiceElemento = indice;
+            _classeTabela = $"tch{indice}";
         }
 
         public string ObterHtml() {            
@@ -33,9 +43,114 @@ namespace RelatorioVM.Elementos.Relatorios
             return tabela.ToHtmlString();
         }
 
+        public string ObterEstilo()
+        {
+            var construtorEstilo = new EstiloConstrutor();            
+            construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                .AdicionarClasse(_classeTabela)
+                .DefinirFonte(_configuracaoRelatorio.Formatacao.FonteConteudo)
+                .DefinirMedida(new EstiloElementoMedida()
+                {
+                    Direcao = TipoDirecaoMedida.Largura,
+                    Tamanho = 100,
+                    UnidadeMedida = TipoUnidadeMedida.Percentual
+                })
+            );
+
+            construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                .AdicionarClasse(_classeTabela)
+                .AdicionarClasse("tr-cabecalho")
+                .DefinirFonte(_configuracaoRelatorio.Formatacao.FonteConteudo)
+                .DefinirBorda(new EstiloElementoBorda() {
+                    Direcao = TipoBorda.Tudo,
+                    TipoBorda = TipoEstiloBorda.Solida,
+                    UnidadeMedida = TipoUnidadeMedida.Pixel,
+                    Tamanho = 1,
+                    Cor = "#777"
+                })
+            );
+
+            construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                .AdicionarClasse(_classeTabela)
+                .AdicionarClasseElemento("th")
+                .DefinirBorda(new EstiloElementoBorda()
+                {
+                    Direcao = TipoBorda.Tudo,
+                    TipoBorda = TipoEstiloBorda.Solida,
+                    UnidadeMedida = TipoUnidadeMedida.Pixel,
+                    Tamanho = 1,
+                    Cor = "#777"
+                })
+            );
+
+            construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                .AdicionarClasse(_classeTabela)
+                .AdicionarClasseElemento("td,th")
+                .DefinirAlinhamentoTexto(new EstiloAlinhamentoTexto() { Direcao = TipoAlinhamentoHorizontal.Esquerda })
+                .DefinirPreenchimento(new EstiloElementoPreenchimento()
+                {
+                    Direcao = TipoPreenchimento.Direita,
+                    Tamanho = 3,
+                    UnidadeMedida = TipoUnidadeMedida.Pixel
+                })
+                .DefinirPreenchimento(new EstiloElementoPreenchimento()
+                {
+                    Direcao = TipoPreenchimento.Esquerda,
+                    Tamanho = 3,
+                    UnidadeMedida = TipoUnidadeMedida.Pixel
+                })
+            );
+
+            construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                .AdicionarClasse(_classeTabela)
+                .AdicionarClasse("tr-zebra")
+                .DefinirEstiloManual("background-color: #f2f2f2;")
+            );
+
+            construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                .AdicionarClasse(_classeTabela)
+                .AdicionarClasse("tr-totais-titulo")
+                .AdicionarClasseElemento("td")
+                .DefinirEstiloManual("font-weight: bold;")
+            );
+
+            construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                .AdicionarClasse(_classeTabela)
+                .AdicionarClasse("tr-totais")
+                .AdicionarClasseElemento("td")
+                .DefinirEstiloManual("font-weight: bold;")
+                .DefinirBorda(new EstiloElementoBorda() { 
+                    Direcao = TipoBorda.Topo,
+                    Tamanho = 1,
+                    UnidadeMedida = TipoUnidadeMedida.Pixel,
+                    TipoBorda = TipoEstiloBorda.Solida,
+                    Cor = "#888"
+                })
+            );
+
+            construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                .AdicionarClasse(_classeTabela)
+                .AdicionarClasse("tr-grupo-titulo")
+                .AdicionarClasseElemento("td")
+                .DefinirEstiloManual("font-weight: bold;")
+                .DefinirBorda(new EstiloElementoBorda()
+                {
+                    Direcao = TipoBorda.Fundo,
+                    Tamanho = 1,
+                    UnidadeMedida = TipoUnidadeMedida.Pixel,
+                    TipoBorda = TipoEstiloBorda.Solida,
+                    Cor = "#888"
+                })
+            );
+
+            construtorEstilo.AdicionarEstilos(_tabela.ObterColunasVisiveis().ObterEstilos(_classeTabela));
+            
+            return construtorEstilo.ToString();
+        }
+
         private HtmlTag CriarTabela() { 
             return new HtmlTag("table")
-                .AddClass("tabela-conteudo");
+                .AddClass(_classeTabela);
         }
 
         private void AdicionarCabecalho(HtmlTag tabela) {
@@ -54,7 +169,7 @@ namespace RelatorioVM.Elementos.Relatorios
                     colunaHtml.ExpandirColuna(coluna.QuantidadeColunasUtilizadas);
                     
                 colunaHtml
-                    .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal)
+                    .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontalTitulo)
                     .Text(coluna.TituloColuna);
             }
         }
@@ -65,25 +180,27 @@ namespace RelatorioVM.Elementos.Relatorios
             if (_tabela.Agrupadores.Count == 0)
                 AdicionarConteudoItens(corpoTabela, _tabela.Conteudo);
             else
-                AdicionarConteudoAgrupado(corpoTabela, _tabela.Conteudo, _tabela.Agrupadores.ToList());
+                AdicionarConteudoAgrupado(corpoTabela, _tabela.Conteudo, _tabela.Agrupadores, 0);
         }
 
-        private void AdicionarConteudoAgrupado(HtmlTag corpoTabela, IEnumerable<T> conteudo, List<TabelaAgrupador<T>> agrupadores) {
-            if (agrupadores.Count == 0)
+        private void AdicionarConteudoAgrupado(HtmlTag corpoTabela, IEnumerable<T> conteudo, List<TabelaAgrupador<T>> agrupadores, int indice) {
+            if (agrupadores.Count <= indice)
                 return;
 
-            var agrupador = agrupadores[0];
-            agrupadores.RemoveAt(0);
+            var agrupador = agrupadores[indice];
 
             var grupos = agrupador.AgruparConteudo(conteudo);
             foreach (var itensGrupo in grupos) {
                 agrupador.Totais.ZerarTotais();
 
                 agrupador.AdicionarCabecalhoAgrupamento(corpoTabela, itensGrupo.First(), _tabela.ObterQuantidadeColunasVisiveis());
-                if (agrupadores.Count > 0)
-                    AdicionarConteudoAgrupado(corpoTabela, itensGrupo, agrupadores.ToList());
+                if (agrupadores.Count > indice + 1)
+                    AdicionarConteudoAgrupado(corpoTabela, itensGrupo, agrupadores, indice + 1);
                 else
-                    AdicionarConteudoItens(corpoTabela, itensGrupo, (item) => { agrupador.CalcularTotais(item); });
+                    AdicionarConteudoItens(corpoTabela, itensGrupo, (item) => { 
+                        for (int i = 0; i <= indice; i++)
+                            agrupadores[i].CalcularTotais(item); 
+                    });
 
                 agrupador.AdicionarTotaisHtml(corpoTabela, _tabela, _configuracaoRelatorio.Formatacao);
             }
@@ -107,15 +224,18 @@ namespace RelatorioVM.Elementos.Relatorios
             foreach (var coluna in _tabela.ObterColunasVisiveis())
             {
                 var colunaHtml = linha.CriarColunaTabela();
-                if (coluna.TemComplemento) {
-                    colunaHtml.AddClass("td-valor-complemento");
-
+                if (coluna.TemComplemento)
+                {
+                    colunaHtml.AddClass($"{coluna.Identificador}-valor");
                     linha.CriarColunaTabela()
-                        .AddClass("td-complemento")
-                        .Text(coluna.ObterSeparadorComComplementoConvertido(conteudo, _configuracaoRelatorio.Formatacao));
+                        .AddClass($"{coluna.Identificador}-separador")
+                        .Text(coluna.Separador);
+                    linha.CriarColunaTabela()
+                        .AddClass($"{coluna.Identificador}-complemento")
+                        .Text(coluna.ObterComplementoConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                 }
                 else
-                    colunaHtml.DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontal);
+                    colunaHtml.AddClass(coluna.Identificador);
 
                 colunaHtml.Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));                
             }
@@ -138,6 +258,6 @@ namespace RelatorioVM.Elementos.Relatorios
                 .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda)
                 .ExpandirColuna(_tabela.ObterQuantidadeColunasVisiveis())
                 .Text(_tabela.Titulo);
-        }        
+        }       
     }    
 }

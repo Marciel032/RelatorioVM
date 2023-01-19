@@ -36,7 +36,7 @@ namespace RelatorioVM.Dominio.Conversores
             FonteConteudo = new FonteEscrita();
             FonteTitulo = new FonteEscrita() { Tamanho = 16 };
 
-            DefinirValorNulavelParaOTipo<DateTime>("__/__/____");
+            DefinirValorNulavelParaOTipo<DateTime>("--/--/----");
         }
 
         public IConfiguracaoFormatacaoRelatorio DefinirValorNulavelParaOTipo<T>(string valor)
