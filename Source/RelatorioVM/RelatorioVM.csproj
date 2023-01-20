@@ -4,14 +4,15 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <Company>Infogen Sistemas</Company>
     <Authors>Marciel Grutzmann</Authors>
-    <Version>1.0.0.11</Version>
+    <Version>1.0.0.12</Version>
     <PackageTags>report builder relatorio view model</PackageTags>
     <Description>Permite gerar relatórios em html, a partir de view models</Description>
     <RepositoryUrl>https://github.com/Marciel032/RelatorioVM</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Marciel032/RelatorioVM</PackageProjectUrl>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	 <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	 <DocumentationFile></DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
