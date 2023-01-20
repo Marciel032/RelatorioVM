@@ -143,12 +143,6 @@ namespace RelatorioVM.Elementos.Relatorios
                 })
             );
 
-            construtorEstilo.AdicionarEstilo(new EstiloElemento()
-                .AdicionarClasse(_classeTabela)
-                .AdicionarClasseElemento("td:nth-child(2)")
-                .DefinirEstiloManual("font-weight: bold;")
-            );
-
             construtorEstilo.AdicionarEstilos(_tabela.ObterColunasVisiveis().ObterEstilos(_classeTabela));
             
             return construtorEstilo.ToString();
@@ -224,7 +218,8 @@ namespace RelatorioVM.Elementos.Relatorios
 
         private void AdicionarConteudoItem(HtmlTag corpoTabela, T conteudo, bool zebra)
         {
-            var linha = corpoTabela.CriarLinhaTabela();
+            var linha = corpoTabela.CriarLinhaTabela()
+                .AddClass("tr-conteudo");
             if (zebra && _configuracaoRelatorio.Conteudo.Zebrado)
                 linha.AddClass("tr-zebra");
             foreach (var coluna in _tabela.ObterColunasVisiveis())
@@ -233,23 +228,18 @@ namespace RelatorioVM.Elementos.Relatorios
                 if (coluna.TemComplemento && coluna.AlinhamentoHorizontalColuna == TipoAlinhamentoHorizontal.Centro)
                 {
                     colunaHtml
-                        .AddClass($"{coluna.Identificador}-valor")
                         .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                     linha.CriarColunaTabela()
-                        .AddClass($"{coluna.Identificador}-separador")
                         .Text(coluna.Separador);
                     linha.CriarColunaTabela()
-                        .AddClass($"{coluna.Identificador}-complemento")
                         .Text(coluna.ObterComplementoConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                 }
                 else if (coluna.TemComplemento) {
                     colunaHtml
-                        .AddClass(coluna.Identificador)
                         .Text(coluna.ObterValorConvertidoComComplemento(conteudo, _configuracaoRelatorio.Formatacao));
                 }
                 else {
                     colunaHtml
-                        .AddClass(coluna.Identificador)
                         .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                 }               
             }

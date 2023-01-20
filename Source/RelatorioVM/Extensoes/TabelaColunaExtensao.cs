@@ -12,19 +12,24 @@ namespace RelatorioVM.Extensoes
     internal static class TabelaColunaExtensao
     {
         public static List<EstiloElemento> ObterEstilos<T>(this IEnumerable<TabelaColuna<T>> colunas, string classeTabela) {
-            var indiceColuna = 0;
+            var indiceColuna = 1;
             var estilos = new List<EstiloElemento>();
 
             foreach (var coluna in colunas) {
                 if (!coluna.PrecisaGerarEstilo())
+                {
+                    indiceColuna += coluna.QuantidadeColunasUtilizadas;
                     continue;
+                }
 
                 var estiloColuna = new EstiloElemento()
-                    .AdicionarClasse(classeTabela);
+                    .AdicionarClasse(classeTabela)
+                    .AdicionarClasse("tr-conteudo")
+                    .AdicionarClasseElemento($"td:nth-child({indiceColuna})");
+
                 if (coluna.PrecisaGerarEstiloComplementoColuna())
                 {
                     estiloColuna
-                        .AdicionarClasse($"{coluna.Identificador}-valor")
                         .DefinirAlinhamentoTexto(new EstiloAlinhamentoTexto() { Direcao = TipoAlinhamentoHorizontal.Direita })
                         .DefinirPreenchimento(new EstiloElementoPreenchimento() { 
                             Direcao = TipoPreenchimento.Direita,
@@ -34,7 +39,8 @@ namespace RelatorioVM.Extensoes
 
                     var estiloSeparador = new EstiloElemento()
                         .AdicionarClasse(classeTabela)
-                        .AdicionarClasse($"{coluna.Identificador}-separador")
+                        .AdicionarClasse("tr-conteudo")
+                        .AdicionarClasseElemento($"td:nth-child({indiceColuna + 1})")
                         .DefinirMedida(new EstiloElementoMedida()
                         {
                             Direcao = TipoDirecaoMedida.Largura,
@@ -67,7 +73,8 @@ namespace RelatorioVM.Extensoes
 
                     var estiloComplemento = new EstiloElemento()
                         .AdicionarClasse(classeTabela)
-                        .AdicionarClasse($"{coluna.Identificador}-complemento")
+                        .AdicionarClasse("tr-conteudo")
+                        .AdicionarClasseElemento($"td:nth-child({indiceColuna + 2})")
                         .DefinirAlinhamentoTexto(new EstiloAlinhamentoTexto() { Direcao = TipoAlinhamentoHorizontal.Esquerda })
                         .DefinirPreenchimento(new EstiloElementoPreenchimento()
                         {
@@ -89,7 +96,6 @@ namespace RelatorioVM.Extensoes
                 }
                 else
                 {
-                    estiloColuna.AdicionarClasse($"{coluna.Identificador}");
                     if (coluna.PrecisaGerarEstiloAlinhamentoHorizontalColuna())
                         estiloColuna.DefinirAlinhamentoTexto(new EstiloAlinhamentoTexto() { Direcao = coluna.AlinhamentoHorizontalColuna });
                 }
@@ -106,6 +112,8 @@ namespace RelatorioVM.Extensoes
                     estiloColuna.DefinirEstiloManual("white-space: nowrap;");
 
                 estilos.Add(estiloColuna);
+
+                indiceColuna += coluna.QuantidadeColunasUtilizadas;
             }
 
             return estilos;

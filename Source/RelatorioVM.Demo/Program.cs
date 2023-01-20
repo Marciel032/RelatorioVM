@@ -104,7 +104,8 @@ namespace RelatorioVM.Demo
                         .Coluna(x => x.Municipio, coluna => coluna
                             .DefinirSeparador("/")
                             .DefinirCondensado(true)
-                            .PermitirQuebraDeLinha(false))
+                            .PermitirQuebraDeLinha(false)
+                            .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Direita))
                         .Agrupar(agrupar =>
                             agrupar
                                 .Coluna(x => x.FilialCodigo, coluna => coluna.OcultarNoTotal())
