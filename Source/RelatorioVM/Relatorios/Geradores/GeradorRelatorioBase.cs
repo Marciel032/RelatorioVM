@@ -47,7 +47,7 @@ namespace RelatorioVM.Relatorios.Geradores
 body{
   -webkit-print-color-adjust:exact;
 }
-table { 
+body > table { 
     page-break-inside:auto;
     border-collapse: collapse;
     margin-top: 10px;

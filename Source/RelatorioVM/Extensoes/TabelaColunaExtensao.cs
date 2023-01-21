@@ -14,6 +14,7 @@ namespace RelatorioVM.Extensoes
         public static List<EstiloElemento> ObterEstilos<T>(this IEnumerable<TabelaColuna<T>> colunas, string classeTabela) {
             var indiceColuna = 1;
             var estilos = new List<EstiloElemento>();
+            var filtroLinhaConteudo = "tr:not(.tr-t):not(.tr-t-t):not(.tr-g-t)";
 
             foreach (var coluna in colunas) {
                 if (!coluna.PrecisaGerarEstilo())
@@ -23,8 +24,9 @@ namespace RelatorioVM.Extensoes
                 }
 
                 var estiloColuna = new EstiloElemento()
-                    .AdicionarClasse(classeTabela)
-                    .AdicionarClasse("tr-conteudo")
+                    .AdicionarClasse(classeTabela + " > ")
+                    .AdicionarClasseElemento("tbody > ")
+                    .AdicionarClasseElemento(filtroLinhaConteudo)
                     .AdicionarClasseElemento($"td:nth-child({indiceColuna})");
 
                 if (coluna.PrecisaGerarEstiloComplementoColuna())
@@ -38,8 +40,9 @@ namespace RelatorioVM.Extensoes
                         });
 
                     var estiloSeparador = new EstiloElemento()
-                        .AdicionarClasse(classeTabela)
-                        .AdicionarClasse("tr-conteudo")
+                        .AdicionarClasse(classeTabela + " > ")
+                        .AdicionarClasseElemento("tbody > ")
+                        .AdicionarClasseElemento(filtroLinhaConteudo)
                         .AdicionarClasseElemento($"td:nth-child({indiceColuna + 1})")
                         .DefinirMedida(new EstiloElementoMedida()
                         {
@@ -72,8 +75,9 @@ namespace RelatorioVM.Extensoes
                     estilos.Add(estiloSeparador);
 
                     var estiloComplemento = new EstiloElemento()
-                        .AdicionarClasse(classeTabela)
-                        .AdicionarClasse("tr-conteudo")
+                        .AdicionarClasse(classeTabela + " > ")
+                        .AdicionarClasseElemento("tbody > ")
+                        .AdicionarClasseElemento(filtroLinhaConteudo)
                         .AdicionarClasseElemento($"td:nth-child({indiceColuna + 2})")
                         .DefinirAlinhamentoTexto(new EstiloAlinhamentoTexto() { Direcao = TipoAlinhamentoHorizontal.Esquerda })
                         .DefinirPreenchimento(new EstiloElementoPreenchimento()

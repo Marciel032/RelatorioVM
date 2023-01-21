@@ -87,11 +87,22 @@ namespace RelatorioVM.Elementos.Relatorios
                 })
             );
 
-            construtorEstilo.AdicionarEstilo(new EstiloElemento()
-                .AdicionarClasse(_classeTabela)
-                .AdicionarClasse("tr-zebra")
-                .DefinirEstiloManual("background-color: #f2f2f2;")
-            );
+            if (_configuracaoRelatorio.Conteudo.Zebrado)
+            {
+                construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                    .AdicionarClasse(_classeTabela + " > ")
+                    .AdicionarClasseElemento("tbody > ")
+                    .AdicionarClasseElemento("tr:nth-child(even)")
+                    .DefinirEstiloManual("background-color: #f2f2f2;")
+                );
+
+                construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                    .AdicionarClasse(_classeTabela + " > ")
+                    .AdicionarClasseElemento("tbody > ")
+                    .AdicionarClasseElemento("tr:nth-child(odd)")
+                    .DefinirEstiloManual("background-color: #ffffff;")
+                );
+            }
 
             construtorEstilo.AdicionarEstilo(new EstiloElemento()
                 .AdicionarClasse(_classeTabela)
@@ -120,7 +131,6 @@ namespace RelatorioVM.Elementos.Relatorios
 
         private void AdicionarConteudoColunas(HtmlTag corpoTabela, T conteudo)
         {
-            bool zebra = false;
             var colunasVisiveis = _tabela.ObterColunasVisiveis();
             if (colunasVisiveis.Count() == 0)
                 return;
@@ -130,8 +140,6 @@ namespace RelatorioVM.Elementos.Relatorios
             foreach (var colunaVertical in colunasVerticais)
             {
                 linha = corpoTabela.CriarLinhaTabela();
-                if (zebra && _configuracaoRelatorio.Conteudo.Zebrado)
-                    linha.AddClass("tr-zebra");
 
                 foreach (var conteudoVertical in colunaVertical)
                 {                    
@@ -144,8 +152,6 @@ namespace RelatorioVM.Elementos.Relatorios
                         .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda)
                         .Text(conteudoVertical.ObterValorConvertidoComComplemento(conteudo, _configuracaoRelatorio.Formatacao));
                 }
-                
-                zebra = !zebra;
             }
 
             //Completa as colunas no final, para não ficar espaço vazio na ultima linha

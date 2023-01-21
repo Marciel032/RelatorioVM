@@ -52,9 +52,9 @@ namespace RelatorioVM.Demo
                     Valor = (decimal)random.NextDouble() * 100m,
                     Pessoa = new PessoaViewModel()
                     {
-                        Codigo = random.Next(1, 2000),
+                        Codigo = random.Next(1, 999999),
                         Nome = "Teste",
-                        Endereco = "Endereco de testes"
+                        Endereco = $"Endereco de testes, {random.Next(1, 9999)}"
                     },
                     Ativo = random.Next(1, 3) == 1,
                     Situacao = (TipoSituacao)random.Next(0, 4),
@@ -103,7 +103,7 @@ namespace RelatorioVM.Demo
                         .Ignorar(x => x.PessoaCodigo)
                         //.ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)                        
                         .ComplementarValor(x => x.Municipio, x => x.Estado)
-                        .TabelaVertical(x => x.Pessoa)
+                        .TabelaVertical(x => x.Pessoa, tabelaV => tabelaV.QuantidadeColunasVerticais(2))
                         .Coluna(x => x.Valor, coluna => coluna.DefinirPrefixoColuna("R$"))
                         .Coluna(x => x.Municipio, coluna => coluna
                             .DefinirSeparador("/")

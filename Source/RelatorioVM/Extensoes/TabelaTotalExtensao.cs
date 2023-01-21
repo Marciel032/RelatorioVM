@@ -38,7 +38,7 @@ namespace RelatorioVM.Extensoes
                 if (!string.IsNullOrWhiteSpace(titulo))
                 {
                     tabelaHtml.CriarLinhaTabela()
-                        .AddClass("tr-totais-titulo")
+                        .AddClass("tr-t-t")
                         .CriarColunaTabela()
                         .ExpandirColuna(tabela.ObterQuantidadeColunasVisiveis())
                         .Text(titulo);
@@ -48,11 +48,11 @@ namespace RelatorioVM.Extensoes
 
                 if (total.TemTituloColuna) {
                     linhaTituloTotal = tabelaHtml.CriarLinhaTabela()
-                        .AddClass("tr-totais");
+                        .AddClass("tr-t");
                 }
 
                 var linhaTotal = tabelaHtml.CriarLinhaTabela()
-                    .AddClass("tr-totais");
+                    .AddClass("tr-t");
 
                 foreach (var coluna in tabela.ObterColunasVisiveis())
                 {
@@ -62,7 +62,8 @@ namespace RelatorioVM.Extensoes
 
                         if (linhaTituloTotal != null)
                         {
-                            linhaTituloTotal.CriarColunaCabecalhoTabela()
+                            linhaTituloTotal.CriarColunaTabela()
+                                .AddClass("td-t-t")
                                 .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontalTitulo)
                                 .ExpandirColuna(coluna.QuantidadeColunasUtilizadas)
                                 .Text(totalColuna.TituloColuna);
