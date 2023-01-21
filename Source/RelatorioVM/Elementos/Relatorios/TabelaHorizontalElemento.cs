@@ -18,27 +18,25 @@ namespace RelatorioVM.Elementos.Relatorios
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
         private Tabela<T> _tabela;
-        private int _indiceElemento;
-        private string _classeTabela;
+        private string _classeTabela { get { return $"tch{Indice}"; } }
+
+        public string Indice { get { return _tabela.Indice; } set { _tabela.Indice = value; } }
 
         public TabelaHorizontalElemento(ConfiguracaoRelatorio configuracaoRelatorio, Tabela<T> tabela)
         {
             _configuracaoRelatorio = configuracaoRelatorio;
             _tabela = tabela;
-            _classeTabela = "tch";
         }
 
-        public void DefinirIndiceElemento(int indice)
-        {
-            _indiceElemento = indice;
-            _classeTabela = $"tch{indice}";
-        }
+        public string ObterHtml(object conteudo) {
+            var conteudoTabela = (IEnumerable<T>)conteudo;
+            if (conteudoTabela == null)
+                return string.Empty;
 
-        public string ObterHtml() {            
             var tabela = CriarTabela();
             AdicionarCabecalho(tabela);
             var corpoTabela = tabela.CriarCorpoTabela();
-            AdicionarConteudo(corpoTabela);
+            AdicionarConteudo(corpoTabela, conteudoTabela);
             AdicionarTotais(tabela, corpoTabela);
             return tabela.ToHtmlString();
         }
@@ -143,9 +141,9 @@ namespace RelatorioVM.Elementos.Relatorios
                 })
             );
 
-            construtorEstilo.AdicionarEstilos(_tabela.ObterColunasVisiveis().ObterEstilos(_classeTabela));
+            construtorEstilo.AdicionarEstilos(_tabela.ObterColunasVisiveis().ObterEstilos(_classeTabela));            
             
-            return construtorEstilo.ToString();
+            return construtorEstilo.ToString() + _tabela.ObterEstilo();
         }
 
         private HtmlTag CriarTabela() { 
@@ -174,13 +172,13 @@ namespace RelatorioVM.Elementos.Relatorios
             }
         }
 
-        private void AdicionarConteudo(HtmlTag corpoTabela) {
+        private void AdicionarConteudo(HtmlTag corpoTabela, IEnumerable<T> conteudos) {
             _tabela.Totais.ZerarTotais();
             
             if (_tabela.Agrupadores.Count == 0)
-                AdicionarConteudoItens(corpoTabela, _tabela.Conteudo);
+                AdicionarConteudoItens(corpoTabela, conteudos);
             else
-                AdicionarConteudoAgrupado(corpoTabela, _tabela.Conteudo, _tabela.Agrupadores, 0);
+                AdicionarConteudoAgrupado(corpoTabela, conteudos, _tabela.Agrupadores, 0);
         }
 
         private void AdicionarConteudoAgrupado(HtmlTag corpoTabela, IEnumerable<T> conteudo, List<TabelaAgrupador<T>> agrupadores, int indice) {
@@ -234,11 +232,17 @@ namespace RelatorioVM.Elementos.Relatorios
                     linha.CriarColunaTabela()
                         .Text(coluna.ObterComplementoConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                 }
-                else if (coluna.TemComplemento) {
+                else if (coluna.TemComplemento)
+                {
                     colunaHtml
                         .Text(coluna.ObterValorConvertidoComComplemento(conteudo, _configuracaoRelatorio.Formatacao));
                 }
-                else {
+                else if (coluna.TemElementos)
+                {
+                    coluna.AdicionarHtml(colunaHtml, conteudo);
+                }
+                else
+                {
                     colunaHtml
                         .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                 }               

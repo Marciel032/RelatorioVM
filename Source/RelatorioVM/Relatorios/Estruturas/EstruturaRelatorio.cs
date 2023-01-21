@@ -12,22 +12,26 @@ namespace RelatorioVM.Relatorios.Estruturas
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
 
-        private List<IElementoRelatorioVM> elementos;
+        private List<IElementoRelatorioVM> _elementos;
+        private Dictionary<string, object> _conteudos;
+        private IElementoRelatorioVM _filtro;
         public TituloElemento Titulo { get; set; }
-        public IElementoRelatorioVM Filtro { get; set; }        
+        public IElementoRelatorioVM Filtro { get { return _filtro; } }        
 
         public EstruturaRelatorio(ConfiguracaoRelatorio configuracaoRelatorio)
         {
             _configuracaoRelatorio = configuracaoRelatorio;
 
             Titulo = new TituloElemento();
-            elementos = new List<IElementoRelatorioVM>();
+            _elementos = new List<IElementoRelatorioVM>();
+            _conteudos = new Dictionary<string, object>();
         }
 
         public void AdicionarHtml(HtmlTag parent) {
-            parent.AppendHtml(Titulo.ObterHtml());
-            parent.AppendHtml(Filtro?.ObterHtml());            
-            elementos.ForEach(x => parent.AppendHtml(x.ObterHtml()));
+            parent.AppendHtml(Titulo.ObterHtml(null));
+            if(_conteudos.ContainsKey("filtros"))
+                parent.AppendHtml(Filtro?.ObterHtml(_conteudos["filtros"]));            
+            _elementos.ForEach(x => parent.AppendHtml(x.ObterHtml(_conteudos[x.Indice])));
         }
 
         public string ObterEstilo() {
@@ -38,7 +42,7 @@ namespace RelatorioVM.Relatorios.Estruturas
             if(Filtro != null)
                 construtorEstilo.AppendLine(Filtro.ObterEstilo());
 
-            foreach (var elemento in elementos) {
+            foreach (var elemento in _elementos) {
                 var estilo = elemento.ObterEstilo();
                 if (string.IsNullOrEmpty(estilo))
                     continue;
@@ -48,9 +52,16 @@ namespace RelatorioVM.Relatorios.Estruturas
             return construtorEstilo.ToString();
         }
 
-        public void AdicionarElemento(IElementoRelatorioVM elemento) {
-            elemento.DefinirIndiceElemento(elementos.Count);
-            elementos.Add(elemento);            
+        public void AdicionarElemento(IElementoRelatorioVM elemento, object conteudo) {
+            elemento.Indice = _elementos.Count.ToString();
+            _elementos.Add(elemento);
+            _conteudos.Add(elemento.Indice, conteudo);
+        }
+
+        public void AdicionarFiltro(IElementoRelatorioVM filtro, object conteudo)
+        {
+            _filtro = filtro;
+            _conteudos.Add("filtros", conteudo);
         }
     }
 }

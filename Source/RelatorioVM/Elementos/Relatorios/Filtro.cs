@@ -10,8 +10,6 @@ namespace RelatorioVM.Elementos.Relatorios
     {
         public string Identificador { get; set; }
         public string Nome { get; set; }
-        public string Valor { get; set; }   
-        public string ValorComplemento { get; set; }
         public string Separador { get; set; }
         
         public Propriedade<T> Propriedade { get; set; }
@@ -21,8 +19,6 @@ namespace RelatorioVM.Elementos.Relatorios
         {
             Identificador = string.Empty;
             Nome = string.Empty;
-            Valor = string.Empty;
-            ValorComplemento = string.Empty;
             Separador = "-";
         }
     }

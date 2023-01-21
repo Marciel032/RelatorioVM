@@ -12,23 +12,20 @@ namespace RelatorioVM.Elementos.Relatorios
     internal class FiltrosElemento<T>: IElementoRelatorioVM
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
-        private readonly T _filtroVM;
-        private int indiceElemento;
         public List<Filtro<T>> Filtros { get; set; }
+        public string Indice { get; set; }
 
-        public FiltrosElemento(T filtroVM, ConfiguracaoRelatorio configuracaoRelatorio)
+        public FiltrosElemento(ConfiguracaoRelatorio configuracaoRelatorio)
         {
             _configuracaoRelatorio = configuracaoRelatorio;
-            _filtroVM = filtroVM;
             Filtros = new List<Filtro<T>>();
         }
 
-        public void DefinirIndiceElemento(int indice)
-        {
-            indiceElemento = indice;
-        }
+        public string ObterHtml(object conteudo) {
+            var filtroConteudo = (T)conteudo;
+            if (filtroConteudo == null)
+                return string.Empty;
 
-        public string ObterHtml() {
             if (Filtros.Count == 0)
                 return string.Empty;
 
@@ -48,13 +45,6 @@ namespace RelatorioVM.Elementos.Relatorios
                     .Style("border", "1px solid #888") ;
                 foreach (var filtro in filtros)
                 {
-                    if (string.IsNullOrWhiteSpace(filtro.Valor))
-                    { 
-                        filtro.Valor = filtro.Propriedade.ObterValorConvertido(_filtroVM, _configuracaoRelatorio.Formatacao);
-                        if (filtro.PropriedadeComplemento != null)
-                            filtro.ValorComplemento = filtro.PropriedadeComplemento.ObterValorConvertido(_filtroVM, _configuracaoRelatorio.Formatacao);
-                    }
-
                     linha.CriarColunaTabela()
                         .Style("text-align", "right")
                         .Append(
@@ -64,7 +54,7 @@ namespace RelatorioVM.Elementos.Relatorios
                         );                    
                     linha.CriarColunaTabela()
                         .Append(
-                            ObterValorTag(filtro)
+                            ObterValorTag(filtro, filtroConteudo)
                         );
                 }
 
@@ -86,20 +76,20 @@ namespace RelatorioVM.Elementos.Relatorios
                 .Attr("width", "100%");
         }
 
-        private HtmlTag ObterValorTag(Filtro<T> filtro) {
-            if (!string.IsNullOrWhiteSpace(filtro.ValorComplemento))
-                return ObterValorComComplemento(filtro);
+        private HtmlTag ObterValorTag(Filtro<T> filtro, T conteudo) {
+            if(filtro.PropriedadeComplemento != null)
+                return ObterValorComComplemento(filtro, conteudo);
 
             return new HtmlTag("strong")
-                .Text(filtro.Valor);
+                .Text(filtro.Propriedade.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
         }
 
-        private HtmlTag ObterValorComComplemento(Filtro<T> filtro) {
+        private HtmlTag ObterValorComComplemento(Filtro<T> filtro, T conteudo) {
             return new HtmlTag("strong")
-                .Text(filtro.Valor)                
+                .Text(filtro.Propriedade.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao))                
                 .After(
                     new HtmlTag("strong")
-                        .Text(filtro.ValorComplemento))
+                        .Text(filtro.PropriedadeComplemento.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao)))
                 .After(
                     new HtmlTag("span")
                         .Text($" {filtro.Separador} ")

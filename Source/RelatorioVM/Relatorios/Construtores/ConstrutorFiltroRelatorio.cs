@@ -18,11 +18,10 @@ namespace RelatorioVM.Relatorios.Construtores
         private T _filtroVM;
         private Dictionary<string, Filtro<T>> _filtros;
 
-        public ConstrutorFiltroRelatorio(ConfiguracaoRelatorio configuracaoRelatorio, T filtroVM)
+        public ConstrutorFiltroRelatorio(ConfiguracaoRelatorio configuracaoRelatorio)
         {
             _configuracaoRelatorio = configuracaoRelatorio;
-            _filtroVM = filtroVM;
-            _filtros = _filtroVM
+            _filtros = typeof(T)
                 .ObterPropriedades()
                 .Where(x => x.PodeSerFiltro(_filtroVM))
                 .Select(x => x.ObterFiltro<T>())
@@ -30,7 +29,7 @@ namespace RelatorioVM.Relatorios.Construtores
         }        
 
         public FiltrosElemento<T> Construir() {
-            return new FiltrosElemento<T>(_filtroVM, _configuracaoRelatorio)
+            return new FiltrosElemento<T>(_configuracaoRelatorio)
             {
                 Filtros = _filtros.Values.ToList()
             };
@@ -47,7 +46,10 @@ namespace RelatorioVM.Relatorios.Construtores
         {
             var filtro = Obterfiltro(propriedadeExpressao);
             if (filtro != null)
-                filtro.ValorComplemento = valor;
+                filtro.PropriedadeComplemento = new Propriedade<T>(filtro.Propriedade.PropriedadeInformacao)
+                {
+                    FuncaoPropriedade = (origem) => valor
+                };
             return this;
         }
 
@@ -69,7 +71,10 @@ namespace RelatorioVM.Relatorios.Construtores
         {
             var filtro = Obterfiltro(propriedadeExpressao);
             if (filtro != null)
-                filtro.ValorComplemento = funcao?.Invoke(propriedadeExpressao.Compile()(_filtroVM));
+                filtro.PropriedadeComplemento = new Propriedade<T>(filtro.Propriedade.PropriedadeInformacao)
+                {
+                    FuncaoPropriedade = (origem) => funcao?.Invoke(propriedadeExpressao.Compile()(origem))
+                };
             return this;
         }
 
@@ -84,14 +89,14 @@ namespace RelatorioVM.Relatorios.Construtores
         {
             var filtro = Obterfiltro(propriedadeExpressao);
             if(filtro != null)
-                filtro.Valor = valor;
+                filtro.Propriedade.FuncaoPropriedade = (origem) => valor;
             return this;
         }
 
         public IFiltroRelatorioVM<T> Valor<TPropriedade>(Expression<Func<T, TPropriedade>> propriedadeExpressao, Func<TPropriedade, string> funcao) {
             var filtro = Obterfiltro(propriedadeExpressao);
             if (filtro != null)
-                filtro.Valor = funcao?.Invoke(propriedadeExpressao.Compile()(_filtroVM));
+                filtro.Propriedade.FuncaoPropriedade = (origem) => funcao?.Invoke(propriedadeExpressao.Compile()(origem));
             return this;
         }
 

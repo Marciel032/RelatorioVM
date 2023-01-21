@@ -61,6 +61,8 @@ namespace RelatorioVM.Dominio.Interfaces
         /// <summary>
         /// Aplica agrupamento e ordenação dos valores nas colunas informadas
         /// </summary>
-        ITabelaHorizontalRelatorioVM<TConteudo> Agrupar(Action<ITabelaAgrupadorRelatorioVM<TConteudo>> opcoes);        
+        ITabelaHorizontalRelatorioVM<TConteudo> Agrupar(Action<ITabelaAgrupadorRelatorioVM<TConteudo>> opcoes);
+
+        ITabelaHorizontalRelatorioVM<TConteudo> TabelaVertical<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Action<ITabelaVerticalRelatorioVM<TPropriedade>> opcoes = null) where TPropriedade : class;
     }
 }

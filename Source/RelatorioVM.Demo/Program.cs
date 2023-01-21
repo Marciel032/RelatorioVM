@@ -32,7 +32,8 @@ namespace RelatorioVM.Demo
                 Pessoa = new PessoaViewModel()
                 {
                     Codigo = 1,
-                    Nome = "Testes"
+                    Nome = "Testes",
+                    Endereco = "Endereco de testes"
                 },
                 OperacaoCodigo = 5,
                 OperacaoNome = "VENDAS",
@@ -51,8 +52,9 @@ namespace RelatorioVM.Demo
                     Valor = (decimal)random.NextDouble() * 100m,
                     Pessoa = new PessoaViewModel()
                     {
-                        Codigo = random.Next(),
-                        Nome = "Teste"
+                        Codigo = random.Next(1, 2000),
+                        Nome = "Teste",
+                        Endereco = "Endereco de testes"
                     },
                     Ativo = random.Next(1, 3) == 1,
                     Situacao = (TipoSituacao)random.Next(0, 4),
@@ -98,8 +100,10 @@ namespace RelatorioVM.Demo
                 {
                     tabela
                         .Titulo("Tabela exibindo valores na horizontal")
-                        .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)
+                        .Ignorar(x => x.PessoaCodigo)
+                        //.ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)                        
                         .ComplementarValor(x => x.Municipio, x => x.Estado)
+                        .TabelaVertical(x => x.Pessoa)
                         .Coluna(x => x.Valor, coluna => coluna.DefinirPrefixoColuna("R$"))
                         .Coluna(x => x.Municipio, coluna => coluna
                             .DefinirSeparador("/")

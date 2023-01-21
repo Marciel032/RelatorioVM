@@ -7,21 +7,16 @@ namespace RelatorioVM.Demo.ComponentesCustomizados
 {
     public class ComponenteCustomizado : IElementoRelatorioVM
     {
-        private int indiceElemento;
-
-        public void DefinirIndiceElemento(int indice)
-        {
-            indiceElemento = indice;
-        }
+        public string Indice { get; set; }
 
         public string ObterEstilo()
         {
-            return $".componente-customizado{indiceElemento} {{ color: orange; text-align: center;}}";
+            return $".componente-customizado{Indice} {{ color: orange; text-align: center;}}";
         }
 
-        public string ObterHtml()
+        public string ObterHtml(object conteudo)
         {
-            return $"<h1 class=\"componente-customizado{indiceElemento}\">Testes de componente customizado</h1>";
+            return $"<h1 class=\"componente-customizado{Indice}\">Testes de componente customizado</h1>";
         }
     }
 }

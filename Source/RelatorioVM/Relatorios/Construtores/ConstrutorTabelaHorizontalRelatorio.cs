@@ -15,7 +15,7 @@ namespace RelatorioVM.Relatorios.Construtores
 {
     internal class ConstrutorTabelaHorizontalRelatorio<TConteudo> : ConstrutorTabelaRelatorio<TConteudo>, ITabelaHorizontalRelatorioVM<TConteudo>
     {      
-        public ConstrutorTabelaHorizontalRelatorio(ConfiguracaoRelatorio configuracaoRelatorio, IEnumerable<TConteudo> conteudo) : base(configuracaoRelatorio, conteudo)
+        public ConstrutorTabelaHorizontalRelatorio(ConfiguracaoRelatorio configuracaoRelatorio) : base(configuracaoRelatorio)
         {
 
         }        
@@ -87,6 +87,15 @@ namespace RelatorioVM.Relatorios.Construtores
         public ITabelaHorizontalRelatorioVM<TConteudo> IgnorarTudo()
         {
             IgnorarTodasColunas();
+            return this;
+        }
+
+        public ITabelaHorizontalRelatorioVM<TConteudo> TabelaVertical<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Action<ITabelaVerticalRelatorioVM<TPropriedade>> opcoes = null) where TPropriedade : class
+        {
+
+            var construtorTabela = new ConstrutorTabelaVerticalRelatorio<TPropriedade>(_configuracaoRelatorio);
+            opcoes?.Invoke(construtorTabela);
+            AdicionarElementoColuna(propriedadeExpressao, construtorTabela.Construir());
             return this;
         }
     }

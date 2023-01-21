@@ -18,27 +18,27 @@ namespace RelatorioVM.Elementos.Relatorios
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
         private Tabela<T> _tabela;
-        private int indiceElemento;
-        private string _classeTabela;
+        private string _classeTabela { get { return $"tcv{Indice}"; } }
+
+        public string Indice { get; set; }
 
         public TabelaVerticalElemento(ConfiguracaoRelatorio configuracaoRelatorio, Tabela<T> tabela)
         {
             _configuracaoRelatorio = configuracaoRelatorio;
             _tabela = tabela;
-            _classeTabela = "tcv";
         }
 
-        public void DefinirIndiceElemento(int indice)
-        {
-            indiceElemento = indice;
-            _classeTabela = $"tcv{indice}";
-        }
+        public string ObterHtml(object conteudo) {
+            if (conteudo == null)
+                return string.Empty;
 
-        public string ObterHtml() {            
             var tabela = CriarTabela();
             AdicionarCabecalho(tabela);
             var corpoTabela = tabela.CriarCorpoTabela();
-            AdicionarConteudo(corpoTabela);
+            if (conteudo is IEnumerable<T>)
+                AdicionarConteudo(corpoTabela, (IEnumerable<T>)conteudo);
+            else if (conteudo is T)
+                AdicionarConteudoColunas(corpoTabela, (T)conteudo);
             return tabela.ToHtmlString();
         }
 
@@ -113,8 +113,8 @@ namespace RelatorioVM.Elementos.Relatorios
             AdicionarTitulo(cabecalho);
         }
 
-        private void AdicionarConteudo(HtmlTag corpoTabela) {
-            foreach (var conteudo in _tabela.Conteudo)
+        private void AdicionarConteudo(HtmlTag corpoTabela, IEnumerable<T> conteudos) {
+            foreach (var conteudo in conteudos)
                 AdicionarConteudoColunas(corpoTabela, conteudo);
         }
 

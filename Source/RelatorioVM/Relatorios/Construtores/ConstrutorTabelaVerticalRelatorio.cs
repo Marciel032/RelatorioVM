@@ -15,7 +15,7 @@ namespace RelatorioVM.Relatorios.Construtores
 {
     internal class ConstrutorTabelaVerticalRelatorio<TConteudo>: ConstrutorTabelaRelatorio<TConteudo>, ITabelaVerticalRelatorioVM<TConteudo>
     {   
-        public ConstrutorTabelaVerticalRelatorio(ConfiguracaoRelatorio configuracaoRelatorio, IEnumerable<TConteudo> conteudo): base(configuracaoRelatorio, conteudo)
+        public ConstrutorTabelaVerticalRelatorio(ConfiguracaoRelatorio configuracaoRelatorio): base(configuracaoRelatorio)
         {
 
         }        

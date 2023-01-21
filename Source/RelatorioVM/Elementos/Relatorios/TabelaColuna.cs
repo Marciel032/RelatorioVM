@@ -1,4 +1,5 @@
-﻿using RelatorioVM.Dominio.Configuracoes.Formatacoes;
+﻿using HtmlTags;
+using RelatorioVM.Dominio.Configuracoes.Formatacoes;
 using RelatorioVM.Dominio.Conversores;
 using RelatorioVM.Dominio.Enumeradores;
 using RelatorioVM.Dominio.Interfaces;
@@ -12,6 +13,7 @@ namespace RelatorioVM.Elementos.Relatorios
 {
     internal class TabelaColuna<T>: IColunaRelatorioVM<T>
     {
+        private List<IElementoRelatorioVM> _elementos;
         public string Identificador { get; set; }
         public string TituloColuna { get; set; }
         public Propriedade<T> Propriedade { get; set; }
@@ -29,9 +31,19 @@ namespace RelatorioVM.Elementos.Relatorios
         public bool TemComplemento { get { return PropriedadeComplemento != null;  } }
         public int QuantidadeColunasUtilizadas { get { return TemComplemento && AlinhamentoHorizontalColuna == TipoAlinhamentoHorizontal.Centro ? 3 : 1; } }
         public bool TemPrefixo { get { return !string.IsNullOrEmpty(Prefixo); } }
+        public bool TemElementos { get { return _elementos.Count > 0; } }
+        public string Indice
+        {
+            set
+            {
+                for (int i = 0; i < _elementos.Count; i++)
+                    _elementos[i].Indice = $"{value}-{i}";
+            } 
+        }
 
         public TabelaColuna()
         {
+            _elementos = new List<IElementoRelatorioVM>();
             Identificador = string.Empty;
             TituloColuna = string.Empty;
             AlinhamentoHorizontalTitulo = TipoAlinhamentoHorizontal.Esquerda;
@@ -42,6 +54,30 @@ namespace RelatorioVM.Elementos.Relatorios
             Fonte = new FonteEscrita();
             Condensado = false;
             PermiteQuebraDeLinha = true;
+        }
+
+        public void AdicionarElemento(IElementoRelatorioVM elemento) {             
+            _elementos.Add(elemento);
+        }
+
+        public void AdicionarHtml(HtmlTag parent, T conteudo)
+        {
+            _elementos.ForEach(x => parent.AppendHtml(x.ObterHtml(Propriedade.ObterValor(conteudo))));
+        }
+
+        public string ObterEstilo()
+        {
+            var construtorEstilo = new StringBuilder();
+
+            foreach (var elemento in _elementos)
+            {
+                var estilo = elemento.ObterEstilo();
+                if (string.IsNullOrEmpty(estilo))
+                    continue;
+
+                construtorEstilo.AppendLine(estilo);
+            }
+            return construtorEstilo.ToString();
         }
 
         public string ObterValorConvertido(T origem, ConfiguracaoFormatacaoRelatorio formatacao) {
