@@ -62,6 +62,10 @@ hr
     margin-top: 20px;
     margin-bottom: 20px;
 }
+table {
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
 @page {
     @top-center { content: element(titulo) }
 }");
