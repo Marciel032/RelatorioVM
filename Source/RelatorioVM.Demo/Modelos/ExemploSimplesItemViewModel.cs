@@ -22,14 +22,13 @@ namespace RelatorioVM.Demo.Modelos
         public bool Ativo { get; set; }        
         public decimal Valor { get; set; }
 
-        [ColunaRelatorio(Titulo = "Situação", Prefixo = "=>")]
+        [ColunaRelatorio(Titulo = "Situação")]
         public TipoSituacao Situacao { get; set; }
 
         [ColunaRelatorio(Titulo = "Município")]
         public string Municipio { get; set; }
-        public string Estado { get; set; }
-
-
+        public string Estado { get; set; }      
+        public List<ProdutoViewModel> Produtos { get; set; }
     }
 
     public enum TipoSituacao { 

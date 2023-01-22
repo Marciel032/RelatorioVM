@@ -11,9 +11,10 @@ namespace RelatorioVM.Elementos.Relatorios
         public string Indice { 
             get { return _indice; } 
             set { 
-                _indice = value; 
-                foreach(var coluna in Colunas)
-                    coluna.Value.Indice = _indice;
+                _indice = value;
+                var indice = 0;
+                foreach (var coluna in Colunas)
+                    coluna.Value.Indice = $"{_indice}-{indice++}";
                 } 
         }
         public string Titulo { get; set; }

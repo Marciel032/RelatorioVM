@@ -98,5 +98,13 @@ namespace RelatorioVM.Relatorios.Construtores
             AdicionarElementoColuna(propriedadeExpressao, construtorTabela.Construir());
             return this;
         }
+
+        public ITabelaHorizontalRelatorioVM<TConteudo> TabelaHorizontal<TPropriedade>(Expression<Func<TConteudo, IEnumerable<TPropriedade>>> propriedadeExpressao, Action<ITabelaHorizontalRelatorioVM<TPropriedade>> opcoes = null) where TPropriedade : class
+        {
+            var construtorTabela = new ConstrutorTabelaHorizontalRelatorio<TPropriedade>(_configuracaoRelatorio);
+            opcoes?.Invoke(construtorTabela);
+            AdicionarElementoColuna(propriedadeExpressao, construtorTabela.Construir());
+            return this;
+        }
     }
 }

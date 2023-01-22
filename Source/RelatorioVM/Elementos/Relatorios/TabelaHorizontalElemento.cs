@@ -57,7 +57,6 @@ namespace RelatorioVM.Elementos.Relatorios
 
             construtorEstilo.AdicionarEstilo(new EstiloElemento()
                 .AdicionarClasse($"{_classeTabela}-tr-h")
-                .DefinirFonte(_configuracaoRelatorio.Formatacao.FonteConteudo)
                 .DefinirBorda(new EstiloElementoBorda() {
                     Direcao = TipoBorda.Tudo,
                     TipoBorda = TipoEstiloBorda.Solida,

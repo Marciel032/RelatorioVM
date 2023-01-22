@@ -57,9 +57,10 @@ namespace RelatorioVM.Elementos.Relatorios
             );
 
             construtorEstilo.AdicionarEstilo(new EstiloElemento()
-                .AdicionarClasse(_classeTabela)
-                .AdicionarClasse("tr-cabecalho")
-                .DefinirFonte(_configuracaoRelatorio.Formatacao.FonteConteudo)
+                .AdicionarClasse(_classeTabela + " >")
+                .AdicionarClasseElemento("thead >")
+                .AdicionarClasseElemento("tr >")
+                .AdicionarClasseElemento("th")
                 .DefinirBorda(new EstiloElementoBorda()
                 {
                     Direcao = TipoBorda.Fundo,
@@ -71,10 +72,32 @@ namespace RelatorioVM.Elementos.Relatorios
             );
 
             construtorEstilo.AdicionarEstilo(new EstiloElemento()
-                .AdicionarClasse(_classeTabela)
-                .AdicionarClasseElemento("td,th")
+                .AdicionarClasse(_classeTabela + " >")
+                .AdicionarClasseElemento("thead >")
+                .AdicionarClasseElemento("tr >")
+                .AdicionarClasseElemento("th")
                 .DefinirAlinhamentoTexto(new EstiloAlinhamentoTexto() { Direcao = TipoAlinhamentoHorizontal.Esquerda})
                 .DefinirPreenchimento(new EstiloElementoPreenchimento() { 
+                    Direcao = TipoPreenchimento.Direita,
+                    Tamanho = 3,
+                    UnidadeMedida = TipoUnidadeMedida.Pixel
+                })
+                .DefinirPreenchimento(new EstiloElementoPreenchimento()
+                {
+                    Direcao = TipoPreenchimento.Esquerda,
+                    Tamanho = 3,
+                    UnidadeMedida = TipoUnidadeMedida.Pixel
+                })
+            );
+
+            construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                .AdicionarClasse(_classeTabela + " >")
+                .AdicionarClasseElemento("tbody >")
+                .AdicionarClasseElemento("tr >")
+                .AdicionarClasseElemento("td")
+                .DefinirAlinhamentoTexto(new EstiloAlinhamentoTexto() { Direcao = TipoAlinhamentoHorizontal.Esquerda })
+                .DefinirPreenchimento(new EstiloElementoPreenchimento()
+                {
                     Direcao = TipoPreenchimento.Direita,
                     Tamanho = 3,
                     UnidadeMedida = TipoUnidadeMedida.Pixel
@@ -105,9 +128,14 @@ namespace RelatorioVM.Elementos.Relatorios
             }
 
             construtorEstilo.AdicionarEstilo(new EstiloElemento()
-                .AdicionarClasse(_classeTabela)
-                .AdicionarClasse("td-titulo")
+                .AdicionarClasse(_classeTabela + " >")
+                .AdicionarClasseElemento("tbody >")
+                .AdicionarClasseElemento("tr >")
+                .AdicionarClasse("td-t")
                 .DefinirEstiloManual("font-weight: bold;")
+                .DefinirAlinhamentoTexto(new EstiloAlinhamentoTexto() { 
+                    Direcao = TipoAlinhamentoHorizontal.Direita
+                })
             );
 
             return construtorEstilo.ToString();
@@ -144,9 +172,8 @@ namespace RelatorioVM.Elementos.Relatorios
                 foreach (var conteudoVertical in colunaVertical)
                 {                    
                     linha.CriarColunaTabela()
-                        .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Direita)
                         .Text($"{conteudoVertical.TituloColuna}:")
-                        .AddClass("td-titulo");
+                        .AddClass("td-t");
 
                     linha.CriarColunaTabela()
                         .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda)
@@ -173,8 +200,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 .CriarColunaCabecalhoTabela()
                 .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda)
                 .ExpandirColuna(_tabela.QuantidadeColunasVertical * 2)
-                .Text(_tabela.Titulo)
-                .AddClass("tr-cabecalho");
+                .Text(_tabela.Titulo);
         }        
     }    
 }
