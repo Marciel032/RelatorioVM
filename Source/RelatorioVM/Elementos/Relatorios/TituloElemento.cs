@@ -10,13 +10,10 @@ namespace RelatorioVM.Elementos.Relatorios
 {
     internal class TituloElemento: IElementoRelatorioVM
     {
+        public string Indice { get; set; }
         public string Texto { get; set; }
 
-        public void DefinirIndiceElemento(int indice)
-        {
-        }
-
-        public string ObterHtml() {
+        public string ObterHtml(object conteudo) {
             if (string.IsNullOrWhiteSpace(Texto))
                 return string.Empty;
 

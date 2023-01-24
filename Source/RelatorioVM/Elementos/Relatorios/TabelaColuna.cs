@@ -1,10 +1,12 @@
-﻿using RelatorioVM.Dominio.Configuracoes.Formatacoes;
+﻿using HtmlTags;
+using RelatorioVM.Dominio.Configuracoes.Formatacoes;
 using RelatorioVM.Dominio.Conversores;
 using RelatorioVM.Dominio.Enumeradores;
 using RelatorioVM.Dominio.Interfaces;
 using RelatorioVM.Elementos.Propriedades;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -12,6 +14,7 @@ namespace RelatorioVM.Elementos.Relatorios
 {
     internal class TabelaColuna<T>: IColunaRelatorioVM<T>
     {
+        private List<TabelaColunaElemento> _elementos;
         public string Identificador { get; set; }
         public string TituloColuna { get; set; }
         public Propriedade<T> Propriedade { get; set; }
@@ -29,9 +32,21 @@ namespace RelatorioVM.Elementos.Relatorios
         public bool TemComplemento { get { return PropriedadeComplemento != null;  } }
         public int QuantidadeColunasUtilizadas { get { return TemComplemento && AlinhamentoHorizontalColuna == TipoAlinhamentoHorizontal.Centro ? 3 : 1; } }
         public bool TemPrefixo { get { return !string.IsNullOrEmpty(Prefixo); } }
+        public bool TemElementos { get { return _elementos.Count > 0; } }
+        public bool TemElementosLinha { get { return _elementos.Count(x => !x.ExibirNaColuna) > 0; } }
+
+        public string Indice
+        {
+            set
+            {
+                for (int i = 0; i < _elementos.Count; i++)
+                    _elementos[i].Indice = $"{value}-{i}";
+            } 
+        }
 
         public TabelaColuna()
         {
+            _elementos = new List<TabelaColunaElemento>();
             Identificador = string.Empty;
             TituloColuna = string.Empty;
             AlinhamentoHorizontalTitulo = TipoAlinhamentoHorizontal.Esquerda;
@@ -42,6 +57,42 @@ namespace RelatorioVM.Elementos.Relatorios
             Fonte = new FonteEscrita();
             Condensado = false;
             PermiteQuebraDeLinha = true;
+        }
+
+        public void AdicionarElemento(IElementoRelatorioVM elemento, bool exibirNaColuna = true) {
+            var elementoColuna = new TabelaColunaElemento(elemento);
+            elementoColuna.ExibirNaColuna = exibirNaColuna;
+            _elementos.Add(elementoColuna);
+
+            if (exibirNaColuna)
+                Visivel = true;
+        }
+
+        public void AdicionarHtmlColuna(HtmlTag parent, T conteudo)
+        {
+            foreach(var elemento in _elementos.Where(x=> x.ExibirNaColuna))
+                parent.AppendHtml(elemento.ObterHtml(Propriedade.ObterValor(conteudo)));
+        }
+
+        public void AdicionarHtmlLinha(HtmlTag parent, T conteudo)
+        {
+            foreach (var elemento in _elementos.Where(x => !x.ExibirNaColuna))
+                parent.AppendHtml(elemento.ObterHtml(Propriedade.ObterValor(conteudo)));
+        }
+
+        public string ObterEstilo()
+        {
+            var construtorEstilo = new StringBuilder();
+
+            foreach (var elemento in _elementos)
+            {
+                var estilo = elemento.ObterEstilo();
+                if (string.IsNullOrEmpty(estilo))
+                    continue;
+
+                construtorEstilo.AppendLine(estilo);
+            }
+            return construtorEstilo.ToString();
         }
 
         public string ObterValorConvertido(T origem, ConfiguracaoFormatacaoRelatorio formatacao) {

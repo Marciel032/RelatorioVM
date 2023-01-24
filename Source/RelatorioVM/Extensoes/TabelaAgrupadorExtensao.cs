@@ -55,7 +55,7 @@ namespace RelatorioVM.Extensoes
         {
             var titulo = agrupador.ObterTituloAgrupamento(item, false);
             tabelaHtml.CriarLinhaTabela()
-                .AddClass("tr-grupo-titulo")
+                .AddClass("tr-g-t")
                 .CriarColunaTabela()
                 .ExpandirColuna(quantidadeDeColunas)                
                 .Text(titulo);

@@ -18,27 +18,25 @@ namespace RelatorioVM.Elementos.Relatorios
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
         private Tabela<T> _tabela;
-        private int _indiceElemento;
-        private string _classeTabela;
+        private string _classeTabela { get { return $"tch{Indice}"; } }
+
+        public string Indice { get { return _tabela.Indice; } set { _tabela.Indice = value; } }
 
         public TabelaHorizontalElemento(ConfiguracaoRelatorio configuracaoRelatorio, Tabela<T> tabela)
         {
             _configuracaoRelatorio = configuracaoRelatorio;
             _tabela = tabela;
-            _classeTabela = "tch";
         }
 
-        public void DefinirIndiceElemento(int indice)
-        {
-            _indiceElemento = indice;
-            _classeTabela = $"tch{indice}";
-        }
+        public string ObterHtml(object conteudo) {
+            var conteudoTabela = (IEnumerable<T>)conteudo;
+            if (conteudoTabela == null)
+                return string.Empty;
 
-        public string ObterHtml() {            
             var tabela = CriarTabela();
             AdicionarCabecalho(tabela);
             var corpoTabela = tabela.CriarCorpoTabela();
-            AdicionarConteudo(corpoTabela);
+            AdicionarConteudo(corpoTabela, conteudoTabela);
             AdicionarTotais(tabela, corpoTabela);
             return tabela.ToHtmlString();
         }
@@ -58,9 +56,7 @@ namespace RelatorioVM.Elementos.Relatorios
             );
 
             construtorEstilo.AdicionarEstilo(new EstiloElemento()
-                .AdicionarClasse(_classeTabela)
-                .AdicionarClasse("tr-cabecalho")
-                .DefinirFonte(_configuracaoRelatorio.Formatacao.FonteConteudo)
+                .AdicionarClasse($"{_classeTabela}-tr-h")
                 .DefinirBorda(new EstiloElementoBorda() {
                     Direcao = TipoBorda.Tudo,
                     TipoBorda = TipoEstiloBorda.Solida,
@@ -71,7 +67,9 @@ namespace RelatorioVM.Elementos.Relatorios
             );
 
             construtorEstilo.AdicionarEstilo(new EstiloElemento()
-                .AdicionarClasse(_classeTabela)
+                .AdicionarClasse(_classeTabela + " >")
+                .AdicionarClasseElemento("thead >")
+                .AdicionarClasseElemento("tr >")
                 .AdicionarClasseElemento("th")
                 .DefinirBorda(new EstiloElementoBorda()
                 {
@@ -81,11 +79,6 @@ namespace RelatorioVM.Elementos.Relatorios
                     Tamanho = 1,
                     Cor = "#777"
                 })
-            );
-
-            construtorEstilo.AdicionarEstilo(new EstiloElemento()
-                .AdicionarClasse(_classeTabela)
-                .AdicionarClasseElemento("td,th")
                 .DefinirAlinhamentoTexto(new EstiloAlinhamentoTexto() { Direcao = TipoAlinhamentoHorizontal.Esquerda })
                 .DefinirPreenchimento(new EstiloElementoPreenchimento()
                 {
@@ -102,21 +95,69 @@ namespace RelatorioVM.Elementos.Relatorios
             );
 
             construtorEstilo.AdicionarEstilo(new EstiloElemento()
-                .AdicionarClasse(_classeTabela)
-                .AdicionarClasse("tr-zebra")
-                .DefinirEstiloManual("background-color: #f2f2f2;")
+                .AdicionarClasse(_classeTabela + " >")
+                .AdicionarClasseElemento("tbody >")
+                .AdicionarClasseElemento("tr >")
+                .AdicionarClasseElemento("td")
+                .DefinirAlinhamentoTexto(new EstiloAlinhamentoTexto() { Direcao = TipoAlinhamentoHorizontal.Esquerda })
+                .DefinirPreenchimento(new EstiloElementoPreenchimento()
+                {
+                    Direcao = TipoPreenchimento.Direita,
+                    Tamanho = 3,
+                    UnidadeMedida = TipoUnidadeMedida.Pixel
+                })
+                .DefinirPreenchimento(new EstiloElementoPreenchimento()
+                {
+                    Direcao = TipoPreenchimento.Esquerda,
+                    Tamanho = 3,
+                    UnidadeMedida = TipoUnidadeMedida.Pixel
+                })
             );
 
+            if (_configuracaoRelatorio.Conteudo.Zebrado)
+            {
+                construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                    .AdicionarClasse(_classeTabela + " > ")
+                    .AdicionarClasseElemento("tbody > ")
+                    .AdicionarClasseElemento("tr:nth-child(even):not(.tr-t):not(.tr-t-t):not(.tr-g-t)")
+                    .DefinirEstiloManual("background-color: #f2f2f2;")
+                );
+
+                construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                    .AdicionarClasse(_classeTabela + " > ")
+                    .AdicionarClasseElemento("tbody > ")
+                    .AdicionarClasseElemento("tr:nth-child(odd):not(.tr-t):not(.tr-t-t):not(.tr-g-t)")
+                    .DefinirEstiloManual("background-color: #ffffff;")
+                );
+            }
+
             construtorEstilo.AdicionarEstilo(new EstiloElemento()
-                .AdicionarClasse(_classeTabela)
-                .AdicionarClasse("tr-totais-titulo")
-                .AdicionarClasseElemento("td")
+                .AdicionarClasse(_classeTabela + " >")
+                .AdicionarClasseElemento("tbody >")
+                .AdicionarClasse("tr-t-t")
                 .DefinirEstiloManual("font-weight: bold;")
             );
 
             construtorEstilo.AdicionarEstilo(new EstiloElemento()
-                .AdicionarClasse(_classeTabela)
-                .AdicionarClasse("tr-totais")
+                .AdicionarClasse(_classeTabela + " >")
+                .AdicionarClasseElemento("tbody >")
+                .AdicionarClasseElemento("tr >")
+                .AdicionarClasse("td-t-t")
+                .DefinirEstiloManual("font-weight: bold;")
+                .DefinirBorda(new EstiloElementoBorda()
+                {
+                    Direcao = TipoBorda.Tudo,
+                    TipoBorda = TipoEstiloBorda.Solida,
+                    UnidadeMedida = TipoUnidadeMedida.Pixel,
+                    Tamanho = 1,
+                    Cor = "#777"
+                })
+            );
+
+            construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                .AdicionarClasse(_classeTabela + " >")
+                .AdicionarClasseElemento("tbody >")
+                .AdicionarClasse("tr-t")
                 .AdicionarClasseElemento("td")
                 .DefinirEstiloManual("font-weight: bold;")
                 .DefinirBorda(new EstiloElementoBorda() { 
@@ -129,8 +170,9 @@ namespace RelatorioVM.Elementos.Relatorios
             );
 
             construtorEstilo.AdicionarEstilo(new EstiloElemento()
-                .AdicionarClasse(_classeTabela)
-                .AdicionarClasse("tr-grupo-titulo")
+                .AdicionarClasse(_classeTabela + " >")
+                .AdicionarClasseElemento("tbody >")
+                .AdicionarClasse("tr-g-t")
                 .AdicionarClasseElemento("td")
                 .DefinirEstiloManual("font-weight: bold;")
                 .DefinirBorda(new EstiloElementoBorda()
@@ -143,15 +185,9 @@ namespace RelatorioVM.Elementos.Relatorios
                 })
             );
 
-            construtorEstilo.AdicionarEstilo(new EstiloElemento()
-                .AdicionarClasse(_classeTabela)
-                .AdicionarClasseElemento("td:nth-child(2)")
-                .DefinirEstiloManual("font-weight: bold;")
-            );
-
-            construtorEstilo.AdicionarEstilos(_tabela.ObterColunasVisiveis().ObterEstilos(_classeTabela));
+            construtorEstilo.AdicionarEstilos(_tabela.ObterColunasVisiveis().ObterEstilos(_classeTabela));            
             
-            return construtorEstilo.ToString();
+            return construtorEstilo.ToString() + _tabela.ObterEstilo();
         }
 
         private HtmlTag CriarTabela() { 
@@ -166,7 +202,7 @@ namespace RelatorioVM.Elementos.Relatorios
 
             var linhaCabecalho = cabecalho
                 .CriarLinhaTabela()
-                .AddClass("tr-cabecalho");
+                .AddClass($"{_classeTabela}-tr-h");
 
             foreach (var coluna in _tabela.ObterColunasVisiveis())
             {
@@ -180,13 +216,13 @@ namespace RelatorioVM.Elementos.Relatorios
             }
         }
 
-        private void AdicionarConteudo(HtmlTag corpoTabela) {
+        private void AdicionarConteudo(HtmlTag corpoTabela, IEnumerable<T> conteudos) {
             _tabela.Totais.ZerarTotais();
             
             if (_tabela.Agrupadores.Count == 0)
-                AdicionarConteudoItens(corpoTabela, _tabela.Conteudo);
+                AdicionarConteudoItens(corpoTabela, conteudos);
             else
-                AdicionarConteudoAgrupado(corpoTabela, _tabela.Conteudo, _tabela.Agrupadores, 0);
+                AdicionarConteudoAgrupado(corpoTabela, conteudos, _tabela.Agrupadores, 0);
         }
 
         private void AdicionarConteudoAgrupado(HtmlTag corpoTabela, IEnumerable<T> conteudo, List<TabelaAgrupador<T>> agrupadores, int indice) {
@@ -213,45 +249,60 @@ namespace RelatorioVM.Elementos.Relatorios
         }        
 
         private void AdicionarConteudoItens(HtmlTag corpoTabela, IEnumerable<T> itens, Action<T> onDepoisAdicionarConteudo = null) {
-            bool zebra = false;
             foreach (var conteudo in itens)
             {
-                AdicionarConteudoItem(corpoTabela, conteudo, zebra);
-                zebra = !zebra;
+                AdicionarConteudoItem(corpoTabela, conteudo);
                 onDepoisAdicionarConteudo?.Invoke(conteudo);
             }
         }
 
-        private void AdicionarConteudoItem(HtmlTag corpoTabela, T conteudo, bool zebra)
+        private void AdicionarConteudoItem(HtmlTag corpoTabela, T conteudo)
         {
             var linha = corpoTabela.CriarLinhaTabela();
-            if (zebra && _configuracaoRelatorio.Conteudo.Zebrado)
-                linha.AddClass("tr-zebra");
             foreach (var coluna in _tabela.ObterColunasVisiveis())
             {
                 var colunaHtml = linha.CriarColunaTabela();
                 if (coluna.TemComplemento && coluna.AlinhamentoHorizontalColuna == TipoAlinhamentoHorizontal.Centro)
                 {
                     colunaHtml
-                        .AddClass($"{coluna.Identificador}-valor")
                         .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                     linha.CriarColunaTabela()
-                        .AddClass($"{coluna.Identificador}-separador")
                         .Text(coluna.Separador);
                     linha.CriarColunaTabela()
-                        .AddClass($"{coluna.Identificador}-complemento")
                         .Text(coluna.ObterComplementoConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                 }
-                else if (coluna.TemComplemento) {
+                else if (coluna.TemComplemento)
+                {
                     colunaHtml
-                        .AddClass(coluna.Identificador)
                         .Text(coluna.ObterValorConvertidoComComplemento(conteudo, _configuracaoRelatorio.Formatacao));
                 }
-                else {
+                else if (coluna.TemElementos)
+                {
+                    coluna.AdicionarHtmlColuna(colunaHtml, conteudo);
+                }
+                else
+                {
                     colunaHtml
-                        .AddClass(coluna.Identificador)
                         .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                 }               
+            }
+
+            if (_tabela.TemElementosLinha) {
+                var colunaHtml = corpoTabela
+                    .CriarLinhaTabela()
+                    .CriarColunaTabela()
+                    .ExpandirColuna(_tabela.ObterQuantidadeColunasVisiveis())
+                    .Style("padding-left","50px")
+                    .Style("padding-right","10px")
+                    .Style("padding-top","10px")
+                    .Style("padding-bottom","20px");
+
+                foreach (var coluna in _tabela.Colunas.Values) {
+                    if (!coluna.TemElementosLinha)
+                        continue;
+
+                    coluna.AdicionarHtmlLinha(colunaHtml, conteudo);
+                }
             }
 
             _tabela.Totais.CalcularTotais(conteudo);           

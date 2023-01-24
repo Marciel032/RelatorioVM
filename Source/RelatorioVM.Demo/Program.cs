@@ -32,7 +32,8 @@ namespace RelatorioVM.Demo
                 Pessoa = new PessoaViewModel()
                 {
                     Codigo = 1,
-                    Nome = "Testes"
+                    Nome = "Testes",
+                    Endereco = "Endereco de testes"
                 },
                 OperacaoCodigo = 5,
                 OperacaoNome = "VENDAS",
@@ -51,14 +52,23 @@ namespace RelatorioVM.Demo
                     Valor = (decimal)random.NextDouble() * 100m,
                     Pessoa = new PessoaViewModel()
                     {
-                        Codigo = random.Next(),
-                        Nome = "Teste"
+                        Codigo = random.Next(1, 999999),
+                        Nome = "Teste",
+                        Endereco = $"Endereco de testes, {random.Next(1, 9999)}"
                     },
                     Ativo = random.Next(1, 3) == 1,
                     Situacao = (TipoSituacao)random.Next(0, 4),
                     Municipio = (new List<string>() { "UMA CIDADE", "OUTRA CIDADE", "MAIS UMA OUTRA CIDADE", "UMA OUTRA CIDADE QUALQUER" })[new Random().Next(0, 3)],
-                    Estado = (new List<string>() { "SC", "RS", "SP", "RJ" })[new Random().Next(0, 3)]
+                    Estado = (new List<string>() { "SC", "RS", "SP", "RJ" })[new Random().Next(0, 3)],
+                    Produtos = new List<ProdutoViewModel>()                    
                 });
+
+                for (int j = 0; j < random.Next(2, 5); j++)
+                    viewModel.Itens[i].Produtos.Add(new ProdutoViewModel() { 
+                        Codigo = random.Next(1, 999999),
+                        Nome = "PRODUTO DE TESTES",
+                        Valor = (decimal)random.NextDouble() * 100m
+                    });
             }
             #endregion
 
@@ -98,13 +108,23 @@ namespace RelatorioVM.Demo
                 {
                     tabela
                         .Titulo("Tabela exibindo valores na horizontal")
-                        .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)
+                        .Ignorar(x => x.PessoaCodigo)
+                        //.ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)                        
                         .ComplementarValor(x => x.Municipio, x => x.Estado)
+                        .TabelaVertical(x => x.Pessoa, false, tv => tv.Titulo("Pessoa"))
+                        .TabelaHorizontal(x => x.Produtos, true, tabelaProdutos => {
+                            tabelaProdutos
+                                .ComplementarValor(x => x.Codigo, x => x.Nome)
+                                .Coluna(x => x.Valor, coluna => coluna.DefinirPrefixoColuna("R$"))
+                                .Totalizar(total => total.Coluna(x => x.Valor, x => x.Valor))
+                                .Titulo("Produtos");
+                        })
                         .Coluna(x => x.Valor, coluna => coluna.DefinirPrefixoColuna("R$"))
                         .Coluna(x => x.Municipio, coluna => coluna
                             .DefinirSeparador("/")
                             .DefinirCondensado(true)
-                            .PermitirQuebraDeLinha(false))
+                            .PermitirQuebraDeLinha(false)
+                            .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Direita))
                         .Agrupar(agrupar =>
                             agrupar
                                 .Coluna(x => x.FilialCodigo, coluna => coluna.OcultarNoTotal())

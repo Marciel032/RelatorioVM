@@ -27,9 +27,9 @@ namespace RelatorioVM.Relatorios.Construtores
         {
             if (conteudo != null)
             {
-                var construtorTabela = new ConstrutorTabelaHorizontalRelatorio<TConteudo>(_configuracaoRelatorio, conteudo);
+                var construtorTabela = new ConstrutorTabelaHorizontalRelatorio<TConteudo>(_configuracaoRelatorio);
                 opcoes?.Invoke(construtorTabela);
-                _estruturaRelatorio.AdicionarElemento(construtorTabela.Construir());
+                _estruturaRelatorio.AdicionarElemento(construtorTabela.Construir(), conteudo);
             }
 
             return this;
@@ -39,9 +39,9 @@ namespace RelatorioVM.Relatorios.Construtores
         {
             if (conteudo != null)
             {
-                var construtorTabela = new ConstrutorTabelaVerticalRelatorio<TConteudo>(_configuracaoRelatorio, new List<TConteudo>() { conteudo });
+                var construtorTabela = new ConstrutorTabelaVerticalRelatorio<TConteudo>(_configuracaoRelatorio);
                 opcoes?.Invoke(construtorTabela);
-                _estruturaRelatorio.AdicionarElemento(construtorTabela.Construir());
+                _estruturaRelatorio.AdicionarElemento(construtorTabela.Construir(), conteudo);
             }
 
             return this;
@@ -51,9 +51,9 @@ namespace RelatorioVM.Relatorios.Construtores
         {
             if (conteudo != null)
             {
-                var construtorTabela = new ConstrutorTabelaVerticalRelatorio<TConteudo>(_configuracaoRelatorio, conteudo );
+                var construtorTabela = new ConstrutorTabelaVerticalRelatorio<TConteudo>(_configuracaoRelatorio);
                 opcoes?.Invoke(construtorTabela);
-                _estruturaRelatorio.AdicionarElemento(construtorTabela.Construir());
+                _estruturaRelatorio.AdicionarElemento(construtorTabela.Construir(), conteudo);
             }
 
             return this;
@@ -70,10 +70,10 @@ namespace RelatorioVM.Relatorios.Construtores
         public IRelatorioVM Filtros<TFiltro>(TFiltro filtros, Action<IFiltroRelatorioVM<TFiltro>> opcoes = null)
         {
             if (filtros != null) {
-                var construtorFiltro = new ConstrutorFiltroRelatorio<TFiltro>(_configuracaoRelatorio, filtros);
+                var construtorFiltro = new ConstrutorFiltroRelatorio<TFiltro>(_configuracaoRelatorio);
 
                 opcoes?.Invoke(construtorFiltro);
-                _estruturaRelatorio.Filtro = construtorFiltro.Construir();
+                _estruturaRelatorio.AdicionarFiltro(construtorFiltro.Construir(), filtros);
             }            
 
             return this;
@@ -93,12 +93,12 @@ namespace RelatorioVM.Relatorios.Construtores
 
         public IRelatorioVM AdicionarComponenteCustomizado(IElementoRelatorioVM elemento)
         {
-            _estruturaRelatorio.AdicionarElemento(elemento);
+            _estruturaRelatorio.AdicionarElemento(elemento, null);
             return this;
         }
 
         public IRelatorioVM AdicionarLinhaHorizontal() {
-            _estruturaRelatorio.AdicionarElemento(new LinhaHorizontalElemento());
+            _estruturaRelatorio.AdicionarElemento(new LinhaHorizontalElemento(), null);
             return this;
         }
 

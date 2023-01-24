@@ -4,10 +4,10 @@ using System.Text;
 
 namespace RelatorioVM.Demo.Modelos
 {
-    public class PessoaViewModel
+    public class ProdutoViewModel
     {
         public int Codigo { get; set; }
         public string Nome { get; set; }
-        public string Endereco { get; set; }
+        public decimal Valor { get; set; }
     }
 }

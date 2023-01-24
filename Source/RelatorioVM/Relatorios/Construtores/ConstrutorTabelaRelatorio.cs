@@ -18,10 +18,10 @@ namespace RelatorioVM.Relatorios.Construtores
         protected ConfiguracaoRelatorio _configuracaoRelatorio;
         protected Tabela<TConteudo> _tabela;        
 
-        public ConstrutorTabelaRelatorio(ConfiguracaoRelatorio configuracaoRelatorio, IEnumerable<TConteudo> conteudo)
+        public ConstrutorTabelaRelatorio(ConfiguracaoRelatorio configuracaoRelatorio)
         {
             _configuracaoRelatorio = configuracaoRelatorio;
-            _tabela = new Tabela<TConteudo>(conteudo);
+            _tabela = new Tabela<TConteudo>();
             _tabela.Colunas = typeof(TConteudo)
                 .ObterPropriedades()
                 .Where(x => x.PodeSerColunaTabela())
@@ -134,6 +134,12 @@ namespace RelatorioVM.Relatorios.Construtores
             var agrupador = agrupadorConstrutor.Construir();
             if (agrupador.Agrupadores.Count > 0)
                 _tabela.Agrupadores.Add(agrupador);
+        }
+
+        protected void AdicionarElementoColuna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, IElementoRelatorioVM elemento, bool exibirNaColuna)
+        {
+            if (ObterColuna(propriedadeExpressao, out var coluna))
+                coluna.AdicionarElemento(elemento, exibirNaColuna);
         }
 
         private bool ObterColuna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, out TabelaColuna<TConteudo> coluna) {

@@ -61,6 +61,18 @@ namespace RelatorioVM.Dominio.Interfaces
         /// <summary>
         /// Aplica agrupamento e ordenação dos valores nas colunas informadas
         /// </summary>
-        ITabelaHorizontalRelatorioVM<TConteudo> Agrupar(Action<ITabelaAgrupadorRelatorioVM<TConteudo>> opcoes);        
+        ITabelaHorizontalRelatorioVM<TConteudo> Agrupar(Action<ITabelaAgrupadorRelatorioVM<TConteudo>> opcoes);
+
+        /// <summary>
+        /// Define que a coluna sera exibida como uma tabela vertical. O tipo da coluna precisa ser uma classe.
+        /// </summary>     
+        /// <param name="exibirNaColuna">Quando verdadeiro, exibe a tabela vertical dentro da coluna. Quando falso, exibe a tabela vertical em uma nova linha.</param>       
+        ITabelaHorizontalRelatorioVM<TConteudo> TabelaVertical<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, bool exibirNaColuna = true, Action<ITabelaVerticalRelatorioVM<TPropriedade>> opcoes = null) where TPropriedade : class;
+
+        /// <summary>
+        /// Define que a coluna sera exibida como uma tabela horizontal. O tipo da coluna precisa ser uma LISTA de uma classe.
+        /// </summary>
+        /// <param name="exibirNaColuna">Quando verdadeiro, exibe a tabela horizontal dentro da coluna. Quando falso, exibe a tabela horizontal em uma nova linha.</param>       
+        ITabelaHorizontalRelatorioVM<TConteudo> TabelaHorizontal<TPropriedade>(Expression<Func<TConteudo, IEnumerable<TPropriedade>>> propriedadeExpressao, bool exibirNaColuna = true, Action<ITabelaHorizontalRelatorioVM<TPropriedade>> opcoes = null) where TPropriedade : class;
     }
 }

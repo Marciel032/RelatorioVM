@@ -18,27 +18,27 @@ namespace RelatorioVM.Elementos.Relatorios
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
         private Tabela<T> _tabela;
-        private int indiceElemento;
-        private string _classeTabela;
+        private string _classeTabela { get { return $"tcv{Indice}"; } }
+
+        public string Indice { get; set; }
 
         public TabelaVerticalElemento(ConfiguracaoRelatorio configuracaoRelatorio, Tabela<T> tabela)
         {
             _configuracaoRelatorio = configuracaoRelatorio;
             _tabela = tabela;
-            _classeTabela = "tcv";
         }
 
-        public void DefinirIndiceElemento(int indice)
-        {
-            indiceElemento = indice;
-            _classeTabela = $"tcv{indice}";
-        }
+        public string ObterHtml(object conteudo) {
+            if (conteudo == null)
+                return string.Empty;
 
-        public string ObterHtml() {            
             var tabela = CriarTabela();
             AdicionarCabecalho(tabela);
             var corpoTabela = tabela.CriarCorpoTabela();
-            AdicionarConteudo(corpoTabela);
+            if (conteudo is IEnumerable<T>)
+                AdicionarConteudo(corpoTabela, (IEnumerable<T>)conteudo);
+            else if (conteudo is T)
+                AdicionarConteudoColunas(corpoTabela, (T)conteudo);
             return tabela.ToHtmlString();
         }
 
@@ -57,9 +57,10 @@ namespace RelatorioVM.Elementos.Relatorios
             );
 
             construtorEstilo.AdicionarEstilo(new EstiloElemento()
-                .AdicionarClasse(_classeTabela)
-                .AdicionarClasse("tr-cabecalho")
-                .DefinirFonte(_configuracaoRelatorio.Formatacao.FonteConteudo)
+                .AdicionarClasse(_classeTabela + " >")
+                .AdicionarClasseElemento("thead >")
+                .AdicionarClasseElemento("tr >")
+                .AdicionarClasseElemento("th")
                 .DefinirBorda(new EstiloElementoBorda()
                 {
                     Direcao = TipoBorda.Fundo,
@@ -71,8 +72,10 @@ namespace RelatorioVM.Elementos.Relatorios
             );
 
             construtorEstilo.AdicionarEstilo(new EstiloElemento()
-                .AdicionarClasse(_classeTabela)
-                .AdicionarClasseElemento("td,th")
+                .AdicionarClasse(_classeTabela + " >")
+                .AdicionarClasseElemento("thead >")
+                .AdicionarClasseElemento("tr >")
+                .AdicionarClasseElemento("th")
                 .DefinirAlinhamentoTexto(new EstiloAlinhamentoTexto() { Direcao = TipoAlinhamentoHorizontal.Esquerda})
                 .DefinirPreenchimento(new EstiloElementoPreenchimento() { 
                     Direcao = TipoPreenchimento.Direita,
@@ -88,15 +91,51 @@ namespace RelatorioVM.Elementos.Relatorios
             );
 
             construtorEstilo.AdicionarEstilo(new EstiloElemento()
-                .AdicionarClasse(_classeTabela)
-                .AdicionarClasse("tr-zebra")
-                .DefinirEstiloManual("background-color: #f2f2f2;")
+                .AdicionarClasse(_classeTabela + " >")
+                .AdicionarClasseElemento("tbody >")
+                .AdicionarClasseElemento("tr >")
+                .AdicionarClasseElemento("td")
+                .DefinirAlinhamentoTexto(new EstiloAlinhamentoTexto() { Direcao = TipoAlinhamentoHorizontal.Esquerda })
+                .DefinirPreenchimento(new EstiloElementoPreenchimento()
+                {
+                    Direcao = TipoPreenchimento.Direita,
+                    Tamanho = 3,
+                    UnidadeMedida = TipoUnidadeMedida.Pixel
+                })
+                .DefinirPreenchimento(new EstiloElementoPreenchimento()
+                {
+                    Direcao = TipoPreenchimento.Esquerda,
+                    Tamanho = 3,
+                    UnidadeMedida = TipoUnidadeMedida.Pixel
+                })
             );
 
+            if (_configuracaoRelatorio.Conteudo.Zebrado)
+            {
+                construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                    .AdicionarClasse(_classeTabela + " > ")
+                    .AdicionarClasseElemento("tbody > ")
+                    .AdicionarClasseElemento("tr:nth-child(even)")
+                    .DefinirEstiloManual("background-color: #f2f2f2;")
+                );
+
+                construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                    .AdicionarClasse(_classeTabela + " > ")
+                    .AdicionarClasseElemento("tbody > ")
+                    .AdicionarClasseElemento("tr:nth-child(odd)")
+                    .DefinirEstiloManual("background-color: #ffffff;")
+                );
+            }
+
             construtorEstilo.AdicionarEstilo(new EstiloElemento()
-                .AdicionarClasse(_classeTabela)
-                .AdicionarClasse("td-titulo")
+                .AdicionarClasse(_classeTabela + " >")
+                .AdicionarClasseElemento("tbody >")
+                .AdicionarClasseElemento("tr >")
+                .AdicionarClasse("td-t")
                 .DefinirEstiloManual("font-weight: bold;")
+                .DefinirAlinhamentoTexto(new EstiloAlinhamentoTexto() { 
+                    Direcao = TipoAlinhamentoHorizontal.Direita
+                })
             );
 
             return construtorEstilo.ToString();
@@ -113,14 +152,13 @@ namespace RelatorioVM.Elementos.Relatorios
             AdicionarTitulo(cabecalho);
         }
 
-        private void AdicionarConteudo(HtmlTag corpoTabela) {
-            foreach (var conteudo in _tabela.Conteudo)
+        private void AdicionarConteudo(HtmlTag corpoTabela, IEnumerable<T> conteudos) {
+            foreach (var conteudo in conteudos)
                 AdicionarConteudoColunas(corpoTabela, conteudo);
         }
 
         private void AdicionarConteudoColunas(HtmlTag corpoTabela, T conteudo)
         {
-            bool zebra = false;
             var colunasVisiveis = _tabela.ObterColunasVisiveis();
             if (colunasVisiveis.Count() == 0)
                 return;
@@ -130,22 +168,17 @@ namespace RelatorioVM.Elementos.Relatorios
             foreach (var colunaVertical in colunasVerticais)
             {
                 linha = corpoTabela.CriarLinhaTabela();
-                if (zebra && _configuracaoRelatorio.Conteudo.Zebrado)
-                    linha.AddClass("tr-zebra");
 
                 foreach (var conteudoVertical in colunaVertical)
                 {                    
                     linha.CriarColunaTabela()
-                        .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Direita)
                         .Text($"{conteudoVertical.TituloColuna}:")
-                        .AddClass("td-titulo");
+                        .AddClass("td-t");
 
                     linha.CriarColunaTabela()
                         .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda)
                         .Text(conteudoVertical.ObterValorConvertidoComComplemento(conteudo, _configuracaoRelatorio.Formatacao));
                 }
-                
-                zebra = !zebra;
             }
 
             //Completa as colunas no final, para não ficar espaço vazio na ultima linha
@@ -167,8 +200,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 .CriarColunaCabecalhoTabela()
                 .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda)
                 .ExpandirColuna(_tabela.QuantidadeColunasVertical * 2)
-                .Text(_tabela.Titulo)
-                .AddClass("tr-cabecalho");
+                .Text(_tabela.Titulo);
         }        
     }    
 }

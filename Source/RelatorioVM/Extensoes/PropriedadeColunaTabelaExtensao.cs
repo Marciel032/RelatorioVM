@@ -24,7 +24,7 @@ namespace RelatorioVM.Extensoes
             coluna.Propriedade = new Propriedade<T>(propriedade);
             coluna.AlinhamentoHorizontalTitulo = propriedade.ObterAlinhamentoHorizontal();
             coluna.AlinhamentoHorizontalColuna = coluna.AlinhamentoHorizontalTitulo;
-            coluna.Visivel = true;
+            coluna.Visivel = propriedade.PodeSerVisivel();
 
             var colunaAtributo = propriedade.GetCustomAttribute<ColunaRelatorioAttribute>();
             if (colunaAtributo != null)
@@ -53,6 +53,13 @@ namespace RelatorioVM.Extensoes
             var tipo = propriedade.PropertyType;
             
             return tipo.EhDecimal();
+        }
+
+        public static bool PodeSerVisivel(this PropertyInfo propriedade)
+        {
+            var tipo = propriedade.PropertyType.ObterTipoNaoNullo();
+
+            return !tipo.EhLista();
         }
 
         public static TabelaColunaTotal<T> ObterTotalTabela<T>(this PropertyInfo propriedade)
