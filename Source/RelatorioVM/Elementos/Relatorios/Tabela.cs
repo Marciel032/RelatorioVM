@@ -27,6 +27,8 @@ namespace RelatorioVM.Elementos.Relatorios
 
         public List<TabelaAgrupador<T>> Agrupadores { get; set; }
 
+        public bool TemElementosLinha { get { return Colunas.Values.Any(x => x.TemElementosLinha); } }
+
         public Tabela()
         {
             Titulo = string.Empty;

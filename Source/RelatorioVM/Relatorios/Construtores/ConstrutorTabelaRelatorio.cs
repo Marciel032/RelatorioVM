@@ -136,10 +136,10 @@ namespace RelatorioVM.Relatorios.Construtores
                 _tabela.Agrupadores.Add(agrupador);
         }
 
-        protected void AdicionarElementoColuna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, IElementoRelatorioVM elemento)
+        protected void AdicionarElementoColuna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, IElementoRelatorioVM elemento, bool exibirNaColuna)
         {
             if (ObterColuna(propriedadeExpressao, out var coluna))
-                coluna.AdicionarElemento(elemento);
+                coluna.AdicionarElemento(elemento, exibirNaColuna);
         }
 
         private bool ObterColuna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, out TabelaColuna<TConteudo> coluna) {

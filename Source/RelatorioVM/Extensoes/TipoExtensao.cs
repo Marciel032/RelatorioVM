@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RelatorioVM.Extensoes
@@ -11,6 +12,17 @@ namespace RelatorioVM.Extensoes
                 return Nullable.GetUnderlyingType(tipo);
 
             return tipo;
+        }
+
+        public static bool EhLista(this Type tipo)
+        {
+            var tipoNaoNullo = tipo.ObterTipoNaoNullo();
+            if (tipoNaoNullo == typeof(string))
+                return false;
+
+            return tipoNaoNullo.GetInterfaces().Any(
+                i => i.IsGenericType &&
+                i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
         }
 
         public static bool EhInteiroOuDecimal(this Type tipo)

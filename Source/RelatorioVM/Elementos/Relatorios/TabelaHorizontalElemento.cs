@@ -278,13 +278,31 @@ namespace RelatorioVM.Elementos.Relatorios
                 }
                 else if (coluna.TemElementos)
                 {
-                    coluna.AdicionarHtml(colunaHtml, conteudo);
+                    coluna.AdicionarHtmlColuna(colunaHtml, conteudo);
                 }
                 else
                 {
                     colunaHtml
                         .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                 }               
+            }
+
+            if (_tabela.TemElementosLinha) {
+                var colunaHtml = corpoTabela
+                    .CriarLinhaTabela()
+                    .CriarColunaTabela()
+                    .ExpandirColuna(_tabela.ObterQuantidadeColunasVisiveis())
+                    .Style("padding-left","50px")
+                    .Style("padding-right","10px")
+                    .Style("padding-top","10px")
+                    .Style("padding-bottom","20px");
+
+                foreach (var coluna in _tabela.Colunas.Values) {
+                    if (!coluna.TemElementosLinha)
+                        continue;
+
+                    coluna.AdicionarHtmlLinha(colunaHtml, conteudo);
+                }
             }
 
             _tabela.Totais.CalcularTotais(conteudo);           

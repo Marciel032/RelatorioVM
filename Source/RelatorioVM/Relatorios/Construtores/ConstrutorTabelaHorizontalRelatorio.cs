@@ -90,20 +90,20 @@ namespace RelatorioVM.Relatorios.Construtores
             return this;
         }
 
-        public ITabelaHorizontalRelatorioVM<TConteudo> TabelaVertical<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, Action<ITabelaVerticalRelatorioVM<TPropriedade>> opcoes = null) where TPropriedade : class
+        public ITabelaHorizontalRelatorioVM<TConteudo> TabelaVertical<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, bool exibirNaColuna = true, Action<ITabelaVerticalRelatorioVM<TPropriedade>> opcoes = null) where TPropriedade : class
         {
 
             var construtorTabela = new ConstrutorTabelaVerticalRelatorio<TPropriedade>(_configuracaoRelatorio);
             opcoes?.Invoke(construtorTabela);
-            AdicionarElementoColuna(propriedadeExpressao, construtorTabela.Construir());
+            AdicionarElementoColuna(propriedadeExpressao, construtorTabela.Construir(), exibirNaColuna);
             return this;
         }
 
-        public ITabelaHorizontalRelatorioVM<TConteudo> TabelaHorizontal<TPropriedade>(Expression<Func<TConteudo, IEnumerable<TPropriedade>>> propriedadeExpressao, Action<ITabelaHorizontalRelatorioVM<TPropriedade>> opcoes = null) where TPropriedade : class
+        public ITabelaHorizontalRelatorioVM<TConteudo> TabelaHorizontal<TPropriedade>(Expression<Func<TConteudo, IEnumerable<TPropriedade>>> propriedadeExpressao, bool exibirNaColuna = true, Action<ITabelaHorizontalRelatorioVM<TPropriedade>> opcoes = null) where TPropriedade : class
         {
             var construtorTabela = new ConstrutorTabelaHorizontalRelatorio<TPropriedade>(_configuracaoRelatorio);
             opcoes?.Invoke(construtorTabela);
-            AdicionarElementoColuna(propriedadeExpressao, construtorTabela.Construir());
+            AdicionarElementoColuna(propriedadeExpressao, construtorTabela.Construir(), exibirNaColuna);
             return this;
         }
     }

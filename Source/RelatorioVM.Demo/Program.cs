@@ -111,12 +111,13 @@ namespace RelatorioVM.Demo
                         .Ignorar(x => x.PessoaCodigo)
                         //.ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)                        
                         .ComplementarValor(x => x.Municipio, x => x.Estado)
-                        .TabelaVertical(x => x.Pessoa)
-                        .TabelaHorizontal(x => x.Produtos, tabelaProdutos => {
+                        .TabelaVertical(x => x.Pessoa, false, tv => tv.Titulo("Pessoa"))
+                        .TabelaHorizontal(x => x.Produtos, true, tabelaProdutos => {
                             tabelaProdutos
                                 .ComplementarValor(x => x.Codigo, x => x.Nome)
                                 .Coluna(x => x.Valor, coluna => coluna.DefinirPrefixoColuna("R$"))
-                                .Totalizar(total => total.Coluna(x => x.Valor, x => x.Valor, coluna => coluna.Titulo("Valor total")));
+                                .Totalizar(total => total.Coluna(x => x.Valor, x => x.Valor))
+                                .Titulo("Produtos");
                         })
                         .Coluna(x => x.Valor, coluna => coluna.DefinirPrefixoColuna("R$"))
                         .Coluna(x => x.Municipio, coluna => coluna
