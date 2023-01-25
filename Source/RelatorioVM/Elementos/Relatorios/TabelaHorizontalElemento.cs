@@ -251,14 +251,19 @@ namespace RelatorioVM.Elementos.Relatorios
         private void AdicionarConteudoItens(HtmlTag corpoTabela, IEnumerable<T> itens, Action<T> onDepoisAdicionarConteudo = null) {
             foreach (var conteudo in itens)
             {
-                AdicionarConteudoItem(corpoTabela, conteudo);
+                var linhaConteudo = corpoTabela.CriarLinhaTabela();
+                AdicionarConteudoItem(linhaConteudo, conteudo);
+                if (_tabela.TemElementosLinha)
+                    AdicionarConteudoItemElementos(corpoTabela.CriarLinhaTabela(), conteudo);
+
+                _tabela.Totais.CalcularTotais(conteudo);
+
                 onDepoisAdicionarConteudo?.Invoke(conteudo);
             }
         }
 
-        private void AdicionarConteudoItem(HtmlTag corpoTabela, T conteudo)
+        private void AdicionarConteudoItem(HtmlTag linha, T conteudo)
         {
-            var linha = corpoTabela.CriarLinhaTabela();
             foreach (var coluna in _tabela.ObterColunasVisiveis())
             {
                 var colunaHtml = linha.CriarColunaTabela();
@@ -285,27 +290,29 @@ namespace RelatorioVM.Elementos.Relatorios
                     colunaHtml
                         .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                 }               
-            }
+            }                      
+        }
 
-            if (_tabela.TemElementosLinha) {
-                var colunaHtml = corpoTabela
-                    .CriarLinhaTabela()
+        private void AdicionarConteudoItemElementos(HtmlTag linha, T conteudo)
+        {
+            if (_tabela.TemElementosLinha)
+            {
+                var colunaHtml = linha
                     .CriarColunaTabela()
                     .ExpandirColuna(_tabela.ObterQuantidadeColunasVisiveis())
-                    .Style("padding-left","50px")
-                    .Style("padding-right","10px")
-                    .Style("padding-top","10px")
-                    .Style("padding-bottom","20px");
+                    .Style("padding-left", "50px")
+                    .Style("padding-right", "10px")
+                    .Style("padding-top", "10px")
+                    .Style("padding-bottom", "20px");
 
-                foreach (var coluna in _tabela.Colunas.Values) {
+                foreach (var coluna in _tabela.Colunas.Values)
+                {
                     if (!coluna.TemElementosLinha)
                         continue;
 
                     coluna.AdicionarHtmlLinha(colunaHtml, conteudo);
                 }
             }
-
-            _tabela.Totais.CalcularTotais(conteudo);           
         }
 
         private void AdicionarTotais(HtmlTag tabela, HtmlTag corpoTabela)
