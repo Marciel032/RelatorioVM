@@ -112,7 +112,7 @@ namespace RelatorioVM.Demo
                         //.ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)                        
                         .ComplementarValor(x => x.Municipio, x => x.Estado)
                         .TabelaVertical(x => x.Pessoa, false, tv => tv.Titulo("Pessoa"))
-                        .TabelaHorizontal(x => x.Produtos, true, tabelaProdutos => {
+                        .TabelaHorizontal(x => x.Produtos, false, tabelaProdutos => {
                             tabelaProdutos
                                 .ComplementarValor(x => x.Codigo, x => x.Nome)
                                 .Coluna(x => x.Valor, coluna => coluna.DefinirPrefixoColuna("R$"))

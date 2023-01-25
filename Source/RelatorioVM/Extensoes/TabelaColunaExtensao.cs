@@ -14,7 +14,7 @@ namespace RelatorioVM.Extensoes
         public static List<EstiloElemento> ObterEstilos<T>(this IEnumerable<TabelaColuna<T>> colunas, string classeTabela) {
             var indiceColuna = 1;
             var estilos = new List<EstiloElemento>();
-            var filtroLinhaConteudo = "tr:not(.tr-t):not(.tr-t-t):not(.tr-g-t)";
+            var filtroLinhaConteudo = "tr:not(.tr-t):not(.tr-t-t):not(.tr-g-t) >";
 
             foreach (var coluna in colunas) {
                 if (!coluna.PrecisaGerarEstilo())
@@ -47,8 +47,8 @@ namespace RelatorioVM.Extensoes
                         .DefinirMedida(new EstiloElementoMedida()
                         {
                             Direcao = TipoDirecaoMedida.Largura,
-                            Tamanho = 0,
-                            UnidadeMedida = TipoUnidadeMedida.Percentual
+                            Tamanho = 1,
+                            UnidadeMedida = TipoUnidadeMedida.Pixel
                         })
                         .DefinirPreenchimento(new EstiloElementoPreenchimento()
                         {
