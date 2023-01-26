@@ -14,11 +14,11 @@ using System.Text;
 namespace RelatorioVM.Relatorios.Construtores
 {
     internal class ConstrutorTabelaHorizontalRelatorio<TConteudo> : ConstrutorTabelaRelatorio<TConteudo>, ITabelaHorizontalRelatorioVM<TConteudo>
-    {      
+    {
         public ConstrutorTabelaHorizontalRelatorio(ConfiguracaoRelatorio configuracaoRelatorio) : base(configuracaoRelatorio)
         {
 
-        }        
+        }
 
         public TabelaHorizontalElemento<TConteudo> Construir()
         {
@@ -87,6 +87,13 @@ namespace RelatorioVM.Relatorios.Construtores
         public ITabelaHorizontalRelatorioVM<TConteudo> IgnorarTudo()
         {
             IgnorarTodasColunas();
+            return this;
+        }
+
+        public ITabelaHorizontalRelatorioVM<TConteudo> Fracionar(int quantidadeColunas) {
+            if(quantidadeColunas > 0)
+                _tabela.QuantidadeFracionamentoDados = quantidadeColunas;
+            
             return this;
         }
 

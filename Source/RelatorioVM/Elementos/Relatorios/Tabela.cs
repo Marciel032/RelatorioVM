@@ -22,6 +22,7 @@ namespace RelatorioVM.Elementos.Relatorios
         /// Utilizado ao construir a tabela vertical, para separar os valores em colunas
         /// </summary>
         public int QuantidadeColunasVertical { get; set; }
+        public int QuantidadeFracionamentoDados { get; set; }
         public Dictionary<string, TabelaColuna<T>> Colunas { get; set; }        
         public List<TabelaTotal<T>> Totais { get; set; }
 
@@ -33,12 +34,21 @@ namespace RelatorioVM.Elementos.Relatorios
         {
             Titulo = string.Empty;
             QuantidadeColunasVertical = 1;
+            QuantidadeFracionamentoDados = 1;
             Colunas = new Dictionary<string, TabelaColuna<T>>();
             Totais = new List<TabelaTotal<T>>();
             Agrupadores = new List<TabelaAgrupador<T>>();
         }
 
         public int ObterQuantidadeColunasVisiveis() {
+            return Colunas
+                .Where(x => x.Value.Visivel)
+                .Select(x => x.Value.QuantidadeColunasUtilizadas)
+                .Sum() * QuantidadeFracionamentoDados;
+        }
+
+        public int ObterQuantidadeColunasVisiveisSemFracionamento()
+        {
             return Colunas
                 .Where(x => x.Value.Visivel)
                 .Select(x => x.Value.QuantidadeColunasUtilizadas)

@@ -64,6 +64,11 @@ namespace RelatorioVM.Dominio.Interfaces
         ITabelaHorizontalRelatorioVM<TConteudo> Agrupar(Action<ITabelaAgrupadorRelatorioVM<TConteudo>> opcoes);
 
         /// <summary>
+        /// Divide os valores em colunas, e os exibe lado a lado
+        /// </summary>
+        ITabelaHorizontalRelatorioVM<TConteudo> Fracionar(int quantidadeColunas);
+
+        /// <summary>
         /// Define que a coluna sera exibida como uma tabela vertical. O tipo da coluna precisa ser uma classe.
         /// </summary>     
         /// <param name="exibirNaColuna">Quando verdadeiro, exibe a tabela vertical dentro da coluna. Quando falso, exibe a tabela vertical em uma nova linha.</param>       

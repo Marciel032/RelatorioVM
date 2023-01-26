@@ -204,16 +204,19 @@ namespace RelatorioVM.Elementos.Relatorios
                 .CriarLinhaTabela()
                 .AddClass($"{_classeTabela}-tr-h");
 
-            foreach (var coluna in _tabela.ObterColunasVisiveis())
+            for (int i = 0; i < _tabela.QuantidadeFracionamentoDados; i++)
             {
-                var colunaHtml = linhaCabecalho.CriarColunaCabecalhoTabela();
-                if (coluna.TemComplemento)
-                    colunaHtml.ExpandirColuna(coluna.QuantidadeColunasUtilizadas);
-                    
-                colunaHtml
-                    .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontalTitulo)
-                    .Text(coluna.TituloColuna);
-            }
+                foreach (var coluna in _tabela.ObterColunasVisiveis())
+                {
+                    var colunaHtml = linhaCabecalho.CriarColunaCabecalhoTabela();
+                    if (coluna.TemComplemento)
+                        colunaHtml.ExpandirColuna(coluna.QuantidadeColunasUtilizadas);
+
+                    colunaHtml
+                        .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontalTitulo)
+                        .Text(coluna.TituloColuna);
+                }
+            }            
         }
 
         private void AdicionarConteudo(HtmlTag corpoTabela, IEnumerable<T> conteudos) {
@@ -249,48 +252,59 @@ namespace RelatorioVM.Elementos.Relatorios
         }        
 
         private void AdicionarConteudoItens(HtmlTag corpoTabela, IEnumerable<T> itens, Action<T> onDepoisAdicionarConteudo = null) {
-            foreach (var conteudo in itens)
+            var quantidadeItensFracionamento = (int)Math.Ceiling((decimal)itens.Count() / (decimal)_tabela.QuantidadeFracionamentoDados);
+            var linhasFracionados = itens.CriarGruposDeFracionamento(_tabela.QuantidadeFracionamentoDados);
+            foreach (var linha in linhasFracionados)
             {
                 var linhaConteudo = corpoTabela.CriarLinhaTabela();
-                AdicionarConteudoItem(linhaConteudo, conteudo);
+                HtmlTag linhaComplemento = null;
                 if (_tabela.TemElementosLinha)
-                    AdicionarConteudoItemElementos(corpoTabela.CriarLinhaTabela(), conteudo);
+                    linhaComplemento = corpoTabela.CriarLinhaTabela();
+                foreach (var conteudo in linha)
+                {
+                    AdicionarConteudoItem(linhaConteudo, conteudo);
+                    if (linhaComplemento != null)
+                        AdicionarConteudoItemElementos(linhaComplemento, conteudo);
+                    if (conteudo == null)
+                        continue;
 
-                _tabela.Totais.CalcularTotais(conteudo);
+                    _tabela.Totais.CalcularTotais(conteudo);
 
-                onDepoisAdicionarConteudo?.Invoke(conteudo);
+                    onDepoisAdicionarConteudo?.Invoke(conteudo);
+                }
             }
         }
 
         private void AdicionarConteudoItem(HtmlTag linha, T conteudo)
         {
-            foreach (var coluna in _tabela.ObterColunasVisiveis())
-            {
-                var colunaHtml = linha.CriarColunaTabela();
-                if (coluna.TemComplemento && coluna.AlinhamentoHorizontalColuna == TipoAlinhamentoHorizontal.Centro)
+            if (conteudo != null)
+                foreach (var coluna in _tabela.ObterColunasVisiveis())
                 {
-                    colunaHtml
-                        .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
-                    linha.CriarColunaTabela()
-                        .Text(coluna.Separador);
-                    linha.CriarColunaTabela()
-                        .Text(coluna.ObterComplementoConvertido(conteudo, _configuracaoRelatorio.Formatacao));
+                    var colunaHtml = linha.CriarColunaTabela();
+                    if (coluna.TemComplemento && coluna.AlinhamentoHorizontalColuna == TipoAlinhamentoHorizontal.Centro)
+                    {
+                        colunaHtml
+                            .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
+                        linha.CriarColunaTabela()
+                            .Text(coluna.Separador);
+                        linha.CriarColunaTabela()
+                            .Text(coluna.ObterComplementoConvertido(conteudo, _configuracaoRelatorio.Formatacao));
+                    }
+                    else if (coluna.TemComplemento)
+                    {
+                        colunaHtml
+                            .Text(coluna.ObterValorConvertidoComComplemento(conteudo, _configuracaoRelatorio.Formatacao));
+                    }
+                    else if (coluna.TemElementos)
+                        coluna.AdicionarHtmlColuna(colunaHtml, conteudo);
+                    else
+                    {
+                        colunaHtml
+                            .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
+                    }
                 }
-                else if (coluna.TemComplemento)
-                {
-                    colunaHtml
-                        .Text(coluna.ObterValorConvertidoComComplemento(conteudo, _configuracaoRelatorio.Formatacao));
-                }
-                else if (coluna.TemElementos)
-                {
-                    coluna.AdicionarHtmlColuna(colunaHtml, conteudo);
-                }
-                else
-                {
-                    colunaHtml
-                        .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
-                }               
-            }                      
+            else
+                linha.CriarColunaTabela().ExpandirColuna(_tabela.ObterQuantidadeColunasVisiveisSemFracionamento());
         }
 
         private void AdicionarConteudoItemElementos(HtmlTag linha, T conteudo)
@@ -299,18 +313,21 @@ namespace RelatorioVM.Elementos.Relatorios
             {
                 var colunaHtml = linha
                     .CriarColunaTabela()
-                    .ExpandirColuna(_tabela.ObterQuantidadeColunasVisiveis())
+                    .ExpandirColuna(_tabela.ObterQuantidadeColunasVisiveisSemFracionamento())
                     .Style("padding-left", "50px")
                     .Style("padding-right", "10px")
                     .Style("padding-top", "10px")
                     .Style("padding-bottom", "20px");
 
-                foreach (var coluna in _tabela.Colunas.Values)
+                if (conteudo != null)
                 {
-                    if (!coluna.TemElementosLinha)
-                        continue;
+                    foreach (var coluna in _tabela.Colunas.Values)
+                    {
+                        if (!coluna.TemElementosLinha)
+                            continue;
 
-                    coluna.AdicionarHtmlLinha(colunaHtml, conteudo);
+                        coluna.AdicionarHtmlLinha(colunaHtml, conteudo);
+                    }
                 }
             }
         }
