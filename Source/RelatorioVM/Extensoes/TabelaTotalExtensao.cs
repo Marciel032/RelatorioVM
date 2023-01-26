@@ -54,40 +54,43 @@ namespace RelatorioVM.Extensoes
                 var linhaTotal = tabelaHtml.CriarLinhaTabela()
                     .AddClass("tr-t");
 
-                foreach (var coluna in tabela.ObterColunasVisiveis())
+                for (int i = 0; i < tabela.QuantidadeFracionamentoDados; i++)
                 {
-                    if (total.Totais.ContainsKey(coluna.Identificador))
+                    foreach (var coluna in tabela.ObterColunasVisiveis())
                     {
-                        var totalColuna = total.Totais[coluna.Identificador];
-
-                        if (linhaTituloTotal != null)
+                        if (total.Totais.ContainsKey(coluna.Identificador) && i == tabela.QuantidadeFracionamentoDados - 1)
                         {
-                            linhaTituloTotal.CriarColunaTabela()
-                                .AddClass("td-t-t")
-                                .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontalTitulo)
+                            var totalColuna = total.Totais[coluna.Identificador];
+
+                            if (linhaTituloTotal != null)
+                            {
+                                linhaTituloTotal.CriarColunaTabela()
+                                    .AddClass("td-t-t")
+                                    .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontalTitulo)
+                                    .ExpandirColuna(coluna.QuantidadeColunasUtilizadas)
+                                    .Text(totalColuna.TituloColuna);
+                            }
+
+                            var valor = totalColuna.ObterValorConvertido(formatacao);
+                            if (coluna.TemPrefixo)
+                                valor = $"{coluna.Prefixo} {valor}";
+                            linhaTotal.CriarColunaTabela()
+                                .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontalColuna)
                                 .ExpandirColuna(coluna.QuantidadeColunasUtilizadas)
-                                .Text(totalColuna.TituloColuna);
+                                .Text(valor);
                         }
+                        else
+                        {
+                            if (linhaTituloTotal != null)
+                                linhaTituloTotal.CriarColunaTabela()
+                                    .ExpandirColuna(coluna.QuantidadeColunasUtilizadas);
 
-                        var valor = totalColuna.ObterValorConvertido(formatacao);
-                        if (coluna.TemPrefixo)
-                            valor = $"{coluna.Prefixo} {valor}";
-                        linhaTotal.CriarColunaTabela()
-                            .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontalColuna)
-                            .ExpandirColuna(coluna.QuantidadeColunasUtilizadas)
-                            .Text(valor);                        
-                    }
-                    else
-                    {
-                        if (linhaTituloTotal != null)
-                            linhaTituloTotal.CriarColunaTabela()
+                            linhaTotal
+                                .CriarColunaTabela()
                                 .ExpandirColuna(coluna.QuantidadeColunasUtilizadas);
-
-                        linhaTotal
-                            .CriarColunaTabela()
-                            .ExpandirColuna(coluna.QuantidadeColunasUtilizadas);
+                        }
                     }
-                }
+                }                
             }
         }
     }
