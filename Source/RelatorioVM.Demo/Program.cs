@@ -111,7 +111,7 @@ namespace RelatorioVM.Demo
                         .Ignorar(x => x.PessoaCodigo)
                         //.ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)                        
                         .ComplementarValor(x => x.Municipio, x => x.Estado)
-                        .TabelaVertical(x => x.Pessoa, false, tv => tv.Titulo("Pessoa"))
+                        .TabelaVertical(x => x.Pessoa, true)
                         .TabelaHorizontal(x => x.Produtos, false, tabelaProdutos => {
                             tabelaProdutos
                                 .ComplementarValor(x => x.Codigo, x => x.Nome)
@@ -152,7 +152,7 @@ namespace RelatorioVM.Demo
                     configuracao.ConfigurarFormatacao(formatacao =>
                     {
                         formatacao
-                            .DefinirQuantidadeCasasDecimais(3)
+                            .DefinirQuantidadeCasasDecimais(3)                            
                             .DefinirValorNulavelParaOTipo<int>("-1")
                             .DefinirValorNulavelParaOTipo<DateTime>("--/--/----")
                             .UsarFonte(TipoFonteEscrita.ArialNarrow)
@@ -166,6 +166,7 @@ namespace RelatorioVM.Demo
                                 fonte.Tamanho = 20;
                             });
                     });
+
                 })
                 .Construir();
 

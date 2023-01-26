@@ -25,7 +25,7 @@ namespace RelatorioVM.Relatorios.Construtores
             _tabela.Colunas = typeof(TConteudo)
                 .ObterPropriedades()
                 .Where(x => x.PodeSerColunaTabela())
-                .Select(x => x.ObterColunaTabela<TConteudo>())
+                .Select((x, indice) => x.ObterColunaTabela<TConteudo>(indice))
                 .ToDictionary(x => x.Identificador);
         }              
 

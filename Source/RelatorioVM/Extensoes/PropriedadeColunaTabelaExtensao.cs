@@ -16,8 +16,8 @@ namespace RelatorioVM.Extensoes
             return true;
         }
 
-        public static TabelaColuna<T> ObterColunaTabela<T>(this PropertyInfo propriedade) {            
-            var coluna = new TabelaColuna<T>();
+        public static TabelaColuna<T> ObterColunaTabela<T>(this PropertyInfo propriedade, int posicao) {            
+            var coluna = new TabelaColuna<T>(posicao);
 
             coluna.Identificador = propriedade.Name;            
             coluna.TituloColuna = propriedade.ObterNome();
