@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelatorioVM.Dominio.Enumeradores;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
@@ -66,7 +67,10 @@ namespace RelatorioVM.Dominio.Interfaces
         /// <summary>
         /// Divide os valores em colunas, e os exibe lado a lado
         /// </summary>
-        ITabelaHorizontalRelatorioVM<TConteudo> Fracionar(int quantidadeColunas);
+        /// <param name="quantidadeColunas">Define a quantidade de dados que será exibido em cada linha.</param>
+        /// <param name="orientacao">Define a ordenação dos dados exibidos.</param>
+        /// <returns></returns>        
+        ITabelaHorizontalRelatorioVM<TConteudo> Fracionar(int quantidadeColunas, TipoOrientacaoFracionamento orientacao = TipoOrientacaoFracionamento.Horizontal);
 
         /// <summary>
         /// Define que a coluna sera exibida como uma tabela vertical. O tipo da coluna precisa ser uma classe.

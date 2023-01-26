@@ -63,9 +63,9 @@ namespace RelatorioVM.Demo
                     Produtos = new List<ProdutoViewModel>()                    
                 });
 
-                for (int j = 0; j < random.Next(2, 5); j++)
+                for (int j = 0; j < random.Next(2, 100); j++)
                     viewModel.Itens[i].Produtos.Add(new ProdutoViewModel() { 
-                        Codigo = random.Next(1, 999999),
+                        Codigo = j + 1,
                         Nome = "PRODUTO DE TESTES",
                         Valor = (decimal)random.NextDouble() * 100m
                     });
@@ -118,7 +118,7 @@ namespace RelatorioVM.Demo
                                 .Coluna(x => x.Valor, coluna => coluna.DefinirPrefixoColuna("R$"))
                                 .Totalizar(total => total.Coluna(x => x.Valor, x => x.Valor))
                                 .Titulo("Produtos")
-                                .Fracionar(2);
+                                .Fracionar(3, TipoOrientacaoFracionamento.Horizontal);
                         })
                         .Coluna(x => x.Valor, coluna => coluna.DefinirPrefixoColuna("R$"))
                         .Coluna(x => x.Municipio, coluna => coluna

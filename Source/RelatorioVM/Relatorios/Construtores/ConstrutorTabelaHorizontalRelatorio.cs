@@ -90,9 +90,12 @@ namespace RelatorioVM.Relatorios.Construtores
             return this;
         }
 
-        public ITabelaHorizontalRelatorioVM<TConteudo> Fracionar(int quantidadeColunas) {
-            if(quantidadeColunas > 0)
-                _tabela.QuantidadeFracionamentoDados = quantidadeColunas;
+        public ITabelaHorizontalRelatorioVM<TConteudo> Fracionar(int quantidadeColunas, TipoOrientacaoFracionamento orientacao = TipoOrientacaoFracionamento.Horizontal) {
+            if(quantidadeColunas <= 1)
+                return this;
+
+            _tabela.QuantidadeFracionamentoDados = quantidadeColunas;
+            _tabela.OrientacaoFracionamento = orientacao;
             
             return this;
         }

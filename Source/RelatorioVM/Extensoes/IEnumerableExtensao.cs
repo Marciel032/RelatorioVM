@@ -31,22 +31,35 @@ namespace RelatorioVM.Extensoes
             var listaItens = lista.ToList();
             var quantidadeItensFracionamento = 1;
             if(listaItens.Count > quantidade)
-                quantidadeItensFracionamento = (int)Math.Ceiling((decimal)listaItens.Count / (decimal)quantidade);
-            var grupos = new List<List<T>>(quantidade);
+                quantidadeItensFracionamento = (int)Math.Floor((decimal)listaItens.Count / (decimal)quantidade);
+            var itensSobrando = listaItens.Count > quantidade ? (listaItens.Count % quantidade) : 0;
+            var grupos = new List<List<T>>();
 
-            for (int i = 0; i < quantidadeItensFracionamento; i++)
+
+            var itensAdicionais = 0;
+            for (int j = 0; j < quantidade; j++)
             {
-                var grupo = new List<T>();
-                for (int j = 0; j < quantidade; j++)
+                var quantidadeItens = quantidadeItensFracionamento;
+                var somarItemAdicional = false;
+                if (itensSobrando > 0)
                 {
-                    var indice = (j * quantidadeItensFracionamento) + i;
-                    if (indice < listaItens.Count)
-                        grupo.Add(listaItens[indice]);
-                    else
-                        grupo.Add(default(T));
+                    somarItemAdicional = true;
+                    quantidadeItens++;
+                    itensSobrando--;
                 }
-                grupos.Add(grupo);
+                for (int i = 0; i < quantidadeItens; i++)
+                {
+                    if (grupos.Count == i)
+                        grupos.Add(new List<T>());
+
+                    var indice = (j * quantidadeItensFracionamento) + i + itensAdicionais;
+                    if (indice < listaItens.Count)
+                        grupos[i].Add(listaItens[indice]);
+                }
+                if (somarItemAdicional)
+                    itensAdicionais++;
             }
+            
 
             return grupos;
         }
