@@ -47,12 +47,14 @@ namespace RelatorioVM.Relatorios.Geradores
 body{
   -webkit-print-color-adjust:exact;
 }
-body > table { 
-    page-break-inside:auto;
+body > table {
     border-collapse: collapse;
     margin-top: 10px;
 } 
-tr { page-break-inside:avoid; page-break-after:auto } 
+table { 
+    page-break-inside:auto;
+} 
+tr { page-break-inside:auto; page-break-after:auto } 
 .keep-together { page-break-inside:avoid; page-break-after:auto } 
 thead { display:table-header-group } 
 tfoot { display:table-footer-group } 
