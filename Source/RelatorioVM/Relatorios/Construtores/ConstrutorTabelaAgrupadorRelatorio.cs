@@ -46,5 +46,11 @@ namespace RelatorioVM.Relatorios.Construtores
             _agrupador.Totalizar = totalizar;
             return this;
         }
+
+        public ITabelaAgrupadorRelatorioVM<TConteudo> QuebrarPaginaAposTotal(bool quebrarPagina = true)
+        {
+            _agrupador.QuebrarPaginaTotal = quebrarPagina;
+            return this;
+        }
     }
 }

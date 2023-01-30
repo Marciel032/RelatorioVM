@@ -10,6 +10,7 @@ namespace RelatorioVM.Elementos.Relatorios
         public string Titulo { get; set; }
         public string TituloComplemento { get; set; }
         public Dictionary<string, TabelaColunaTotal<T>> Totais { get; set; }
+        public bool QuebrarPagina { get; set; }
 
         public bool TemTituloColuna { get { return Totais.Values.Any(x => !string.IsNullOrEmpty(x.TituloColuna)); } }
 
@@ -17,6 +18,7 @@ namespace RelatorioVM.Elementos.Relatorios
         {
             Titulo = "Total";
             Totais = totais;
+            QuebrarPagina = false;
         }
 
         public TabelaTotal<T> Clonar() {

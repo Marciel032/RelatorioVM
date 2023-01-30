@@ -13,6 +13,7 @@ namespace RelatorioVM.Elementos.Relatorios
         public List<TabelaColuna<T>> Colunas { get; set; }
         public List<TabelaTotal<T>> Totais { get; set; }
         public bool Totalizar { get; set; }
+        public bool QuebrarPaginaTotal { get; set; }
 
         public TabelaAgrupador(ConfiguracaoRelatorio configuracao)
         {
@@ -24,6 +25,11 @@ namespace RelatorioVM.Elementos.Relatorios
 
         public ConfiguracaoFormatacaoRelatorio ObterOpcoesFormatacao() {
             return _configuracaoRelatorio.Formatacao;
+        }
+
+        public void AdicionarTotal(TabelaTotal<T> total) {
+            total.QuebrarPagina = QuebrarPaginaTotal;
+            Totais.Add(total);
         }
     }
 }

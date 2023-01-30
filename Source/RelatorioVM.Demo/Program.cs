@@ -130,6 +130,7 @@ namespace RelatorioVM.Demo
                             agrupar
                                 .Coluna(x => x.FilialCodigo, coluna => coluna.OcultarNoTotal())
                                 .Coluna(x => x.Ativo)
+                                .QuebrarPaginaAposTotal()
                          )
                         .Totalizar(opcoes => {
                             opcoes
