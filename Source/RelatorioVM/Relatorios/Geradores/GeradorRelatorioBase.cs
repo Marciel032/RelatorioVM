@@ -47,19 +47,29 @@ namespace RelatorioVM.Relatorios.Geradores
 body{
   -webkit-print-color-adjust:exact;
 }
-body > table {
-    border-collapse: collapse;
+body > table {    
     margin-top: 10px;
 } 
 table { 
+    border-collapse: collapse;
     page-break-inside:auto;
 } 
-tr { page-break-inside:auto; page-break-after:auto } 
-.keep-together { page-break-inside:avoid; page-break-after:auto } 
-thead { display:table-header-group } 
-tfoot { display:table-footer-group } 
-.page-break { page-break-before: always; }
-.page-break-after { page-break-after: always; }
+tr { 
+    page-break-inside:auto; 
+    page-break-after:auto; 
+} 
+thead { 
+    display:table-header-group; 
+} 
+tfoot { 
+    display:table-footer-group; 
+} 
+.page-break { 
+    page-break-before:always; 
+}
+.page-break-after { 
+    page-break-after:always;
+}
 hr
 {
     margin-top: 20px;

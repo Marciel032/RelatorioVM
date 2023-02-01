@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using WkHtmlToPdfDotNet;
 
 namespace RelatorioVM.Demo
 {
@@ -179,6 +180,8 @@ namespace RelatorioVM.Demo
             var pathHtml = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Replace(".tmp", ".html"));
             File.WriteAllText(pathHtml, html);
             new Process { StartInfo = new ProcessStartInfo(pathHtml) { UseShellExecute = true } }.Start();
+
+            CriarArquivoPDFUsandoDinkToPDF(html);
         }
 
         static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -207,5 +210,72 @@ namespace RelatorioVM.Demo
                                        .Direita().ImprimirTexto("www.infogen.com.br");
                                });*/
                     }));
+
+        private static void CriarArquivoPDFUsandoDinkToPDF(string html) {
+            var converter = new SynchronizedConverter(new PdfTools());
+            var arquivo = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Replace(".tmp", ".pdf"));
+            var caminhoArquivoHeader = GravarHtmlHeader();
+            var doc = new HtmlToPdfDocument()
+            {
+                GlobalSettings = {
+                    ColorMode = ColorMode.Color,
+                    Orientation = Orientation.Landscape,
+                    PaperSize = PaperKind.A4,
+                    Out = arquivo,
+                    DPI = 320,
+                },
+                Objects = {
+                    new ObjectSettings() {
+                        Encoding = System.Text.Encoding.UTF8,
+                        PagesCount = true,                        
+                        HtmlContent = html,
+                        WebSettings = { DefaultEncoding = "utf-8" },
+                        HeaderSettings = { HtmlUrl = caminhoArquivoHeader },
+                        FooterSettings = { HtmlUrl = caminhoArquivoHeader }
+                    }
+                }
+            };
+            converter.Convert(doc);
+            new Process { StartInfo = new ProcessStartInfo(arquivo) { UseShellExecute = true } }.Start();
+        }
+
+        private static string GravarHtmlHeader() {
+            var header = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<!DOCTYPE html>
+  <html><head><script>
+  function subst() {
+      var vars = {};
+      var query_strings_from_url = document.location.search.substring(1).split('&');
+      for (var query_string in query_strings_from_url) {
+          if (query_strings_from_url.hasOwnProperty(query_string)) {
+              var temp_var = query_strings_from_url[query_string].split('=', 2);
+              vars[temp_var[0]] = decodeURI(temp_var[1]);
+          }
+      }
+      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages'];
+      for (var css_class in css_selector_classes) {
+          if (css_selector_classes.hasOwnProperty(css_class)) {
+              var element = document.getElementsByClassName(css_selector_classes[css_class]);
+              for (var j = 0; j < element.length; ++j) {
+                  element[j].textContent = vars[css_selector_classes[css_class]];
+              }
+          }
+      }
+  }
+  </script></head><body style=""border:0; margin: 0;"" onload=""subst()"">
+  <table style=""border-bottom: 1px solid black; width: 100%"">
+    <tr>
+      <td class=""section""></td>
+      <td style=""text-align:right"">
+        Página <span class=""page""></span> / <span class=""topage""></span>
+      </td>
+    </tr>
+  </table>
+  </body></html>
+";
+            var arquivo = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Replace(".tmp", ".html"));
+            File.WriteAllText(arquivo, header);
+            return arquivo;
+        }
     }
 }
