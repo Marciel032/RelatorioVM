@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using iText.Html2pdf;
+using Microsoft.Extensions.Hosting;
 using RelatorioVM.Demo.ComponentesCustomizados;
 using RelatorioVM.Demo.Modelos;
 using RelatorioVM.Dominio.Configuracoes;
@@ -12,6 +13,8 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using WkHtmlToPdfDotNet;
+using iText.IO.Font;
+using iText.Layout.Font;
 
 namespace RelatorioVM.Demo
 {
@@ -181,7 +184,9 @@ namespace RelatorioVM.Demo
             File.WriteAllText(pathHtml, html);
             new Process { StartInfo = new ProcessStartInfo(pathHtml) { UseShellExecute = true } }.Start();
 
-            CriarArquivoPDFUsandoDinkToPDF(html);
+           // html = File.ReadAllText(@"C:\Users\Marciel\Downloads\TesteRelatorio.html");
+            //CriarArquivoPDFUsandoDinkToPDF(html);
+            CriarArquivoPDFUsandoIText(html);
         }
 
         static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -193,22 +198,21 @@ namespace RelatorioVM.Demo
                         {
                             conteudo.Zebrado = true;
                         });
-                        /*   options
-                               .UsarOrientacao(TipoOrientacao.Retrato)                            
-                               .ConfigurarFormatacao(formato => {
-                                   formato.CasasDecimais = 3;
-                               })
-                               .ConfigurarCabecalho(cabecalho => {
-                                   cabecalho
-                                       .Esquerda().ImprimirTexto("Nome da empresa")
-                                       .Centro().ImprimirDataHora()
-                                       .Direita().ImprimirNumeroDePaginas();
-                               })
-                               .ConfigurarRodape(rodape => {
-                                   rodape
-                                       .Esquerda().ImprimirTexto("Infogen Sistemas")
-                                       .Direita().ImprimirTexto("www.infogen.com.br");
-                               });*/
+                        options                           
+                            .ConfigurarFormatacao(formato => {
+                                formato.DefinirQuantidadeCasasDecimais(3);
+                            })
+                            .ConfigurarCabecalho(cabecalho => {
+                                cabecalho
+                                    .Esquerda().ImprimirTexto("Nome do meu cliente")
+                                    .Direita().ImprimirNumeroDePaginas();
+                            })
+                            .ConfigurarRodape(rodape => {
+                                rodape
+                                    .Esquerda().ImprimirTexto("Nome da minha empresa")
+                                    .Centro().ImprimirDataHora()
+                                    .Direita().ImprimirTexto("Site da minha empresa");
+                            });
                     }));
 
         private static void CriarArquivoPDFUsandoDinkToPDF(string html) {
@@ -236,6 +240,21 @@ namespace RelatorioVM.Demo
                 }
             };
             converter.Convert(doc);
+            new Process { StartInfo = new ProcessStartInfo(arquivo) { UseShellExecute = true } }.Start();
+        }
+
+        private static void CriarArquivoPDFUsandoIText(string html)
+        {
+            
+            var arquivo = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Replace(".tmp", ".pdf"));
+
+            using (var memoryStream = new MemoryStream())
+            {
+
+                HtmlConverter.ConvertToPdf(html, memoryStream);
+                File.WriteAllBytes(arquivo, memoryStream.ToArray());
+            }
+
             new Process { StartInfo = new ProcessStartInfo(arquivo) { UseShellExecute = true } }.Start();
         }
 

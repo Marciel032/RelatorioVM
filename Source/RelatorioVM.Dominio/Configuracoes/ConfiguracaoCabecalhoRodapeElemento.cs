@@ -12,15 +12,18 @@ namespace RelatorioVM.Dominio.Configuracoes
 
         public TipoElementoCabecalhoRodape Tipo { get; set; }
 
+        public TipoPosicaoCabecalhoRodape Posicao { get; set; }
+
         /// <summary>
         /// Informe o valor do Texto fixo, quando este tipo for informado.
         /// Tambem é possivel informar o formato da data e hora, quando algum tipo de data for informado.
         /// </summary>
         public string Valor { get; set; }
 
-        public ConfiguracaoCabecalhoRodapeElemento(IConfiguracaoCabecalhoRodapeRelatorioBase parent)
+        public ConfiguracaoCabecalhoRodapeElemento(IConfiguracaoCabecalhoRodapeRelatorioBase parent, TipoPosicaoCabecalhoRodape posicao)
         {
             Parent = parent;
+            Posicao = posicao;
             Tipo = TipoElementoCabecalhoRodape.Vazio;
             Valor = string.Empty;
         }
@@ -50,6 +53,13 @@ namespace RelatorioVM.Dominio.Configuracoes
         {
             Tipo = TipoElementoCabecalhoRodape.NumeroDaPagina;
             Valor = prefixo;
+            return Parent;
+        }
+
+        public IConfiguracaoCabecalhoRodapeRelatorioBase ImprimirTitulo()
+        {
+            Tipo = TipoElementoCabecalhoRodape.Titulo;
+            Valor = String.Empty;
             return Parent;
         }
 

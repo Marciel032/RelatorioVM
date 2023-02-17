@@ -1,6 +1,7 @@
 ﻿using HtmlTags;
 using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Dominio.Configuracoes.Formatacoes;
+using RelatorioVM.Dominio.Enumeradores;
 using RelatorioVM.Dominio.Interfaces;
 using RelatorioVM.Extensoes;
 using RelatorioVM.Relatorios.Estruturas;
@@ -75,18 +76,45 @@ hr
     margin-top: 20px;
     margin-bottom: 20px;
 }
+.paginas::before {
+    content: counter(page);
+}
+.paginas::after {
+    content: counter(pages);
+}
 table {
     border-spacing: 0px;
     border-collapse: collapse;
 }
-@page {
-    @top-center { content: element(titulo) }
+@media screen {
+   .somente-impressao {
+       display: none;
+   }
 }");
 
             construtorEstilo.Append(_configuracao.Formatacao.FonteTitulo.ObterEstilo("titulo"));
             construtorEstilo.Append(_estrutura.ObterEstilo());
+            construtorEstilo.Append(GerarEstiloPagina());
 
             return construtorEstilo.ToString().Replace(Environment.NewLine, " ");
+        }
+
+        private string GerarEstiloPagina() {
+            StringBuilder construtorEstilo = new StringBuilder();
+
+            construtorEstilo.Append("@page {")
+                .Append("@top-left { content: element(").Append(TipoPosicaoCabecalhoRodape.CabecalhoEsquerdo.ObterDescricao()).Append(")}")
+                .Append("@top-center { content: element(").Append(TipoPosicaoCabecalhoRodape.CabecalhoCentro.ObterDescricao()).Append(")}")
+                .Append("@top-right { content: element(").Append(TipoPosicaoCabecalhoRodape.CabecalhoDireito.ObterDescricao()).Append(")}")
+                .Append("@bottom-left { content: element(").Append(TipoPosicaoCabecalhoRodape.RodapeEsquerdo.ObterDescricao()).Append(")}")
+                .Append("@bottom-center { content: element(").Append(TipoPosicaoCabecalhoRodape.RodapeCentro.ObterDescricao()).Append(")}")
+                .Append("@bottom-right { content: element(").Append(TipoPosicaoCabecalhoRodape.RodapeDireito.ObterDescricao()).Append(")}")
+                //.Append(".").Append(TipoPosicaoCabecalhoRodape.RodapeDireito.ObterDescricao()).Append("{ display:block }")
+                .Append("}");
+
+            //construtorEstilo.Append(".").Append(TipoPosicaoCabecalhoRodape.RodapeDireito.ObterDescricao()).Append("{ display:none }");
+
+            return construtorEstilo.ToString();
         }
     }
 }

@@ -10,5 +10,6 @@ namespace RelatorioVM.Dominio.Configuracoes.Interfaces
         IConfiguracaoCabecalhoRodapeRelatorioBase ImprimirData(string formato = "dd/MM/yyyy");
         IConfiguracaoCabecalhoRodapeRelatorioBase ImprimirDataHora(string formato = "dd/MM/yyyy HH:mm");
         IConfiguracaoCabecalhoRodapeRelatorioBase ImprimirNumeroDePaginas(string prefixo = "Página ");
+        IConfiguracaoCabecalhoRodapeRelatorioBase ImprimirTitulo();
     }
 }

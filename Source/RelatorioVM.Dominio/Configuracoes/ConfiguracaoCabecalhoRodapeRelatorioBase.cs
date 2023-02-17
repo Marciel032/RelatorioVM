@@ -10,6 +10,15 @@ namespace RelatorioVM.Dominio.Configuracoes
         public ConfiguracaoCabecalhoRodapeElemento ElementoEsquerda { get; set; }
         public ConfiguracaoCabecalhoRodapeElemento ElementoCentro { get; set; }
         public ConfiguracaoCabecalhoRodapeElemento ElementoDireita { get; set; }
+        public bool TemTituloDefinido { 
+            get 
+            {
+                return ElementoEsquerda.Tipo == Enumeradores.TipoElementoCabecalhoRodape.Titulo ||
+                    ElementoCentro.Tipo == Enumeradores.TipoElementoCabecalhoRodape.Titulo ||
+                    ElementoDireita.Tipo == Enumeradores.TipoElementoCabecalhoRodape.Titulo;
+            } 
+
+        }
 
         public IConfiguracaoElemento Centro()
         {

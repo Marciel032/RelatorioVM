@@ -1,4 +1,5 @@
 ﻿using RelatorioVM.Dominio.Configuracoes.Interfaces;
+using RelatorioVM.Dominio.Enumeradores;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,9 +11,9 @@ namespace RelatorioVM.Dominio.Configuracoes
         public int QuantidadeDeFiltrosPorLinha { get; set; }
         public ConfiguracaoCabecalhoRelatorio()
         {
-            ElementoEsquerda = new ConfiguracaoCabecalhoRodapeElemento(this);
-            ElementoCentro = new ConfiguracaoCabecalhoRodapeElemento(this);
-            ElementoDireita = new ConfiguracaoCabecalhoRodapeElemento(this);
+            ElementoEsquerda = new ConfiguracaoCabecalhoRodapeElemento(this, TipoPosicaoCabecalhoRodape.CabecalhoEsquerdo);
+            ElementoCentro = new ConfiguracaoCabecalhoRodapeElemento(this, TipoPosicaoCabecalhoRodape.CabecalhoCentro);
+            ElementoDireita = new ConfiguracaoCabecalhoRodapeElemento(this, TipoPosicaoCabecalhoRodape.CabecalhoDireito);
             QuantidadeDeFiltrosPorLinha = 4;
         }
 

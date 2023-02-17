@@ -1,6 +1,7 @@
 ﻿using HtmlTags;
 using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Dominio.Interfaces;
+using RelatorioVM.Elementos.Estilos;
 using RelatorioVM.Extensoes;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace RelatorioVM.Elementos.Relatorios
     internal class FiltrosElemento<T>: IElementoRelatorioVM
     {
         private readonly ConfiguracaoRelatorio _configuracaoRelatorio;
+        private readonly string _classeFiltro = "tabela_filtro";
         public List<Filtro<T>> Filtros { get; set; }
         public string Indice { get; set; }
 
@@ -30,7 +32,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 return string.Empty;
 
             var tabela = CriarTabela()
-                .AddClass("tabela-filtro");
+                .AddClass(_classeFiltro);
 
             var quantidadeDeFiltrosNaLinha = Math.Clamp(Filtros.Count, 1, _configuracaoRelatorio.Cabecalho.QuantidadeDeFiltrosPorLinha);
             tabela
@@ -42,7 +44,7 @@ namespace RelatorioVM.Elementos.Relatorios
             var gruposFiltros = Filtros.CriarGruposDe(_configuracaoRelatorio.Cabecalho.QuantidadeDeFiltrosPorLinha).ToList();
             foreach (var filtros in gruposFiltros) {
                 var linha = tabela.CriarLinhaTabela()
-                    .Style("border", "1px solid #888") ;
+                    .AddClass("linha-filtro");
                 foreach (var filtro in filtros)
                 {
                     linha.CriarColunaTabela()
@@ -68,7 +70,61 @@ namespace RelatorioVM.Elementos.Relatorios
 
         public string ObterEstilo()
         {
-            return _configuracaoRelatorio.Formatacao.FonteConteudo.ObterEstilo("tabela-filtro");
+            var construtorEstilo = new EstiloConstrutor();
+            construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                .AdicionarClasse(_classeFiltro)
+                .DefinirFonte(_configuracaoRelatorio.Formatacao.FonteConteudo)
+            );
+
+            construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                .AdicionarClasse(_classeFiltro)
+                .AdicionarClasse("linha-filtro")
+                .AdicionarClasseElemento("td")
+                .DefinirBorda(new EstiloElementoBorda() { 
+                    Direcao = Dominio.Enumeradores.TipoBorda.Topo,
+                    Tamanho = 1,
+                    UnidadeMedida = Dominio.Enumeradores.TipoUnidadeMedida.Pixel,
+                    TipoBorda = Dominio.Enumeradores.TipoEstiloBorda.Solida,
+                    Cor = "#888"
+                })
+                .DefinirBorda(new EstiloElementoBorda() { 
+                    Direcao = Dominio.Enumeradores.TipoBorda.Fundo,
+                    Tamanho = 1,
+                    UnidadeMedida = Dominio.Enumeradores.TipoUnidadeMedida.Pixel,
+                    TipoBorda = Dominio.Enumeradores.TipoEstiloBorda.Solida,
+                    Cor = "#888"
+                })
+            );
+
+            construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                .AdicionarClasse(_classeFiltro)
+                .AdicionarClasse("linha-filtro")
+                .AdicionarClasseElemento("td:first-child")
+                .DefinirBorda(new EstiloElementoBorda()
+                {
+                    Direcao = Dominio.Enumeradores.TipoBorda.Esquerda,
+                    Tamanho = 1,
+                    UnidadeMedida = Dominio.Enumeradores.TipoUnidadeMedida.Pixel,
+                    TipoBorda = Dominio.Enumeradores.TipoEstiloBorda.Solida,
+                    Cor = "#888"
+                })
+            );
+
+            construtorEstilo.AdicionarEstilo(new EstiloElemento()
+                .AdicionarClasse(_classeFiltro)
+                .AdicionarClasse("linha-filtro")
+                .AdicionarClasseElemento("td:last-child")
+                .DefinirBorda(new EstiloElementoBorda()
+                {
+                    Direcao = Dominio.Enumeradores.TipoBorda.Direita,
+                    Tamanho = 1,
+                    UnidadeMedida = Dominio.Enumeradores.TipoUnidadeMedida.Pixel,
+                    TipoBorda = Dominio.Enumeradores.TipoEstiloBorda.Solida,
+                    Cor = "#888"
+                })
+            );
+
+            return construtorEstilo.ToString();
         }
 
         private HtmlTag CriarTabela() { 
