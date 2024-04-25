@@ -50,6 +50,16 @@ namespace RelatorioVM.Extensoes
             return tag;
         }
 
+        public static HtmlTag DefinirCorFundo(this HtmlTag tag, string cor)
+        {
+            if (string.IsNullOrEmpty(cor))
+                return tag;            
+
+            tag.Style("background-color", cor);
+
+            return tag;
+        }
+
         public static HtmlTag ExpandirColuna(this HtmlTag tag, int colunas)
         {
             if (colunas > 1)

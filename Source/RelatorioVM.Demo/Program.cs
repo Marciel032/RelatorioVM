@@ -67,6 +67,10 @@ namespace RelatorioVM.Demo
                     Produtos = new List<ProdutoViewModel>()                    
                 });
 
+                if (i < 10) {
+                    viewModel.Itens.Last().CorFundoLinha = "bae3f5";
+                }
+
                 for (int j = 0; j < random.Next(2, 300); j++)
                     viewModel.Itens[i].Produtos.Add(new ProdutoViewModel() { 
                         Codigo = j + 1,
@@ -113,6 +117,7 @@ namespace RelatorioVM.Demo
                     tabela
                         .Titulo("Tabela exibindo valores na horizontal")
                         .Ignorar(x => x.PessoaCodigo)
+                        .Ignorar(x => x.CorFundoLinha)
                         //.ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)                        
                         .ComplementarValor(x => x.Municipio, x => x.Estado)
                         .TabelaVertical(x => x.Pessoa, true)
@@ -145,6 +150,10 @@ namespace RelatorioVM.Demo
                                     coluna
                                         .Titulo("Quantidade");
                                 });
+                        })
+                        .Formatar(opcoes => {
+                            opcoes
+                                .DefinirCorFundoLinhaConteudo(x => x.CorFundoLinha);
                         });
                 })
                 .AdicionarLinhaHorizontal()
@@ -186,7 +195,7 @@ namespace RelatorioVM.Demo
 
            // html = File.ReadAllText(@"C:\Users\Marciel\Downloads\TesteRelatorio.html");
             //CriarArquivoPDFUsandoDinkToPDF(html);
-            CriarArquivoPDFUsandoIText(html);
+            //CriarArquivoPDFUsandoIText(html);
         }
 
         static IHostBuilder CreateHostBuilder(string[] args) =>

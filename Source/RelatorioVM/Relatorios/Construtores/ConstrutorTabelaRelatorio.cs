@@ -16,7 +16,7 @@ namespace RelatorioVM.Relatorios.Construtores
     internal abstract class ConstrutorTabelaRelatorio<TConteudo>
     {
         protected ConfiguracaoRelatorio _configuracaoRelatorio;
-        protected Tabela<TConteudo> _tabela;        
+        protected Tabela<TConteudo> _tabela;
 
         public ConstrutorTabelaRelatorio(ConfiguracaoRelatorio configuracaoRelatorio)
         {
@@ -134,6 +134,13 @@ namespace RelatorioVM.Relatorios.Construtores
             var agrupador = agrupadorConstrutor.Construir();
             if (agrupador.Agrupadores.Count > 0)
                 _tabela.Agrupadores.Add(agrupador);
+        }
+
+        protected void FormatarConteudo(Action<ITabelaFormatacaoRelatorioVM<TConteudo>> opcoes)
+        {
+            var construtorFormatacaoTabela = new ConstrutorFormatacaoTabela<TConteudo>(_configuracaoRelatorio);
+            opcoes?.Invoke(construtorFormatacaoTabela);
+            _tabela.Formatacao = construtorFormatacaoTabela.Construir();
         }
 
         protected void AdicionarElementoColuna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, IElementoRelatorioVM elemento, bool exibirNaColuna)

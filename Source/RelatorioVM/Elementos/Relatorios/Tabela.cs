@@ -34,6 +34,8 @@ namespace RelatorioVM.Elementos.Relatorios
 
         public bool TemElementosLinha { get { return Colunas.Values.Any(x => x.TemElementosLinha); } }
 
+        public TabelaFormatacao<T> Formatacao { get; set; }
+
         public Tabela()
         {
             Titulo = string.Empty;
@@ -43,6 +45,7 @@ namespace RelatorioVM.Elementos.Relatorios
             Colunas = new Dictionary<string, TabelaColuna<T>>();
             Totais = new List<TabelaTotal<T>>();
             Agrupadores = new List<TabelaAgrupador<T>>();
+            Formatacao = new TabelaFormatacao<T>();
         }
 
         public int ObterQuantidadeColunasVisiveis() {

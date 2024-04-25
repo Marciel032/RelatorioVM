@@ -49,6 +49,12 @@ namespace RelatorioVM.Relatorios.Construtores
             return this;
         }
 
+        public ITabelaHorizontalRelatorioVM<TConteudo> Formatar(Action<ITabelaFormatacaoRelatorioVM<TConteudo>> opcoes)
+        {
+            FormatarConteudo(opcoes);
+            return this;
+        }
+
         public ITabelaHorizontalRelatorioVM<TConteudo> Ignorar<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao) {
             IgnorarColuna(propriedadeExpressao);
             return this;

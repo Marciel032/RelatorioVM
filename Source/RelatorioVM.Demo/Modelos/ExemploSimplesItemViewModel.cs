@@ -27,7 +27,8 @@ namespace RelatorioVM.Demo.Modelos
 
         [ColunaRelatorio(Titulo = "Município")]
         public string Municipio { get; set; }
-        public string Estado { get; set; }      
+        public string Estado { get; set; }
+        public string CorFundoLinha { get; set; }
         public List<ProdutoViewModel> Produtos { get; set; }
     }
 
