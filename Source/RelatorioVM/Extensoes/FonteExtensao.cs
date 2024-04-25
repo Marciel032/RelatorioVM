@@ -13,7 +13,16 @@ namespace RelatorioVM.Extensoes
             fonteFormatada.Append($".{classe} ");
 
             fonteFormatada
-                .Append("{");
+                .Append("{")
+                .Append(fonte.ObterEstilo())
+                .Append("}");
+
+            return fonteFormatada.ToString();
+        }
+
+        internal static string ObterEstilo(this FonteEscrita fonte)
+        {
+            StringBuilder fonteFormatada = new StringBuilder();
 
             if (!string.IsNullOrEmpty(fonte.TipoPersonalizado))
                 fonteFormatada.Append($"font-family: {fonte.TipoPersonalizado};");
@@ -28,8 +37,6 @@ namespace RelatorioVM.Extensoes
 
             if (fonte.Negrito)
                 fonteFormatada.Append($"font-weight: bold;");
-
-            fonteFormatada.Append("}");
 
             return fonteFormatada.ToString();
         }

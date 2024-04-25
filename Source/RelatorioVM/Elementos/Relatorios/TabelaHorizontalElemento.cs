@@ -280,6 +280,11 @@ namespace RelatorioVM.Elementos.Relatorios
                 foreach (var conteudo in itens)
                 {
                     var linhas = CriarLinhasItem(corpoTabela);
+
+                    var corFundo = _tabela.Formatacao.CorFundoLinhaConteudoPropriedade?.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao);
+                    linhas.Conteudo.DefinirCorFundo(corFundo);
+                    linhas.Complemento?.DefinirCorFundo(corFundo);
+
                     AdicionarConteudoItemLinha(linhas, conteudo);
                     onDepoisAdicionarConteudo?.Invoke(conteudo);
                 }
@@ -287,7 +292,7 @@ namespace RelatorioVM.Elementos.Relatorios
         }
 
         private (HtmlTag Conteudo, HtmlTag Complemento) CriarLinhasItem(HtmlTag corpoTabela) {
-            var linhaConteudo = corpoTabela.CriarLinhaTabela();
+            var linhaConteudo = corpoTabela.CriarLinhaTabela();            
             HtmlTag linhaComplemento = null;
             if (_tabela.TemElementosLinha)
                 linhaComplemento = corpoTabela.CriarLinhaTabela();
@@ -309,7 +314,7 @@ namespace RelatorioVM.Elementos.Relatorios
         {
             if (conteudo != null)
                 foreach (var coluna in _tabela.ObterColunasVisiveis())
-                {
+                {                    
                     var colunaHtml = linha.CriarColunaTabela();
                     if (coluna.TemComplemento && coluna.AlinhamentoHorizontalColuna == TipoAlinhamentoHorizontal.Centro)
                     {
@@ -325,7 +330,7 @@ namespace RelatorioVM.Elementos.Relatorios
                         colunaHtml
                             .Text(coluna.ObterValorConvertidoComComplemento(conteudo, _configuracaoRelatorio.Formatacao));
                     }
-                    else if (coluna.TemElementos)
+                    else if (coluna.TemElementosColuna)
                         coluna.AdicionarHtmlColuna(colunaHtml, conteudo);
                     else
                     {
@@ -334,7 +339,8 @@ namespace RelatorioVM.Elementos.Relatorios
                     }
                 }
             else
-                linha.CriarColunaTabela().ExpandirColuna(_tabela.ObterQuantidadeColunasVisiveisSemFracionamento());
+                for (int i = 0; i < _tabela.ObterQuantidadeColunasVisiveisSemFracionamento(); i++)
+                    linha.CriarColunaTabela();
         }
 
         private void AdicionarConteudoItemComplemento(HtmlTag linha, T conteudo)

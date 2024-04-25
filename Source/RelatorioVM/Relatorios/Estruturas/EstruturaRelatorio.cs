@@ -1,5 +1,6 @@
 ﻿using HtmlTags;
 using RelatorioVM.Dominio.Configuracoes;
+using RelatorioVM.Dominio.Enumeradores;
 using RelatorioVM.Dominio.Interfaces;
 using RelatorioVM.Elementos.Relatorios;
 using System;
@@ -22,12 +23,19 @@ namespace RelatorioVM.Relatorios.Estruturas
         {
             _configuracaoRelatorio = configuracaoRelatorio;
 
-            Titulo = new TituloElemento();
+            Titulo = new TituloElemento(_configuracaoRelatorio);
             _elementos = new List<IElementoRelatorioVM>();
             _conteudos = new Dictionary<string, object>();
+
+            AdicionarElemento(new CabecalhoRodapeTextoElemento(_configuracaoRelatorio, TipoPosicaoCabecalhoRodape.CabecalhoEsquerdo), _configuracaoRelatorio.Cabecalho.ElementoEsquerda);
+            AdicionarElemento(new CabecalhoRodapeTextoElemento(_configuracaoRelatorio, TipoPosicaoCabecalhoRodape.CabecalhoCentro), _configuracaoRelatorio.Cabecalho.ElementoCentro);
+            AdicionarElemento(new CabecalhoRodapeTextoElemento(_configuracaoRelatorio, TipoPosicaoCabecalhoRodape.CabecalhoDireito), _configuracaoRelatorio.Cabecalho.ElementoDireita);
+            AdicionarElemento(new CabecalhoRodapeTextoElemento(_configuracaoRelatorio, TipoPosicaoCabecalhoRodape.RodapeEsquerdo), _configuracaoRelatorio.Rodape.ElementoEsquerda);
+            AdicionarElemento(new CabecalhoRodapeTextoElemento(_configuracaoRelatorio, TipoPosicaoCabecalhoRodape.RodapeCentro), _configuracaoRelatorio.Rodape.ElementoCentro);
+            AdicionarElemento(new CabecalhoRodapeTextoElemento(_configuracaoRelatorio, TipoPosicaoCabecalhoRodape.RodapeDireito), _configuracaoRelatorio.Rodape.ElementoDireita);
         }
 
-        public void AdicionarHtml(HtmlTag parent) {
+        public void AdicionarHtml(HtmlTag parent) {            
             parent.AppendHtml(Titulo.ObterHtml(null));
             if(_conteudos.ContainsKey("filtros"))
                 parent.AppendHtml(Filtro?.ObterHtml(_conteudos["filtros"]));            

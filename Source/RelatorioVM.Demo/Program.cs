@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using iText.Html2pdf;
+using Microsoft.Extensions.Hosting;
 using RelatorioVM.Demo.ComponentesCustomizados;
 using RelatorioVM.Demo.Modelos;
 using RelatorioVM.Dominio.Configuracoes;
@@ -11,6 +12,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using WkHtmlToPdfDotNet;
+using iText.IO.Font;
+using iText.Layout.Font;
 
 namespace RelatorioVM.Demo
 {
@@ -63,7 +67,11 @@ namespace RelatorioVM.Demo
                     Produtos = new List<ProdutoViewModel>()                    
                 });
 
-                for (int j = 0; j < random.Next(2, 100); j++)
+                if (i < 10) {
+                    viewModel.Itens.Last().CorFundoLinha = "bae3f5";
+                }
+
+                for (int j = 0; j < random.Next(2, 300); j++)
                     viewModel.Itens[i].Produtos.Add(new ProdutoViewModel() { 
                         Codigo = j + 1,
                         Nome = "PRODUTO DE TESTES",
@@ -109,16 +117,17 @@ namespace RelatorioVM.Demo
                     tabela
                         .Titulo("Tabela exibindo valores na horizontal")
                         .Ignorar(x => x.PessoaCodigo)
+                        .Ignorar(x => x.CorFundoLinha)
                         //.ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)                        
                         .ComplementarValor(x => x.Municipio, x => x.Estado)
-                        .TabelaVertical(x => x.Pessoa, false, tv => tv.Titulo("Pessoa"))
+                        .TabelaVertical(x => x.Pessoa, true)
                         .TabelaHorizontal(x => x.Produtos, false, tabelaProdutos => {
                             tabelaProdutos
                                 .ComplementarValor(x => x.Codigo, x => x.Nome)
                                 .Coluna(x => x.Valor, coluna => coluna.DefinirPrefixoColuna("R$"))
                                 .Totalizar(total => total.Coluna(x => x.Valor, x => x.Valor))
                                 .Titulo("Produtos")
-                                .Fracionar(3, TipoOrientacaoFracionamento.Horizontal);
+                                .Fracionar(2, TipoOrientacaoFracionamento.Horizontal);
                         })
                         .Coluna(x => x.Valor, coluna => coluna.DefinirPrefixoColuna("R$"))
                         .Coluna(x => x.Municipio, coluna => coluna
@@ -141,6 +150,10 @@ namespace RelatorioVM.Demo
                                     coluna
                                         .Titulo("Quantidade");
                                 });
+                        })
+                        .Formatar(opcoes => {
+                            opcoes
+                                .DefinirCorFundoLinhaConteudo(x => x.CorFundoLinha);
                         });
                 })
                 .AdicionarLinhaHorizontal()
@@ -152,7 +165,7 @@ namespace RelatorioVM.Demo
                     configuracao.ConfigurarFormatacao(formatacao =>
                     {
                         formatacao
-                            .DefinirQuantidadeCasasDecimais(3)
+                            .DefinirQuantidadeCasasDecimais(3)                            
                             .DefinirValorNulavelParaOTipo<int>("-1")
                             .DefinirValorNulavelParaOTipo<DateTime>("--/--/----")
                             .UsarFonte(TipoFonteEscrita.ArialNarrow)
@@ -166,6 +179,7 @@ namespace RelatorioVM.Demo
                                 fonte.Tamanho = 20;
                             });
                     });
+
                 })
                 .Construir();
 
@@ -178,6 +192,10 @@ namespace RelatorioVM.Demo
             var pathHtml = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Replace(".tmp", ".html"));
             File.WriteAllText(pathHtml, html);
             new Process { StartInfo = new ProcessStartInfo(pathHtml) { UseShellExecute = true } }.Start();
+
+           // html = File.ReadAllText(@"C:\Users\Marciel\Downloads\TesteRelatorio.html");
+            //CriarArquivoPDFUsandoDinkToPDF(html);
+            //CriarArquivoPDFUsandoIText(html);
         }
 
         static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -189,22 +207,103 @@ namespace RelatorioVM.Demo
                         {
                             conteudo.Zebrado = true;
                         });
-                        /*   options
-                               .UsarOrientacao(TipoOrientacao.Retrato)                            
-                               .ConfigurarFormatacao(formato => {
-                                   formato.CasasDecimais = 3;
-                               })
-                               .ConfigurarCabecalho(cabecalho => {
-                                   cabecalho
-                                       .Esquerda().ImprimirTexto("Nome da empresa")
-                                       .Centro().ImprimirDataHora()
-                                       .Direita().ImprimirNumeroDePaginas();
-                               })
-                               .ConfigurarRodape(rodape => {
-                                   rodape
-                                       .Esquerda().ImprimirTexto("Infogen Sistemas")
-                                       .Direita().ImprimirTexto("www.infogen.com.br");
-                               });*/
+                        options                           
+                            .ConfigurarFormatacao(formato => {
+                                formato.DefinirQuantidadeCasasDecimais(3);
+                            })
+                            .ConfigurarCabecalho(cabecalho => {
+                                cabecalho
+                                    .Esquerda().ImprimirTexto("Nome do meu cliente")
+                                    .Direita().ImprimirNumeroDePaginas();
+                            })
+                            .ConfigurarRodape(rodape => {
+                                rodape
+                                    .Esquerda().ImprimirTexto("Nome da minha empresa")
+                                    .Centro().ImprimirDataHora()
+                                    .Direita().ImprimirTexto("Site da minha empresa");
+                            });
                     }));
+
+        private static void CriarArquivoPDFUsandoDinkToPDF(string html) {
+            var converter = new SynchronizedConverter(new PdfTools());
+            var arquivo = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Replace(".tmp", ".pdf"));
+            var caminhoArquivoHeader = GravarHtmlHeader();
+            var doc = new HtmlToPdfDocument()
+            {
+                GlobalSettings = {
+                    ColorMode = ColorMode.Color,
+                    Orientation = Orientation.Landscape,
+                    PaperSize = PaperKind.A4,
+                    Out = arquivo,
+                    DPI = 320,
+                },
+                Objects = {
+                    new ObjectSettings() {
+                        Encoding = System.Text.Encoding.UTF8,
+                        PagesCount = true,                        
+                        HtmlContent = html,
+                        WebSettings = { DefaultEncoding = "utf-8" },
+                        HeaderSettings = { HtmlUrl = caminhoArquivoHeader },
+                        FooterSettings = { HtmlUrl = caminhoArquivoHeader }
+                    }
+                }
+            };
+            converter.Convert(doc);
+            new Process { StartInfo = new ProcessStartInfo(arquivo) { UseShellExecute = true } }.Start();
+        }
+
+        private static void CriarArquivoPDFUsandoIText(string html)
+        {
+            
+            var arquivo = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Replace(".tmp", ".pdf"));
+
+            using (var memoryStream = new MemoryStream())
+            {
+
+                HtmlConverter.ConvertToPdf(html, memoryStream);
+                File.WriteAllBytes(arquivo, memoryStream.ToArray());
+            }
+
+            new Process { StartInfo = new ProcessStartInfo(arquivo) { UseShellExecute = true } }.Start();
+        }
+
+        private static string GravarHtmlHeader() {
+            var header = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<!DOCTYPE html>
+  <html><head><script>
+  function subst() {
+      var vars = {};
+      var query_strings_from_url = document.location.search.substring(1).split('&');
+      for (var query_string in query_strings_from_url) {
+          if (query_strings_from_url.hasOwnProperty(query_string)) {
+              var temp_var = query_strings_from_url[query_string].split('=', 2);
+              vars[temp_var[0]] = decodeURI(temp_var[1]);
+          }
+      }
+      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages'];
+      for (var css_class in css_selector_classes) {
+          if (css_selector_classes.hasOwnProperty(css_class)) {
+              var element = document.getElementsByClassName(css_selector_classes[css_class]);
+              for (var j = 0; j < element.length; ++j) {
+                  element[j].textContent = vars[css_selector_classes[css_class]];
+              }
+          }
+      }
+  }
+  </script></head><body style=""border:0; margin: 0;"" onload=""subst()"">
+  <table style=""border-bottom: 1px solid black; width: 100%"">
+    <tr>
+      <td class=""section""></td>
+      <td style=""text-align:right"">
+        Página <span class=""page""></span> / <span class=""topage""></span>
+      </td>
+    </tr>
+  </table>
+  </body></html>
+";
+            var arquivo = Path.Combine(Path.GetTempPath(), Path.GetTempFileName().Replace(".tmp", ".html"));
+            File.WriteAllText(arquivo, header);
+            return arquivo;
+        }
     }
 }

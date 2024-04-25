@@ -9,6 +9,7 @@ namespace RelatorioVM.Dominio.Enumeradores
         Vazio,
         TextoFixo,
         Data,
-        NumeroDaPagina
+        NumeroDaPagina,
+        Titulo
     }
 }

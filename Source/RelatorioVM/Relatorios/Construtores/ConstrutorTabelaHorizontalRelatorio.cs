@@ -27,7 +27,7 @@ namespace RelatorioVM.Relatorios.Construtores
                 agrupador.Colunas = agrupador.ObterColunasAgrupamento(_tabela.Colunas);
                 agrupador.Colunas.ForEach(x => x.Visivel = false);
                 foreach (var total in _tabela.Totais)
-                    agrupador.Totais.Add(total.Clonar());
+                    agrupador.AdicionarTotal(total.Clonar());
             }
             return new TabelaHorizontalElemento<TConteudo>(_configuracaoRelatorio, _tabela);
         }
@@ -46,6 +46,12 @@ namespace RelatorioVM.Relatorios.Construtores
         public ITabelaHorizontalRelatorioVM<TConteudo> Agrupar(Action<ITabelaAgrupadorRelatorioVM<TConteudo>> opcoes)
         {
             AgruparConteudo(opcoes);
+            return this;
+        }
+
+        public ITabelaHorizontalRelatorioVM<TConteudo> Formatar(Action<ITabelaFormatacaoRelatorioVM<TConteudo>> opcoes)
+        {
+            FormatarConteudo(opcoes);
             return this;
         }
 
@@ -101,6 +107,17 @@ namespace RelatorioVM.Relatorios.Construtores
         }
 
         public ITabelaHorizontalRelatorioVM<TConteudo> TabelaVertical<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, bool exibirNaColuna = true, Action<ITabelaVerticalRelatorioVM<TPropriedade>> opcoes = null) where TPropriedade : class
+        {
+            if (typeof(TPropriedade).EhLista())
+                throw new Exception("Utiliza o método TabelaVerticalLista para exibir uma lista como tabela vertical");
+
+            var construtorTabela = new ConstrutorTabelaVerticalRelatorio<TPropriedade>(_configuracaoRelatorio);
+            opcoes?.Invoke(construtorTabela);
+            AdicionarElementoColuna(propriedadeExpressao, construtorTabela.Construir(), exibirNaColuna);
+            return this;
+        }
+
+        public ITabelaHorizontalRelatorioVM<TConteudo> TabelaVerticalLista<TPropriedade>(Expression<Func<TConteudo, IEnumerable<TPropriedade>>> propriedadeExpressao, bool exibirNaColuna = true, Action<ITabelaVerticalRelatorioVM<TPropriedade>> opcoes = null) where TPropriedade : class
         {
 
             var construtorTabela = new ConstrutorTabelaVerticalRelatorio<TPropriedade>(_configuracaoRelatorio);

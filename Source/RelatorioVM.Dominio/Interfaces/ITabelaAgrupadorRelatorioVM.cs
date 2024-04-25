@@ -9,5 +9,6 @@ namespace RelatorioVM.Dominio.Interfaces
     {
         ITabelaAgrupadorRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Action<IColunaAgrupadorRelatorioVM> configuraColuna = null);
         ITabelaAgrupadorRelatorioVM<TConteudo> Totalizar(bool totalizar = true);
+        ITabelaAgrupadorRelatorioVM<TConteudo> QuebrarPaginaAposTotal(bool quebrarPagina = true);
     }
 }

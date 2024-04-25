@@ -65,6 +65,11 @@ namespace RelatorioVM.Dominio.Interfaces
         ITabelaHorizontalRelatorioVM<TConteudo> Agrupar(Action<ITabelaAgrupadorRelatorioVM<TConteudo>> opcoes);
 
         /// <summary>
+        /// Permite formatar o layout da tabela, como cor, fonte, etc
+        /// </summary>
+        ITabelaHorizontalRelatorioVM<TConteudo> Formatar(Action<ITabelaFormatacaoRelatorioVM<TConteudo>> opcoes);
+
+        /// <summary>
         /// Divide os valores em colunas, e os exibe lado a lado
         /// </summary>
         /// <param name="quantidadeColunas">Define a quantidade de dados que será exibido em cada linha.</param>
@@ -79,9 +84,15 @@ namespace RelatorioVM.Dominio.Interfaces
         ITabelaHorizontalRelatorioVM<TConteudo> TabelaVertical<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, bool exibirNaColuna = true, Action<ITabelaVerticalRelatorioVM<TPropriedade>> opcoes = null) where TPropriedade : class;
 
         /// <summary>
+        /// Define que a coluna sera exibida como uma tabela vertical. O tipo da coluna precisa ser uma classe.
+        /// </summary>     
+        /// <param name="exibirNaColuna">Quando verdadeiro, exibe a tabela vertical dentro da coluna. Quando falso, exibe a tabela vertical em uma nova linha.</param>       
+        ITabelaHorizontalRelatorioVM<TConteudo> TabelaVerticalLista<TPropriedade>(Expression<Func<TConteudo, IEnumerable<TPropriedade>>> propriedadeExpressao, bool exibirNaColuna = true, Action<ITabelaVerticalRelatorioVM<TPropriedade>> opcoes = null) where TPropriedade : class;
+
+        /// <summary>
         /// Define que a coluna sera exibida como uma tabela horizontal. O tipo da coluna precisa ser uma LISTA de uma classe.
         /// </summary>
         /// <param name="exibirNaColuna">Quando verdadeiro, exibe a tabela horizontal dentro da coluna. Quando falso, exibe a tabela horizontal em uma nova linha.</param>       
-        ITabelaHorizontalRelatorioVM<TConteudo> TabelaHorizontal<TPropriedade>(Expression<Func<TConteudo, IEnumerable<TPropriedade>>> propriedadeExpressao, bool exibirNaColuna = true, Action<ITabelaHorizontalRelatorioVM<TPropriedade>> opcoes = null) where TPropriedade : class;
+        ITabelaHorizontalRelatorioVM<TConteudo> TabelaHorizontal<TPropriedade>(Expression<Func<TConteudo, IEnumerable<TPropriedade>>> propriedadeExpressao, bool exibirNaColuna = true, Action<ITabelaHorizontalRelatorioVM<TPropriedade>> opcoes = null) where TPropriedade : class;        
     }
 }

@@ -15,7 +15,9 @@ namespace RelatorioVM.Extensoes
                 case Dominio.Enumeradores.TipoElementoCabecalhoRodape.Data:
                     return DateTime.Now.ToString(elemento.Valor);
                 case Dominio.Enumeradores.TipoElementoCabecalhoRodape.NumeroDaPagina:
-                    return $"{elemento.Valor} [page] / [toPage]";
+                    return $"{elemento.Valor} ";
+                case Dominio.Enumeradores.TipoElementoCabecalhoRodape.Titulo:
+                    return "element(titulo)";
                 case Dominio.Enumeradores.TipoElementoCabecalhoRodape.Vazio:                    
                 default:
                     return string.Empty;

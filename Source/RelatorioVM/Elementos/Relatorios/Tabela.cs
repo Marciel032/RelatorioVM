@@ -30,7 +30,11 @@ namespace RelatorioVM.Elementos.Relatorios
 
         public List<TabelaAgrupador<T>> Agrupadores { get; set; }
 
+        public int Posicao { get; set; }
+
         public bool TemElementosLinha { get { return Colunas.Values.Any(x => x.TemElementosLinha); } }
+
+        public TabelaFormatacao<T> Formatacao { get; set; }
 
         public Tabela()
         {
@@ -41,6 +45,7 @@ namespace RelatorioVM.Elementos.Relatorios
             Colunas = new Dictionary<string, TabelaColuna<T>>();
             Totais = new List<TabelaTotal<T>>();
             Agrupadores = new List<TabelaAgrupador<T>>();
+            Formatacao = new TabelaFormatacao<T>();
         }
 
         public int ObterQuantidadeColunasVisiveis() {
@@ -59,7 +64,7 @@ namespace RelatorioVM.Elementos.Relatorios
         }
 
         public IEnumerable<TabelaColuna<T>> ObterColunasVisiveis() {
-            return Colunas.Values.Where(x => x.Visivel);
+            return Colunas.Values.Where(x => x.Visivel).OrderBy(x => x.Posicao);
         }
 
         public string ObterEstilo()

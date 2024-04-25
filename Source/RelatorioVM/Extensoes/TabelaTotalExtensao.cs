@@ -54,6 +54,9 @@ namespace RelatorioVM.Extensoes
                 var linhaTotal = tabelaHtml.CriarLinhaTabela()
                     .AddClass("tr-t");
 
+                if (total.QuebrarPagina)
+                    linhaTotal.AddClass("page-break-after");
+
                 for (int i = 0; i < tabela.QuantidadeFracionamentoDados; i++)
                 {
                     foreach (var coluna in tabela.ObterColunasVisiveis())

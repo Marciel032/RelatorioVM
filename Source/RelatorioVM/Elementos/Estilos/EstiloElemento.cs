@@ -11,7 +11,7 @@ namespace RelatorioVM.Elementos.Estilos
         private List<string> _classes;
         private FonteEscrita _fonte;
         private List<EstiloElementoMedida> _medidas;
-        private EstiloElementoBorda _borda;
+        private List<EstiloElementoBorda> _bordas;
         private EstiloAlinhamentoTexto _alinhamentoTexto;
         private List<EstiloElementoPreenchimento> _preenchimentos;
         private List<string> _estilosManuais;
@@ -22,6 +22,7 @@ namespace RelatorioVM.Elementos.Estilos
             _medidas = new List<EstiloElementoMedida>();
             _preenchimentos = new List<EstiloElementoPreenchimento>();
             _estilosManuais = new List<string>();
+            _bordas = new List<EstiloElementoBorda>();
         }
 
         public EstiloElemento AdicionarClasse(string classe) { 
@@ -48,7 +49,7 @@ namespace RelatorioVM.Elementos.Estilos
 
         public EstiloElemento DefinirBorda(EstiloElementoBorda borda)
         {
-            _borda = borda;
+            _bordas.Add(borda);
             return this;
         }
 
@@ -117,10 +118,10 @@ namespace RelatorioVM.Elementos.Estilos
 
         private void ConstruirBorda(StringBuilder estiloConstrutor)
         {
-            if (_borda == null)
+            if (_bordas.Count == 0)
                 return;
-            
-            estiloConstrutor.Append(_borda);
+
+            _bordas.ForEach(x => estiloConstrutor.Append(x));
         }
 
         private void ConstruirAlinhamentoTexto(StringBuilder estiloConstrutor)

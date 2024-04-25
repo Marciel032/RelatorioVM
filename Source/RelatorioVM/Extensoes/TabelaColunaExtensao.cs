@@ -16,11 +16,11 @@ namespace RelatorioVM.Extensoes
             var estilos = new List<EstiloElemento>();
             var filtroLinhaConteudo = "tr:not(.tr-t):not(.tr-t-t):not(.tr-g-t) >";
 
-            for (int i = 0; i < tabela.QuantidadeFracionamentoDados; i++)
+            for (int indiceFracionamento = 0; indiceFracionamento < tabela.QuantidadeFracionamentoDados; indiceFracionamento++)
             {
                 foreach (var coluna in colunas)
                 {
-                    if (!coluna.PrecisaGerarEstilo())
+                    if (!coluna.PrecisaGerarEstilo(tabela, indiceFracionamento))
                     {
                         indiceColuna += coluna.QuantidadeColunasUtilizadas;
                         continue;
@@ -119,6 +119,17 @@ namespace RelatorioVM.Extensoes
                     if (coluna.PrecisaGerarEstiloQuebraDeLinha())
                         estiloColuna.DefinirEstiloManual("white-space: nowrap;");
 
+                    if (coluna.PrecisaGerarEstiloFracionamento(tabela, indiceFracionamento))
+                        estiloColuna.DefinirBorda(new EstiloElementoBorda()
+                        {
+                            Direcao = TipoBorda.Esquerda,
+                            Tamanho = 1,
+                            UnidadeMedida = TipoUnidadeMedida.Pixel,
+                            TipoBorda = TipoEstiloBorda.Solida,
+                            Cor = "#777"
+                        });
+
+
                     estilos.Add(estiloColuna);
 
                     indiceColuna += coluna.QuantidadeColunasUtilizadas;
@@ -128,7 +139,7 @@ namespace RelatorioVM.Extensoes
             return estilos;
         }
 
-        private static bool PrecisaGerarEstilo<T>(this TabelaColuna<T> coluna)
+        private static bool PrecisaGerarEstilo<T>(this TabelaColuna<T> coluna, Tabela<T> tabela, int indiceFracionamento)
         {
             if (coluna.PrecisaGerarEstiloAlinhamentoHorizontalColuna())
                 return true;
@@ -140,6 +151,9 @@ namespace RelatorioVM.Extensoes
                 return true;
 
             if (coluna.PrecisaGerarEstiloQuebraDeLinha())
+                return true;
+
+            if (coluna.PrecisaGerarEstiloFracionamento(tabela, indiceFracionamento))
                 return true;
 
             return false;
@@ -163,6 +177,10 @@ namespace RelatorioVM.Extensoes
         private static bool PrecisaGerarEstiloQuebraDeLinha<T>(this TabelaColuna<T> coluna)
         {
             return !coluna.PermiteQuebraDeLinha;
+        }
+        private static bool PrecisaGerarEstiloFracionamento<T>(this TabelaColuna<T> coluna, Tabela<T> tabela, int indiceFracionamento)
+        {
+            return tabela.QuantidadeFracionamentoDados > 1 && coluna.Posicao == 0 && indiceFracionamento > 0;
         }
     }
 }

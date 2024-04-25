@@ -35,10 +35,10 @@ namespace RelatorioVM.Elementos.Relatorios
             var tabela = CriarTabela();
             AdicionarCabecalho(tabela);
             var corpoTabela = tabela.CriarCorpoTabela();
-            if (conteudo is IEnumerable<T>)
+            if (conteudo.GetType().EhLista())
                 AdicionarConteudo(corpoTabela, (IEnumerable<T>)conteudo);
             else if (conteudo is T)
-                AdicionarConteudoColunas(corpoTabela, (T)conteudo);
+                AdicionarConteudo(corpoTabela, new List<T>() { (T)conteudo });
             return tabela.ToHtmlString();
         }
 
@@ -153,11 +153,25 @@ namespace RelatorioVM.Elementos.Relatorios
         }
 
         private void AdicionarConteudo(HtmlTag corpoTabela, IEnumerable<T> conteudos) {
-            foreach (var conteudo in conteudos)
-                AdicionarConteudoColunas(corpoTabela, conteudo);
+            if (_tabela.QuantidadeFracionamentoDados > 1)
+            {
+                IEnumerable<IEnumerable<T>> linhasFracionadas = null;
+                if (_tabela.OrientacaoFracionamento == TipoOrientacaoFracionamento.Vertical)
+                    linhasFracionadas = conteudos.CriarGruposDeFracionamento(_tabela.QuantidadeFracionamentoDados);
+                else
+                    linhasFracionadas = conteudos.CriarGruposDe(_tabela.QuantidadeFracionamentoDados);
+
+                foreach (var linha in linhasFracionadas)
+                    AdicionarConteudoColunas(corpoTabela, linha);
+            }
+            else
+            {
+                foreach (var conteudo in conteudos)
+                    AdicionarConteudoColunas(corpoTabela, new List<T>() { conteudo });
+            }
         }
 
-        private void AdicionarConteudoColunas(HtmlTag corpoTabela, T conteudo)
+        private void AdicionarConteudoColunas(HtmlTag corpoTabela, IEnumerable<T> conteudos)
         {
             var colunasVisiveis = _tabela.ObterColunasVisiveis();
             if (colunasVisiveis.Count() == 0)
@@ -168,16 +182,18 @@ namespace RelatorioVM.Elementos.Relatorios
             foreach (var colunaVertical in colunasVerticais)
             {
                 linha = corpoTabela.CriarLinhaTabela();
+                foreach (var conteudo in conteudos)
+                {
+                    foreach (var conteudoVertical in colunaVertical)
+                    {
+                        linha.CriarColunaTabela()
+                            .Text($"{conteudoVertical.TituloColuna}:")
+                            .AddClass("td-t");
 
-                foreach (var conteudoVertical in colunaVertical)
-                {                    
-                    linha.CriarColunaTabela()
-                        .Text($"{conteudoVertical.TituloColuna}:")
-                        .AddClass("td-t");
-
-                    linha.CriarColunaTabela()
-                        .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda)
-                        .Text(conteudoVertical.ObterValorConvertidoComComplemento(conteudo, _configuracaoRelatorio.Formatacao));
+                        linha.CriarColunaTabela()
+                            .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda)
+                            .Text(conteudoVertical.ObterValorConvertidoComComplemento(conteudo, _configuracaoRelatorio.Formatacao));
+                    }
                 }
             }
 

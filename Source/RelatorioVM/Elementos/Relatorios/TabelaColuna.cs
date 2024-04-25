@@ -28,12 +28,13 @@ namespace RelatorioVM.Elementos.Relatorios
         public int MargemBordas { get; set; }
         public bool Condensado { get; set; }
         public bool PermiteQuebraDeLinha { get; set; }
+        public int Posicao { get; set; }
 
         public bool TemComplemento { get { return PropriedadeComplemento != null;  } }
         public int QuantidadeColunasUtilizadas { get { return TemComplemento && AlinhamentoHorizontalColuna == TipoAlinhamentoHorizontal.Centro ? 3 : 1; } }
         public bool TemPrefixo { get { return !string.IsNullOrEmpty(Prefixo); } }
-        public bool TemElementos { get { return _elementos.Count > 0; } }
-        public bool TemElementosLinha { get { return _elementos.Count(x => !x.ExibirNaColuna) > 0; } }
+        public bool TemElementosLinha { get { return _elementos.Any(x => !x.ExibirNaColuna); } }
+        public bool TemElementosColuna { get { return _elementos.Any(x => x.ExibirNaColuna); } }
 
         public string Indice
         {
@@ -44,9 +45,10 @@ namespace RelatorioVM.Elementos.Relatorios
             } 
         }
 
-        public TabelaColuna()
+        public TabelaColuna(int posicao)
         {
             _elementos = new List<TabelaColunaElemento>();
+            Posicao = posicao;
             Identificador = string.Empty;
             TituloColuna = string.Empty;
             AlinhamentoHorizontalTitulo = TipoAlinhamentoHorizontal.Esquerda;
