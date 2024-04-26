@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <Company>Infogen Sistemas</Company>
     <Authors>Marciel Grutzmann</Authors>
-    <Version>1.0.0.14</Version>
+    <Version>1.0.0.16</Version>
     <PackageTags>report builder relatorio view model</PackageTags>
     <Description>Permite gerar relatórios em html, a partir de view models</Description>
     <RepositoryUrl>https://github.com/Marciel032/RelatorioVM</RepositoryUrl>

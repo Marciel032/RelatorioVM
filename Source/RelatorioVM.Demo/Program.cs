@@ -183,6 +183,7 @@ namespace RelatorioVM.Demo
                 })
                 .Construir();
 
+
             var cronometro = new Stopwatch();
             cronometro.Start();
             var html = relatorio.GerarHtml();

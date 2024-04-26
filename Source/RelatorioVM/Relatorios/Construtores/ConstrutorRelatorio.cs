@@ -102,9 +102,12 @@ namespace RelatorioVM.Relatorios.Construtores
             return this;
         }
 
-        public IGeradorRelatorioVM Construir()
+        public IGeradorRelatorioVM Construir(bool resetarConstrutor = true)
         {
-            return GeradorRelatorioFabrica.Criar(_estruturaRelatorio, _configuracaoRelatorio);
+            var gerador = GeradorRelatorioFabrica.Criar(_estruturaRelatorio, _configuracaoRelatorio);
+            if(resetarConstrutor)
+                _estruturaRelatorio = new EstruturaRelatorio(_configuracaoRelatorio);
+            return gerador;
         }        
     }
 }
