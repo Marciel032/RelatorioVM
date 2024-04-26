@@ -16,6 +16,6 @@ namespace RelatorioVM.Dominio.Interfaces
         IRelatorioVM AdicionarLinhaHorizontal();
         IRelatorioVM Configurar(Action<IConfiguracaoRelatorio> configuracao);
         IRelatorioVM Titulo(string titulo);
-        IGeradorRelatorioVM Construir();
+        IGeradorRelatorioVM Construir(bool resetarConstrutor = true);
     }
 }
