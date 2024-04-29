@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -54,7 +55,7 @@ namespace RelatorioVM.Extensoes
         public static bool EhDecimal(this Type tipo)
         {           
             switch (Type.GetTypeCode(tipo.ObterTipoNaoNullo()))
-            {
+            {                
                 case TypeCode.Decimal:
                 case TypeCode.Double:
                 case TypeCode.Single:
@@ -66,6 +67,11 @@ namespace RelatorioVM.Extensoes
 
         public static bool EhEnumerador(this Type tipo) {
             return tipo.IsEnum;
+        }
+
+        public static bool EhCor(this Type tipo)
+        {
+            return tipo == typeof(Color);
         }
     }
 }

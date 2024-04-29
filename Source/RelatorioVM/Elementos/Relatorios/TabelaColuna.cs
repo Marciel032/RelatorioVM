@@ -4,8 +4,10 @@ using RelatorioVM.Dominio.Conversores;
 using RelatorioVM.Dominio.Enumeradores;
 using RelatorioVM.Dominio.Interfaces;
 using RelatorioVM.Elementos.Propriedades;
+using RelatorioVM.Extensoes;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -36,6 +38,8 @@ namespace RelatorioVM.Elementos.Relatorios
         public bool TemElementosLinha { get { return _elementos.Any(x => !x.ExibirNaColuna); } }
         public bool TemElementosColuna { get { return _elementos.Any(x => x.ExibirNaColuna); } }
 
+        public Color CorFundoConteudo { get; set; }
+
         public string Indice
         {
             set
@@ -59,6 +63,7 @@ namespace RelatorioVM.Elementos.Relatorios
             Fonte = new FonteEscrita();
             Condensado = false;
             PermiteQuebraDeLinha = true;
+            CorFundoConteudo = Color.Empty;
         }
 
         public void AdicionarElemento(IElementoRelatorioVM elemento, bool exibirNaColuna = true) {
@@ -123,6 +128,14 @@ namespace RelatorioVM.Elementos.Relatorios
             return $"{valor} {Separador} {valorComplemento}";
         }
 
+        public Color ObterCorFundoConteudo(T origem)
+        {
+            if (Propriedade.PropriedadeInformacao.PropertyType.EhCor())
+                return (Color)Propriedade.ObterValor(origem);
+
+            return CorFundoConteudo;
+        }
+
         public IColunaRelatorioVM<T> DefinirTitulo(string titulo)
         {
             TituloColuna = titulo;
@@ -167,6 +180,12 @@ namespace RelatorioVM.Elementos.Relatorios
         public IColunaRelatorioVM<T> PermitirQuebraDeLinha(bool quebraDeLinha)
         {
             PermiteQuebraDeLinha = quebraDeLinha;
+            return this;
+        }
+
+        public IColunaRelatorioVM<T> DefinirCorFundoConteudo(Color cor)
+        {
+            CorFundoConteudo = cor;
             return this;
         }
     }

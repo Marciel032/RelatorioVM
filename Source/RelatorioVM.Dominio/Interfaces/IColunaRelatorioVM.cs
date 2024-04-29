@@ -1,6 +1,7 @@
 ﻿using RelatorioVM.Dominio.Enumeradores;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq.Expressions;
 using System.Text;
 
@@ -47,6 +48,11 @@ namespace RelatorioVM.Dominio.Interfaces
         /// Quando a quebra de linha da coluna está ativa, o texto pode ser quebrado para diminuir o espaço utilizado pela coluna.
         /// </summary>
         IColunaRelatorioVM<TConteudo> PermitirQuebraDeLinha(bool quebraDeLinha);
+
+        /// <summary>
+        /// Define a cor de fundo da coluna onde o conteudo é exibido. Não altera a cor de fundo do titulo nem dos totais.
+        /// </summary>
+        IColunaRelatorioVM<TConteudo> DefinirCorFundoConteudo(Color cor);
 
     }
 }

@@ -15,6 +15,7 @@ using System.Xml.Linq;
 using WkHtmlToPdfDotNet;
 using iText.IO.Font;
 using iText.Layout.Font;
+using System.Drawing;
 
 namespace RelatorioVM.Demo
 {
@@ -64,6 +65,7 @@ namespace RelatorioVM.Demo
                     Situacao = (TipoSituacao)random.Next(0, 4),
                     Municipio = (new List<string>() { "UMA CIDADE", "OUTRA CIDADE", "MAIS UMA OUTRA CIDADE", "UMA OUTRA CIDADE QUALQUER" })[new Random().Next(0, 3)],
                     Estado = (new List<string>() { "SC", "RS", "SP", "RJ" })[new Random().Next(0, 3)],
+                    Cor = (new List<Color>() { Color.PowderBlue, Color.Empty, Color.Firebrick, Color.FloralWhite })[new Random().Next(0, 3)],
                     Produtos = new List<ProdutoViewModel>()                    
                 });
 
@@ -120,22 +122,23 @@ namespace RelatorioVM.Demo
                         .Ignorar(x => x.CorFundoLinha)
                         //.ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)                        
                         .ComplementarValor(x => x.Municipio, x => x.Estado)
-                        .TabelaVertical(x => x.Pessoa, true)
-                        .TabelaHorizontal(x => x.Produtos, false, tabelaProdutos => {
+                       // .TabelaVertical(x => x.Pessoa, true)
+                       /* .TabelaHorizontal(x => x.Produtos, false, tabelaProdutos => {
                             tabelaProdutos
                                 .ComplementarValor(x => x.Codigo, x => x.Nome)
                                 .Coluna(x => x.Valor, coluna => coluna.DefinirPrefixoColuna("R$"))
                                 .Totalizar(total => total.Coluna(x => x.Valor, x => x.Valor))
                                 .Titulo("Produtos")
                                 .Fracionar(2, TipoOrientacaoFracionamento.Horizontal);
-                        })
+                        })*/
                         .Coluna(x => x.Valor, coluna => coluna.DefinirPrefixoColuna("R$"))
                         .Coluna(x => x.Municipio, coluna => coluna
                             .DefinirSeparador("/")
                             .DefinirCondensado(true)
                             .PermitirQuebraDeLinha(false)
-                            .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Direita))
-                        .Agrupar(agrupar =>
+                            .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Direita)
+                            .DefinirCorFundoConteudo(Color.Orchid))
+                        /*.Agrupar(agrupar =>
                             agrupar
                                 .Coluna(x => x.FilialCodigo, coluna => coluna.OcultarNoTotal())
                                 .Coluna(x => x.Ativo)
@@ -150,14 +153,14 @@ namespace RelatorioVM.Demo
                                     coluna
                                         .Titulo("Quantidade");
                                 });
-                        })
+                        })*/
                         .Formatar(opcoes => {
                             opcoes
                                 .DefinirCorFundoLinhaConteudo(x => x.CorFundoLinha);
                         });
                 })
-                .AdicionarLinhaHorizontal()
-                .AdicionarComponenteCustomizado(new ComponenteCustomizado())
+                //.AdicionarLinhaHorizontal()
+                //.AdicionarComponenteCustomizado(new ComponenteCustomizado())
                 .Titulo($"Teste de relatório - Fonte {fonteTeste}")
 
                 .Configurar(configuracao =>

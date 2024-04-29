@@ -4,6 +4,7 @@ using RelatorioVM.Elementos.Propriedades;
 using RelatorioVM.Elementos.Relatorios;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Text;

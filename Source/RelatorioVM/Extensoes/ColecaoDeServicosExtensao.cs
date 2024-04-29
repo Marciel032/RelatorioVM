@@ -8,6 +8,7 @@ using RelatorioVM.Infraestruturas;
 using RelatorioVM.Relatorios.Construtores;
 using RelatorioVM.Relatorios.Fabricas;
 using System;
+using System.Drawing;
 
 namespace RelatorioVM.Extensoes
 {
@@ -23,6 +24,7 @@ namespace RelatorioVM.Extensoes
             ConversorValor.DefinirConversor<short>(new ConversorNumerico());
             ConversorValor.DefinirConversor<int>(new ConversorNumerico());
             ConversorValor.DefinirConversor<long>(new ConversorNumerico());
+            ConversorValor.DefinirConversor<Color>(new ConversorCor());
 
             return new ConfiguradorRelatorio();
         }

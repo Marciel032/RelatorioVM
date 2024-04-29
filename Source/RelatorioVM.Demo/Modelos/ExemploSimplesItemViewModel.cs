@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Text;
 
 namespace RelatorioVM.Demo.Modelos
@@ -29,6 +30,7 @@ namespace RelatorioVM.Demo.Modelos
         public string Municipio { get; set; }
         public string Estado { get; set; }
         public string CorFundoLinha { get; set; }
+        public Color Cor { get; set; }
         public List<ProdutoViewModel> Produtos { get; set; }
     }
 

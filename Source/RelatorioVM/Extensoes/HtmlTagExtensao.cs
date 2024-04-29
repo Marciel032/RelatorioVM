@@ -1,7 +1,9 @@
 ﻿using HtmlTags;
 using RelatorioVM.Dominio.Enumeradores;
+using RelatorioVM.Elementos.Relatorios;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace RelatorioVM.Extensoes
@@ -37,6 +39,14 @@ namespace RelatorioVM.Extensoes
             return new HtmlTag("td", tag);
         }
 
+        public static HtmlTag CriarColunaTabela<TConteudo>(this HtmlTag tag, TabelaColuna<TConteudo> coluna, TConteudo conteudo)
+        {
+            var colunaHtml = new HtmlTag("td", tag);
+            colunaHtml.DefinirCorFundo(coluna.ObterCorFundoConteudo(conteudo));
+
+            return colunaHtml;
+        }
+
         public static HtmlTag CriarColunaCabecalhoTabela(this HtmlTag tag)
         {
             return new HtmlTag("th", tag);
@@ -56,6 +66,17 @@ namespace RelatorioVM.Extensoes
                 return tag;            
 
             tag.Style("background-color", cor);
+
+            return tag;
+        }
+
+        public static HtmlTag DefinirCorFundo(this HtmlTag tag, Color cor)
+        {
+            if (cor == Color.Empty)
+                return tag;
+
+            
+            tag.Style("background-color", cor.ParaHexadecimalString());
 
             return tag;
         }

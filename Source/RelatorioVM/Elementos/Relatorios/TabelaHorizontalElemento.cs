@@ -315,14 +315,14 @@ namespace RelatorioVM.Elementos.Relatorios
             if (conteudo != null)
                 foreach (var coluna in _tabela.ObterColunasVisiveis())
                 {                    
-                    var colunaHtml = linha.CriarColunaTabela();
+                    var colunaHtml = linha.CriarColunaTabela(coluna, conteudo);
                     if (coluna.TemComplemento && coluna.AlinhamentoHorizontalColuna == TipoAlinhamentoHorizontal.Centro)
                     {
                         colunaHtml
                             .Text(coluna.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao));
-                        linha.CriarColunaTabela()
+                        linha.CriarColunaTabela(coluna, conteudo)
                             .Text(coluna.Separador);
-                        linha.CriarColunaTabela()
+                        linha.CriarColunaTabela(coluna, conteudo)
                             .Text(coluna.ObterComplementoConvertido(conteudo, _configuracaoRelatorio.Formatacao));
                     }
                     else if (coluna.TemComplemento)
