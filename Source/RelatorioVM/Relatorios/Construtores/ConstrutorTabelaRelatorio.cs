@@ -149,7 +149,7 @@ namespace RelatorioVM.Relatorios.Construtores
                 coluna.AdicionarElemento(elemento, exibirNaColuna);
         }
 
-        private bool ObterColuna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, out TabelaColuna<TConteudo> coluna) {
+        protected bool ObterColuna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> propriedadeExpressao, out TabelaColuna<TConteudo> coluna) {
             var propriedade = propriedadeExpressao.ObterPropriedadeBase();
             return _tabela.Colunas.TryGetValue(propriedade.Name, out coluna);
         }

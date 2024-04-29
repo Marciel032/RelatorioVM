@@ -31,6 +31,7 @@ namespace RelatorioVM.Demo.Modelos
         public string Estado { get; set; }
         public string CorFundoLinha { get; set; }
         public Color Cor { get; set; }
+        public string Imagem { get; set; }
         public List<ProdutoViewModel> Produtos { get; set; }
     }
 

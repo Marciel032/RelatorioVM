@@ -16,6 +16,7 @@ using WkHtmlToPdfDotNet;
 using iText.IO.Font;
 using iText.Layout.Font;
 using System.Drawing;
+using iText.IO.Image;
 
 namespace RelatorioVM.Demo
 {
@@ -66,6 +67,7 @@ namespace RelatorioVM.Demo
                     Municipio = (new List<string>() { "UMA CIDADE", "OUTRA CIDADE", "MAIS UMA OUTRA CIDADE", "UMA OUTRA CIDADE QUALQUER" })[new Random().Next(0, 3)],
                     Estado = (new List<string>() { "SC", "RS", "SP", "RJ" })[new Random().Next(0, 3)],
                     Cor = (new List<Color>() { Color.PowderBlue, Color.Empty, Color.Firebrick, Color.FloralWhite })[new Random().Next(0, 3)],
+                    Imagem = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==",
                     Produtos = new List<ProdutoViewModel>()                    
                 });
 
@@ -105,14 +107,16 @@ namespace RelatorioVM.Demo
                 {
                     tabela
                         .Titulo("Tabela exibindo valores na vertical")
-                        .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa);
+                        .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)
+                        .Imagem(x => x.Imagem);
                 })
                 .AdicionarTabelaVertical(viewModel.Itens[1], tabela =>
                 {
                     tabela
                         .Titulo("Tabela exibindo valores na vertical, com quantidade de colunas personalizada")
                         .QuantidadeColunasVerticais(3)
-                        .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa);
+                        .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)
+                        .Imagem(x => x.Imagem);
                 })
                 .AdicionarTabela(viewModel.Itens, tabela =>
                 {
@@ -138,6 +142,7 @@ namespace RelatorioVM.Demo
                             .PermitirQuebraDeLinha(false)
                             .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Direita)
                             .DefinirCorFundoConteudo(Color.Orchid))
+                        .Imagem(x => x.Imagem)
                         /*.Agrupar(agrupar =>
                             agrupar
                                 .Coluna(x => x.FilialCodigo, coluna => coluna.OcultarNoTotal())

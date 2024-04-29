@@ -66,5 +66,10 @@ namespace RelatorioVM.Dominio.Interfaces
         /// <param name="orientacao">Define a ordenação dos dados exibidos.</param>
         /// <returns></returns>        
         ITabelaVerticalRelatorioVM<TConteudo> Fracionar(int quantidadeColunas, TipoOrientacaoFracionamento orientacao = TipoOrientacaoFracionamento.Horizontal);
+
+        // <summary>
+        /// Define que a coluna sera exibida como uma imagem. O tipo da coluna precisa ser uma string contendo uma Url ou um array de bytes em formato Base64.
+        /// </summary>
+        ITabelaVerticalRelatorioVM<TConteudo> Imagem(Expression<Func<TConteudo, string>> propriedadeExpressao, Action<IImagemRelatorioVM> opcoes = null);
     }
 }

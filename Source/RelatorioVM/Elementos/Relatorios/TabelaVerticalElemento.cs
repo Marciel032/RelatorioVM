@@ -190,9 +190,13 @@ namespace RelatorioVM.Elementos.Relatorios
                             .Text($"{conteudoVertical.TituloColuna}:")
                             .AddClass("td-t");
 
-                        linha.CriarColunaTabela(conteudoVertical, conteudo)
-                            .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda)
-                            .Text(conteudoVertical.ObterValorConvertidoComComplemento(conteudo, _configuracaoRelatorio.Formatacao));
+                        var colunaConteudoHtml = linha.CriarColunaTabela(conteudoVertical, conteudo)
+                            .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda);
+
+                        if (conteudoVertical.TemElementosColuna)
+                            conteudoVertical.AdicionarHtmlColuna(colunaConteudoHtml, conteudo);
+                        else
+                            colunaConteudoHtml.Text(conteudoVertical.ObterValorConvertidoComComplemento(conteudo, _configuracaoRelatorio.Formatacao));                        
                     }
                 }
             }

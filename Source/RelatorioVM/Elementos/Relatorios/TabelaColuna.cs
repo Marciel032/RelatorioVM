@@ -71,8 +71,7 @@ namespace RelatorioVM.Elementos.Relatorios
             elementoColuna.ExibirNaColuna = exibirNaColuna;
             _elementos.Add(elementoColuna);
 
-            if (exibirNaColuna)
-                Visivel = true;
+            Visivel = exibirNaColuna;
         }
 
         public void AdicionarHtmlColuna(HtmlTag parent, T conteudo)

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using System.Xml.Linq;
 
 namespace RelatorioVM.Relatorios.Construtores
 {
@@ -131,6 +132,14 @@ namespace RelatorioVM.Relatorios.Construtores
             var construtorTabela = new ConstrutorTabelaHorizontalRelatorio<TPropriedade>(_configuracaoRelatorio);
             opcoes?.Invoke(construtorTabela);
             AdicionarElementoColuna(propriedadeExpressao, construtorTabela.Construir(), exibirNaColuna);
+            return this;
+        }
+
+        public ITabelaHorizontalRelatorioVM<TConteudo> Imagem(Expression<Func<TConteudo, string>> propriedadeExpressao, bool exibirNaColuna = true, Action<IImagemRelatorioVM> opcoes = null)
+        {
+            var contrutorImagem = new ConstrutorImagemRelatorio(_configuracaoRelatorio);
+            opcoes?.Invoke(contrutorImagem);
+            AdicionarElementoColuna(propriedadeExpressao, contrutorImagem.Construir(), exibirNaColuna);
             return this;
         }
     }

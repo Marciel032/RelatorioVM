@@ -87,5 +87,13 @@ namespace RelatorioVM.Relatorios.Construtores
 
             return this;
         }
+
+        public ITabelaVerticalRelatorioVM<TConteudo> Imagem(Expression<Func<TConteudo, string>> propriedadeExpressao, Action<IImagemRelatorioVM> opcoes = null)
+        {
+            var contrutorImagem = new ConstrutorImagemRelatorio(_configuracaoRelatorio);
+            opcoes?.Invoke(contrutorImagem);
+            AdicionarElementoColuna(propriedadeExpressao, contrutorImagem.Construir(), true);
+            return this;
+        }
     }
 }

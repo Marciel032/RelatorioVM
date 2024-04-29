@@ -93,6 +93,12 @@ namespace RelatorioVM.Dominio.Interfaces
         /// Define que a coluna sera exibida como uma tabela horizontal. O tipo da coluna precisa ser uma LISTA de uma classe.
         /// </summary>
         /// <param name="exibirNaColuna">Quando verdadeiro, exibe a tabela horizontal dentro da coluna. Quando falso, exibe a tabela horizontal em uma nova linha.</param>       
-        ITabelaHorizontalRelatorioVM<TConteudo> TabelaHorizontal<TPropriedade>(Expression<Func<TConteudo, IEnumerable<TPropriedade>>> propriedadeExpressao, bool exibirNaColuna = true, Action<ITabelaHorizontalRelatorioVM<TPropriedade>> opcoes = null) where TPropriedade : class;        
+        ITabelaHorizontalRelatorioVM<TConteudo> TabelaHorizontal<TPropriedade>(Expression<Func<TConteudo, IEnumerable<TPropriedade>>> propriedadeExpressao, bool exibirNaColuna = true, Action<ITabelaHorizontalRelatorioVM<TPropriedade>> opcoes = null) where TPropriedade : class;
+
+        // <summary>
+        /// Define que a coluna sera exibida como uma imagem. O tipo da coluna precisa ser uma string contendo uma Url ou um array de bytes em formato Base64.
+        /// </summary>
+        /// <param name="exibirNaColuna">Quando verdadeiro, exibe a imagem horizontal dentro da coluna. Quando falso, exibe a imagem em uma nova linha.</param>
+        ITabelaHorizontalRelatorioVM<TConteudo> Imagem(Expression<Func<TConteudo, string>> propriedadeExpressao, bool exibirNaColuna = true, Action<IImagemRelatorioVM> opcoes = null);
     }
 }
