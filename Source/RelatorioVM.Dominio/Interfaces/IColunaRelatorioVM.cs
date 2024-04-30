@@ -50,9 +50,14 @@ namespace RelatorioVM.Dominio.Interfaces
         IColunaRelatorioVM<TConteudo> PermitirQuebraDeLinha(bool quebraDeLinha);
 
         /// <summary>
-        /// Define a cor de fundo da coluna onde o conteudo é exibido. Não altera a cor de fundo do titulo nem dos totais.
+        /// Define a cor da coluna onde o conteudo é exibido. Não altera a cor do titulo nem dos totais.
         /// </summary>
-        IColunaRelatorioVM<TConteudo> DefinirCorFundoConteudo(Color cor);
+        IColunaRelatorioVM<TConteudo> DefinirCorConteudo(TipoCor corFundo, TipoCor corConteudo = TipoCor.Indefinido);
 
+        /// <summary>
+        /// Define a cor da coluna onde o conteudo é exibido. Não altera a cor do titulo nem dos totais.
+        /// </summary>
+        IColunaRelatorioVM<TConteudo> DefinirCorConteudo(Color corFundo, Color corConteudo);
+                
     }
 }

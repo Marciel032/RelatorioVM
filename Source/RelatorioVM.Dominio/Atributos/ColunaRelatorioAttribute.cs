@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelatorioVM.Dominio.Enumeradores;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -22,5 +23,7 @@ namespace RelatorioVM.Dominio.Atributos
         /// Define um texto para ser exibido antes de cada valor da coluna.
         /// </summary>
         public string Prefixo { get; set; } = string.Empty;
+
+        public TipoCor CorFundoConteudo { get; set; } = TipoCor.Indefinido;
     }
 }

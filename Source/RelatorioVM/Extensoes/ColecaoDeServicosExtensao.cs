@@ -3,6 +3,7 @@ using RelatorioVM.Configuradores;
 using RelatorioVM.Conversores;
 using RelatorioVM.Dominio.Configuracoes;
 using RelatorioVM.Dominio.Configuracoes.Interfaces;
+using RelatorioVM.Dominio.Enumeradores;
 using RelatorioVM.Dominio.Interfaces;
 using RelatorioVM.Infraestruturas;
 using RelatorioVM.Relatorios.Construtores;
@@ -25,6 +26,7 @@ namespace RelatorioVM.Extensoes
             ConversorValor.DefinirConversor<int>(new ConversorNumerico());
             ConversorValor.DefinirConversor<long>(new ConversorNumerico());
             ConversorValor.DefinirConversor<Color>(new ConversorCor());
+            ConversorValor.DefinirConversor<TipoCor>(new ConversorTipoCor());
 
             return new ConfiguradorRelatorio();
         }

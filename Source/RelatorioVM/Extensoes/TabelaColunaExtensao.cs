@@ -76,6 +76,17 @@ namespace RelatorioVM.Extensoes
 
                         if (coluna.PrecisaGerarEstiloQuebraDeLinha())
                             estiloSeparador.DefinirEstiloManual("white-space: nowrap;");
+                        if (coluna.PrecisaGerarEstiloCorFundoConteudo())
+                            estiloSeparador.DefinirCor(new EstiloCor()
+                            {
+                                Cor = coluna.CorFundoConteudo,
+                                Fundo = true
+                            });
+                        if (coluna.PrecisaGerarEstiloCorConteudo())
+                            estiloSeparador.DefinirCor(new EstiloCor()
+                            {
+                                Cor = coluna.CorConteudo
+                            });
                         estilos.Add(estiloSeparador);
 
                         var estiloComplemento = new EstiloElemento()
@@ -100,6 +111,17 @@ namespace RelatorioVM.Extensoes
 
                         if (coluna.PrecisaGerarEstiloQuebraDeLinha())
                             estiloComplemento.DefinirEstiloManual("white-space: nowrap;");
+                        if (coluna.PrecisaGerarEstiloCorFundoConteudo())
+                            estiloComplemento.DefinirCor(new EstiloCor()
+                            {
+                                Cor = coluna.CorFundoConteudo,
+                                Fundo = true
+                            });
+                        if (coluna.PrecisaGerarEstiloCorConteudo())
+                            estiloComplemento.DefinirCor(new EstiloCor()
+                            {
+                                Cor = coluna.CorConteudo
+                            });
                         estilos.Add(estiloComplemento);
                     }
                     else
@@ -129,6 +151,19 @@ namespace RelatorioVM.Extensoes
                             Cor = "#777"
                         });
 
+                    if (coluna.PrecisaGerarEstiloCorFundoConteudo())
+                        estiloColuna.DefinirCor(new EstiloCor()
+                        {                            
+                            Cor = coluna.CorFundoConteudo,
+                            Fundo = true
+                        });
+
+                    if (coluna.PrecisaGerarEstiloCorConteudo())
+                        estiloColuna.DefinirCor(new EstiloCor()
+                        {
+                            Cor = coluna.CorConteudo
+                        });
+
 
                     estilos.Add(estiloColuna);
 
@@ -156,6 +191,12 @@ namespace RelatorioVM.Extensoes
             if (coluna.PrecisaGerarEstiloFracionamento(tabela, indiceFracionamento))
                 return true;
 
+            if (coluna.PrecisaGerarEstiloCorFundoConteudo())
+                return true;
+
+            if (coluna.PrecisaGerarEstiloCorConteudo())
+                return true;
+
             return false;
         }
 
@@ -181,6 +222,15 @@ namespace RelatorioVM.Extensoes
         private static bool PrecisaGerarEstiloFracionamento<T>(this TabelaColuna<T> coluna, Tabela<T> tabela, int indiceFracionamento)
         {
             return tabela.QuantidadeFracionamentoDados > 1 && coluna.Posicao == 0 && indiceFracionamento > 0;
+        }
+        private static bool PrecisaGerarEstiloCorFundoConteudo<T>(this TabelaColuna<T> coluna)
+        {
+            return !string.IsNullOrEmpty(coluna.CorFundoConteudo);
+        }
+
+        private static bool PrecisaGerarEstiloCorConteudo<T>(this TabelaColuna<T> coluna)
+        {
+            return !string.IsNullOrEmpty(coluna.CorConteudo);
         }
     }
 }

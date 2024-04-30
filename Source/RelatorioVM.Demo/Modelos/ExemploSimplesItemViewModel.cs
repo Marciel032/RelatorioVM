@@ -1,4 +1,5 @@
 ﻿using RelatorioVM.Dominio.Atributos;
+using RelatorioVM.Dominio.Enumeradores;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +16,7 @@ namespace RelatorioVM.Demo.Modelos
         [DisplayName("Filial")]
         public int FilialCodigo { get; set; }
 
-        [ColunaRelatorio(Titulo = "Pessoa")]
+        [ColunaRelatorio(Titulo = "Pessoa", CorFundoConteudo = TipoCor.DarkBlue)]
         public int PessoaCodigo { get; set; }
 
         public PessoaViewModel Pessoa { get; set; }        
@@ -31,6 +32,8 @@ namespace RelatorioVM.Demo.Modelos
         public string Estado { get; set; }
         public string CorFundoLinha { get; set; }
         public Color Cor { get; set; }
+        public TipoCor CorVM { get; set; }
+        
         public string Imagem { get; set; }
         public List<ProdutoViewModel> Produtos { get; set; }
     }

@@ -15,6 +15,7 @@ namespace RelatorioVM.Elementos.Estilos
         private EstiloAlinhamentoTexto _alinhamentoTexto;
         private List<EstiloElementoPreenchimento> _preenchimentos;
         private List<string> _estilosManuais;
+        private List<EstiloCor> _cores;
 
         public EstiloElemento()
         {
@@ -23,6 +24,7 @@ namespace RelatorioVM.Elementos.Estilos
             _preenchimentos = new List<EstiloElementoPreenchimento>();
             _estilosManuais = new List<string>();
             _bordas = new List<EstiloElementoBorda>();
+            _cores = new List<EstiloCor>();
         }
 
         public EstiloElemento AdicionarClasse(string classe) { 
@@ -70,6 +72,12 @@ namespace RelatorioVM.Elementos.Estilos
             return this;
         }
 
+        public EstiloElemento DefinirCor(EstiloCor cor)
+        {
+            _cores.Add(cor);
+            return this;
+        }
+
         public override string ToString()
         {
             var estiloConstrutor = new StringBuilder();
@@ -81,6 +89,7 @@ namespace RelatorioVM.Elementos.Estilos
             ConstruirAlinhamentoTexto(estiloConstrutor);
             ConstruirPreenchimentos(estiloConstrutor);
             ConstruirEstilosManuais(estiloConstrutor);
+            ConstruirCor(estiloConstrutor);
             estiloConstrutor.Append("}");
             return estiloConstrutor.ToString();
         }
@@ -142,6 +151,14 @@ namespace RelatorioVM.Elementos.Estilos
         {
             foreach (var estilo in _estilosManuais)
                 estiloConstrutor.Append(estilo);
+        }
+
+        private void ConstruirCor(StringBuilder estiloConstrutor)
+        {
+            if (_cores.Count == 0)
+                return;
+
+            _cores.ForEach(x => estiloConstrutor.Append(x));
         }
     }
 }

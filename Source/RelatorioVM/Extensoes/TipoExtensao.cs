@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelatorioVM.Dominio.Enumeradores;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -71,7 +72,14 @@ namespace RelatorioVM.Extensoes
 
         public static bool EhCor(this Type tipo)
         {
-            return tipo == typeof(Color);
+            var tipoNaoNullo = tipo.ObterTipoNaoNullo();
+            if (tipoNaoNullo == typeof(Color))
+                return true;
+
+            if (tipoNaoNullo == typeof(TipoCor))
+                return true;
+
+            return false;
         }
     }
 }

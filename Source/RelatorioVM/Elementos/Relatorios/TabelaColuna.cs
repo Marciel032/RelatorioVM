@@ -38,7 +38,8 @@ namespace RelatorioVM.Elementos.Relatorios
         public bool TemElementosLinha { get { return _elementos.Any(x => !x.ExibirNaColuna); } }
         public bool TemElementosColuna { get { return _elementos.Any(x => x.ExibirNaColuna); } }
 
-        public Color CorFundoConteudo { get; set; }
+        public string CorFundoConteudo { get; set; }
+        public string CorConteudo { get; set; }
 
         public string Indice
         {
@@ -63,7 +64,8 @@ namespace RelatorioVM.Elementos.Relatorios
             Fonte = new FonteEscrita();
             Condensado = false;
             PermiteQuebraDeLinha = true;
-            CorFundoConteudo = Color.Empty;
+            CorFundoConteudo = string.Empty;
+            CorConteudo = string.Empty;
         }
 
         public void AdicionarElemento(IElementoRelatorioVM elemento, bool exibirNaColuna = true) {
@@ -127,12 +129,23 @@ namespace RelatorioVM.Elementos.Relatorios
             return $"{valor} {Separador} {valorComplemento}";
         }
 
-        public Color ObterCorFundoConteudo(T origem)
+        public string ObterCorFundoConteudo(T origem)
         {
+            var cor = string.Empty;
             if (Propriedade.PropriedadeInformacao.PropertyType.EhCor())
-                return (Color)Propriedade.ObterValor(origem);
+            {
+                var valor = Propriedade.ObterValor(origem);
+                if (valor != null)
+                {
+                    var tipo = valor.GetType().ObterTipoNaoNullo();
+                    if (tipo == typeof(TipoCor))
+                        cor = ((TipoCor)valor).ObterCorHtml();
+                    if (tipo == typeof(Color))
+                        cor = ((Color)valor).ParaHexadecimalString();
+                }
+            }
 
-            return CorFundoConteudo;
+            return cor;
         }
 
         public IColunaRelatorioVM<T> DefinirTitulo(string titulo)
@@ -182,9 +195,22 @@ namespace RelatorioVM.Elementos.Relatorios
             return this;
         }
 
-        public IColunaRelatorioVM<T> DefinirCorFundoConteudo(Color cor)
+        public IColunaRelatorioVM<T> DefinirCorConteudo(Color corFundo, Color corConteudo)
         {
-            CorFundoConteudo = cor;
+            CorFundoConteudo = corFundo.ParaHexadecimalString();
+            CorConteudo = corConteudo.ParaHexadecimalString();
+            return this;
+        }
+
+        public IColunaRelatorioVM<T> DefinirCorConteudo(TipoCor corFundo, TipoCor corConteudo = TipoCor.Indefinido)
+        {
+            var (corFundoHtml, corContrasteHtml) = corFundo.ObterCoresHtml();
+            CorFundoConteudo = corFundoHtml;
+            CorConteudo = corContrasteHtml;
+
+            if (corConteudo != TipoCor.Indefinido)
+                CorConteudo = corConteudo.ObterCorHtml();
+
             return this;
         }
     }

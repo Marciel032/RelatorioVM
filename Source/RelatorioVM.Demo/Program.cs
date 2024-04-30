@@ -67,6 +67,7 @@ namespace RelatorioVM.Demo
                     Municipio = (new List<string>() { "UMA CIDADE", "OUTRA CIDADE", "MAIS UMA OUTRA CIDADE", "UMA OUTRA CIDADE QUALQUER" })[new Random().Next(0, 3)],
                     Estado = (new List<string>() { "SC", "RS", "SP", "RJ" })[new Random().Next(0, 3)],
                     Cor = (new List<Color>() { Color.PowderBlue, Color.Empty, Color.Firebrick, Color.FloralWhite })[new Random().Next(0, 3)],
+                    CorVM = (new List<TipoCor>() { TipoCor.PowderBlue, TipoCor.Indefinido, TipoCor.FireBrick, TipoCor.FloralWhite })[new Random().Next(0, 3)],
                     Imagem = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==",
                     Produtos = new List<ProdutoViewModel>()                    
                 });
@@ -122,11 +123,11 @@ namespace RelatorioVM.Demo
                 {
                     tabela
                         .Titulo("Tabela exibindo valores na horizontal")
-                        .Ignorar(x => x.PessoaCodigo)
+                        //.Ignorar(x => x.PessoaCodigo)
                         .Ignorar(x => x.CorFundoLinha)
-                        //.ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)                        
+                        .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)                        
                         .ComplementarValor(x => x.Municipio, x => x.Estado)
-                       // .TabelaVertical(x => x.Pessoa, true)
+                       //.TabelaVertical(x => x.Pessoa, true)
                        /* .TabelaHorizontal(x => x.Produtos, false, tabelaProdutos => {
                             tabelaProdutos
                                 .ComplementarValor(x => x.Codigo, x => x.Nome)
@@ -135,15 +136,18 @@ namespace RelatorioVM.Demo
                                 .Titulo("Produtos")
                                 .Fracionar(2, TipoOrientacaoFracionamento.Horizontal);
                         })*/
-                        .Coluna(x => x.Valor, coluna => coluna.DefinirPrefixoColuna("R$"))
+                        .Coluna(x => x.Valor, coluna => coluna
+                            .DefinirPrefixoColuna("R$")
+                            .DefinirCorConteudo(TipoCor.DarkBlue, TipoCor.Wheat)
+                        )
                         .Coluna(x => x.Municipio, coluna => coluna
                             .DefinirSeparador("/")
                             .DefinirCondensado(true)
                             .PermitirQuebraDeLinha(false)
                             .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Direita)
-                            .DefinirCorFundoConteudo(Color.Orchid))
+                            .DefinirCorConteudo(Color.Orchid, Color.White))
                         .Imagem(x => x.Imagem)
-                        /*.Agrupar(agrupar =>
+                        .Agrupar(agrupar =>
                             agrupar
                                 .Coluna(x => x.FilialCodigo, coluna => coluna.OcultarNoTotal())
                                 .Coluna(x => x.Ativo)
@@ -158,7 +162,7 @@ namespace RelatorioVM.Demo
                                     coluna
                                         .Titulo("Quantidade");
                                 });
-                        })*/
+                        })
                         .Formatar(opcoes => {
                             opcoes
                                 .DefinirCorFundoLinhaConteudo(x => x.CorFundoLinha);
