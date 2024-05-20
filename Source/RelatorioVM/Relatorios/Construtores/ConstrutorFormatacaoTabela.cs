@@ -6,6 +6,7 @@ using RelatorioVM.Elementos.Relatorios;
 using RelatorioVM.Extensoes;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -31,6 +32,22 @@ namespace RelatorioVM.Relatorios.Construtores
         public void DefinirCorFundoLinhaConteudo(Expression<Func<TConteudo, string>> propriedadeExpressao) { 
             _tabelaFormatacao.CorFundoLinhaConteudoPropriedade = new Propriedade<TConteudo>(propriedadeExpressao.ObterPropriedadeBase())
             {                
+                FuncaoPropriedade = (origem) => propriedadeExpressao.Compile()(origem)
+            };
+        }
+
+        public void DefinirCorFundoLinhaConteudo(Expression<Func<TConteudo, Color>> propriedadeExpressao)
+        {
+            _tabelaFormatacao.CorFundoLinhaConteudoPropriedade = new Propriedade<TConteudo>(propriedadeExpressao.ObterPropriedadeBase())
+            {
+                FuncaoPropriedade = (origem) => propriedadeExpressao.Compile()(origem)
+            };
+        }
+
+        public void DefinirCorFundoLinhaConteudo(Expression<Func<TConteudo, TipoCor>> propriedadeExpressao)
+        {
+            _tabelaFormatacao.CorFundoLinhaConteudoPropriedade = new Propriedade<TConteudo>(propriedadeExpressao.ObterPropriedadeBase())
+            {
                 FuncaoPropriedade = (origem) => propriedadeExpressao.Compile()(origem)
             };
         }

@@ -281,7 +281,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 {
                     var linhas = CriarLinhasItem(corpoTabela);
 
-                    var corFundo = _tabela.Formatacao.CorFundoLinhaConteudoPropriedade?.ObterValorConvertido(conteudo, _configuracaoRelatorio.Formatacao);
+                    var corFundo = _tabela.Formatacao.ObterCorFundoLinhaConteudo(conteudo);
                     linhas.Conteudo.DefinirCorFundo(corFundo);
                     linhas.Complemento?.DefinirCorFundo(corFundo);
 
