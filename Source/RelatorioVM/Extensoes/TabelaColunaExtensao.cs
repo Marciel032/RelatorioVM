@@ -16,6 +16,25 @@ namespace RelatorioVM.Extensoes
             var estilos = new List<EstiloElemento>();
             var filtroLinhaConteudo = "tr:not(.tr-t):not(.tr-t-t):not(.tr-g-t) >";
 
+            for (int i = 0; i < tabela.Agrupadores.Count; i++)
+            {
+                var estiloColuna = new EstiloElemento()
+                    .AdicionarClasse(classeTabela + " > ")
+                    .AdicionarClasseElemento("tbody > ")
+                    .AdicionarClasseElemento(filtroLinhaConteudo)
+                    .AdicionarClasseElemento($"td:nth-child({indiceColuna})");
+
+                estiloColuna.DefinirCor(new EstiloCor()
+                {
+                    Cor = "#ffffff",
+                    Fundo = true
+                });
+
+                estilos.Add(estiloColuna);
+
+                indiceColuna++;
+            }
+
             for (int indiceFracionamento = 0; indiceFracionamento < tabela.QuantidadeFracionamentoDados; indiceFracionamento++)
             {
                 foreach (var coluna in colunas)

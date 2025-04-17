@@ -158,7 +158,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 .AdicionarClasse(_classeTabela + " >")
                 .AdicionarClasseElemento("tbody >")
                 .AdicionarClasse("tr-t")
-                .AdicionarClasseElemento("td")
+                .AdicionarClasseElemento("td:not(.td-g-t)")
                 .DefinirEstiloManual("font-weight: bold;")
                 .DefinirBorda(new EstiloElementoBorda() { 
                     Direcao = TipoBorda.Topo,
@@ -173,7 +173,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 .AdicionarClasse(_classeTabela + " >")
                 .AdicionarClasseElemento("tbody >")
                 .AdicionarClasse("tr-g-t")
-                .AdicionarClasseElemento("td")
+                .AdicionarClasseElemento("td:not(.td-g-t-g)")
                 .DefinirEstiloManual("font-weight: bold;")
                 .DefinirBorda(new EstiloElementoBorda()
                 {
@@ -204,8 +204,11 @@ namespace RelatorioVM.Elementos.Relatorios
                 .CriarLinhaTabela()
                 .AddClass($"{_classeTabela}-tr-h");
 
+            foreach (var item in _tabela.Agrupadores)
+                linhaCabecalho.CriarColunaTabela();
+
             for (int i = 0; i < _tabela.QuantidadeFracionamentoDados; i++)
-            {
+            {               
                 foreach (var coluna in _tabela.ObterColunasVisiveis())
                 {
                     var colunaHtml = linhaCabecalho.CriarColunaCabecalhoTabela();
@@ -238,7 +241,7 @@ namespace RelatorioVM.Elementos.Relatorios
             foreach (var itensGrupo in grupos) {
                 agrupador.Totais.ZerarTotais();
 
-                agrupador.AdicionarCabecalhoAgrupamento(corpoTabela, itensGrupo.First(), _tabela.ObterQuantidadeColunasVisiveis());
+                agrupador.AdicionarCabecalhoAgrupamento(corpoTabela, itensGrupo.First(), _tabela.ObterQuantidadeColunasVisiveis() + _tabela.Agrupadores.Count, indice);
                 if (agrupadores.Count > indice + 1)
                     AdicionarConteudoAgrupado(corpoTabela, itensGrupo, agrupadores, indice + 1);
                 else
@@ -260,10 +263,18 @@ namespace RelatorioVM.Elementos.Relatorios
                 else
                     linhasFracionadas = itens.CriarGruposDe(_tabela.QuantidadeFracionamentoDados);
 
+
+
                 foreach (var linha in linhasFracionadas)
                 {
                     var quantidadeConteudos = 0;
                     var linhas = CriarLinhasItem(corpoTabela);
+                    foreach (var item in _tabela.Agrupadores)
+                        linhas.Conteudo.CriarColunaTabela().AddClass("td-g-e");
+                    if(linhas.Complemento != null)
+                        foreach (var item in _tabela.Agrupadores)
+                            linhas.Complemento.CriarColunaTabela().AddClass("td-g-e");
+
                     foreach (var conteudo in linha)
                     {
                         AdicionarConteudoItemLinha(linhas, conteudo);
@@ -280,6 +291,11 @@ namespace RelatorioVM.Elementos.Relatorios
                 foreach (var conteudo in itens)
                 {
                     var linhas = CriarLinhasItem(corpoTabela);
+                    foreach (var item in _tabela.Agrupadores)
+                        linhas.Conteudo.CriarColunaTabela().AddClass("td-g-e");
+                    if (linhas.Complemento != null)
+                        foreach (var item in _tabela.Agrupadores)
+                            linhas.Complemento.CriarColunaTabela().AddClass("td-g-e");
 
                     var corFundo = _tabela.Formatacao.ObterCorFundoLinhaConteudo(conteudo);
                     linhas.Conteudo.DefinirCorFundo(corFundo);
@@ -311,7 +327,7 @@ namespace RelatorioVM.Elementos.Relatorios
         }
 
         private void AdicionarConteudoItem(HtmlTag linha, T conteudo)
-        {
+        {            
             if (conteudo != null)
                 foreach (var coluna in _tabela.ObterColunasVisiveis())
                 {                    
@@ -370,7 +386,7 @@ namespace RelatorioVM.Elementos.Relatorios
 
         private void AdicionarTotais(HtmlTag tabela, HtmlTag corpoTabela)
         {
-            _tabela.Totais.AdicionarTotaisHtml(corpoTabela, _tabela, _configuracaoRelatorio.Formatacao);           
+            _tabela.Totais.AdicionarTotaisHtml(corpoTabela, _tabela, _configuracaoRelatorio.Formatacao, 0);           
         }
 
         private void AdicionarTitulo(HtmlTag cabecalho) {
@@ -381,7 +397,7 @@ namespace RelatorioVM.Elementos.Relatorios
                 .CriarLinhaTabela()
                 .CriarColunaCabecalhoTabela()
                 .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda)
-                .ExpandirColuna(_tabela.ObterQuantidadeColunasVisiveis())
+                .ExpandirColuna(_tabela.ObterQuantidadeColunasVisiveis() + _tabela.Agrupadores.Count)
                 .Text(_tabela.Titulo);
         }       
     }    

@@ -25,7 +25,7 @@ namespace RelatorioVM.Extensoes
             if (!agrupador.Totalizar)
                 return;
 
-            agrupador.Totais.AdicionarTotaisHtml(tabelaHtml, tabela, formatacao);
+            agrupador.Totais.AdicionarTotaisHtml(tabelaHtml, tabela, formatacao, tabela.Agrupadores.IndexOf(agrupador));
         }
 
         public static IEnumerable<IGrouping<IDictionary<string, object>, T>> AgruparConteudo<T>(this TabelaAgrupador<T> agrupador, IEnumerable<T> conteudo)
@@ -51,13 +51,21 @@ namespace RelatorioVM.Extensoes
             return conteudo.GroupBy(agrupamentoFuncao, new DicionarioComparador());
         }
 
-        public static void AdicionarCabecalhoAgrupamento<T>(this TabelaAgrupador<T> agrupador, HtmlTag tabelaHtml, T item, int quantidadeDeColunas)
+        public static void AdicionarCabecalhoAgrupamento<T>(this TabelaAgrupador<T> agrupador, HtmlTag tabelaHtml, T item, int quantidadeDeColunas, int indice)
         {
             var titulo = agrupador.ObterTituloAgrupamento(item, false);
-            tabelaHtml.CriarLinhaTabela()
-                .AddClass("tr-g-t")
+            var linha = tabelaHtml.CriarLinhaTabela()
+                .AddClass("tr-g-t");
+
+            //Cria colunas para deixar um espaço para o agrupamento
+            for (int i = 0; i < indice; i++)
+                linha
+                    .CriarColunaTabela()
+                    .AddClass("td-g-t-g"); ;
+
+            linha
                 .CriarColunaTabela()
-                .ExpandirColuna(quantidadeDeColunas)                
+                .ExpandirColuna(quantidadeDeColunas - indice)                
                 .Text(titulo);
 
             agrupador.AjustarTituloComplementoTotais(agrupador.ObterTituloAgrupamento(item, true));

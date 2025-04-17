@@ -22,7 +22,7 @@ namespace RelatorioVM.Extensoes
                     colunaTotal.Value.Calcular(conteudo);
         }
 
-        public static void AdicionarTotaisHtml<T>(this List<TabelaTotal<T>> totais, HtmlTag tabelaHtml, Tabela<T> tabela, ConfiguracaoFormatacaoRelatorio formatacao)
+        public static void AdicionarTotaisHtml<T>(this List<TabelaTotal<T>> totais, HtmlTag tabelaHtml, Tabela<T> tabela, ConfiguracaoFormatacaoRelatorio formatacao, int indice)
         {
             if (tabela.ObterQuantidadeColunasVisiveis() == 0)
                 return;
@@ -37,10 +37,17 @@ namespace RelatorioVM.Extensoes
                 var titulo = total.ObterTituloCompleto();
                 if (!string.IsNullOrWhiteSpace(titulo))
                 {
-                    tabelaHtml.CriarLinhaTabela()
-                        .AddClass("tr-t-t")
+                    var linha = tabelaHtml.CriarLinhaTabela()
+                        .AddClass("tr-t-t");
+
+                    //Cria colunas para deixar um espaço para o agrupamento
+                    for (int i = 0; i < indice; i++)
+                        linha
+                            .CriarColunaTabela();
+
+                    linha
                         .CriarColunaTabela()
-                        .ExpandirColuna(tabela.ObterQuantidadeColunasVisiveis())
+                        .ExpandirColuna(tabela.ObterQuantidadeColunasVisiveis() + tabela.Agrupadores.Count - indice)
                         .Text(titulo);
                 }
 
@@ -49,10 +56,26 @@ namespace RelatorioVM.Extensoes
                 if (total.TemTituloColuna) {
                     linhaTituloTotal = tabelaHtml.CriarLinhaTabela()
                         .AddClass("tr-t");
+
+                    //Cria colunas para deixar um espaço para o agrupamento
+                    for (int i = 0; i < tabela.Agrupadores.Count; i++)
+                    {
+                        var colunaEspacamentoAgrupamento = linhaTituloTotal.CriarColunaTabela();
+                        if (i < indice)
+                            colunaEspacamentoAgrupamento.AddClass("td-g-t");
+                    }
                 }
 
                 var linhaTotal = tabelaHtml.CriarLinhaTabela()
                     .AddClass("tr-t");
+
+                //Cria colunas para deixar um espaço para o agrupamento
+                for (int i = 0; i < tabela.Agrupadores.Count; i++)
+                {
+                    var colunaEspacamentoAgrupamento = linhaTotal.CriarColunaTabela();
+                    if(i < indice)
+                        colunaEspacamentoAgrupamento.AddClass("td-g-t");
+                }
 
                 if (total.QuebrarPagina)
                     linhaTotal.AddClass("page-break-after");
@@ -93,7 +116,7 @@ namespace RelatorioVM.Extensoes
                                 .ExpandirColuna(coluna.QuantidadeColunasUtilizadas);
                         }
                     }
-                }                
+                }                  
             }
         }
     }
