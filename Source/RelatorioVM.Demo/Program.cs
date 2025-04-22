@@ -56,6 +56,7 @@ namespace RelatorioVM.Demo
                     FilialCodigo = random.Next(1, 10),
                     PessoaCodigo = random.Next(1, 2000),
                     Valor = (decimal)random.NextDouble() * 100m,
+                    Valor2 = (decimal)random.NextDouble() * 200m,
                     Pessoa = new PessoaViewModel()
                     {
                         Codigo = random.Next(1, 999999),
@@ -71,6 +72,9 @@ namespace RelatorioVM.Demo
                     Imagem = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==",
                     Produtos = new List<ProdutoViewModel>()                    
                 });
+
+                foreach (var item in viewModel.Itens)
+                    item.Percentual = item.Valor / item.Valor2 * 100;
 
                 if (i < 10) {
                     viewModel.Itens.Last().CorFundoLinha = "bae3f5";
@@ -140,6 +144,8 @@ namespace RelatorioVM.Demo
                             .DefinirPrefixoColuna("R$")
                             .DefinirCorConteudo(TipoCor.DarkBlue, TipoCor.Wheat)
                         )
+                        .Coluna(x => x.Percentual, coluna => coluna
+                            .DefinirPosfixoColuna("%"))
                         .Coluna(x => x.Municipio, coluna => coluna
                             .DefinirSeparador("/")
                             .DefinirCondensado(true)
@@ -150,6 +156,9 @@ namespace RelatorioVM.Demo
                         .Agrupar(agrupar =>
                             agrupar
                                 .Coluna(x => x.FilialCodigo, coluna => coluna.OcultarNoTotal())
+                         )
+                        .Agrupar(agrupar =>
+                            agrupar
                                 .Coluna(x => x.Ativo)
                          )
                         .Totalizar(opcoes => {
@@ -161,7 +170,8 @@ namespace RelatorioVM.Demo
                                 .Coluna(x => x.Municipio, x => 1, coluna => {
                                     coluna
                                         .Titulo("Quantidade");
-                                });
+                                })
+                                .ColunaCalculo(x => x.Percentual, x => (x.Sum(a => a.Valor) / x.Sum(a => a.Valor2)) * 100);
                         })
                         .Formatar(opcoes => {
                             opcoes
@@ -245,7 +255,7 @@ namespace RelatorioVM.Demo
             {
                 GlobalSettings = {
                     ColorMode = ColorMode.Color,
-                    Orientation = Orientation.Landscape,
+                    Orientation = Orientation.Portrait,
                     PaperSize = PaperKind.A4,
                     Out = arquivo,
                     DPI = 320,

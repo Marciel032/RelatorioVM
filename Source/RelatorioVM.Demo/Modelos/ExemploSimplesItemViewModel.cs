@@ -23,6 +23,8 @@ namespace RelatorioVM.Demo.Modelos
 
         public bool Ativo { get; set; }        
         public decimal Valor { get; set; }
+        public decimal Valor2 { get; set; }
+        public decimal Percentual { get; set; }
 
         [ColunaRelatorio(Titulo = "Situação")]
         public TipoSituacao Situacao { get; set; }

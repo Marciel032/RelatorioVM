@@ -20,6 +20,14 @@ namespace RelatorioVM.Extensoes
             agrupador.Totais.CalcularTotais(conteudo);
         }
 
+        public static void CalcularTotaisUsandoFuncaoCalculoTotal<T>(this TabelaAgrupador<T> agrupador, IEnumerable<T> conteudo)
+        {
+            if (!agrupador.Totalizar)
+                return;
+
+            agrupador.Totais.CalcularTotaisUsandoFuncaoCalculoTotal(conteudo);
+        }
+
         public static void AdicionarTotaisHtml<T>(this TabelaAgrupador<T> agrupador, HtmlTag tabelaHtml, Tabela<T> tabela, ConfiguracaoFormatacaoRelatorio formatacao)
         {
             if (!agrupador.Totalizar)

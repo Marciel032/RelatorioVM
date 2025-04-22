@@ -36,6 +36,8 @@ namespace RelatorioVM.Extensoes
                     coluna.Visivel = false;
                 if (!string.IsNullOrWhiteSpace(colunaAtributo.Prefixo))
                     coluna.Prefixo = colunaAtributo.Prefixo;
+                if (!string.IsNullOrWhiteSpace(colunaAtributo.Posfixo))
+                    coluna.Posfixo = colunaAtributo.Posfixo;
                 if (colunaAtributo.CorFundoConteudo != TipoCor.Indefinido)
                 {
                     var (corFundo, corContraste) = colunaAtributo.CorFundoConteudo.ObterCoresHtml();

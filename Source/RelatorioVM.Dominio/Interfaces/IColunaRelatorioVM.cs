@@ -40,6 +40,11 @@ namespace RelatorioVM.Dominio.Interfaces
         IColunaRelatorioVM<TConteudo> DefinirPrefixoColuna(string prefixo);
 
         /// <summary>
+        /// Define o pós-fixo exibido depois do valor em cada coluna. Ex. 10 %
+        /// </summary>
+        IColunaRelatorioVM<TConteudo> DefinirPosfixoColuna(string posfixo);
+
+        /// <summary>
         /// Define o condensamento da coluna. Isso remove os espaços em branco na direita e esquerda da coluna.
         /// </summary>
         IColunaRelatorioVM<TConteudo> DefinirCondensado(bool condensado);

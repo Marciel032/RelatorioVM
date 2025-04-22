@@ -24,6 +24,11 @@ namespace RelatorioVM.Dominio.Atributos
         /// </summary>
         public string Prefixo { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Define um texto para ser exibido após cada valor da coluna.
+        /// </summary>
+        public string Posfixo { get; set; } = string.Empty;
+
         public TipoCor CorFundoConteudo { get; set; } = TipoCor.Indefinido;
     }
 }

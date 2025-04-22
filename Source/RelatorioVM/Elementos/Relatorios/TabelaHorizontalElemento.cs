@@ -229,12 +229,14 @@ namespace RelatorioVM.Elementos.Relatorios
                 AdicionarConteudoItens(corpoTabela, conteudos);
             else
                 AdicionarConteudoAgrupado(corpoTabela, conteudos, _tabela.Agrupadores, 0);
+
+            _tabela.Totais.CalcularTotaisUsandoFuncaoCalculoTotal(conteudos);
         }
 
         private void AdicionarConteudoAgrupado(HtmlTag corpoTabela, IEnumerable<T> conteudo, List<TabelaAgrupador<T>> agrupadores, int indice) {
             if (agrupadores.Count <= indice)
                 return;
-
+            
             var agrupador = agrupadores[indice];
 
             var grupos = agrupador.AgruparConteudo(conteudo);
@@ -250,6 +252,7 @@ namespace RelatorioVM.Elementos.Relatorios
                             agrupadores[i].CalcularTotais(item); 
                     });
 
+                agrupador.CalcularTotaisUsandoFuncaoCalculoTotal(itensGrupo);
                 agrupador.AdicionarTotaisHtml(corpoTabela, _tabela, _configuracaoRelatorio.Formatacao);
             }
         }        

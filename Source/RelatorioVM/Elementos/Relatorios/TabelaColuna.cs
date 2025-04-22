@@ -26,6 +26,7 @@ namespace RelatorioVM.Elementos.Relatorios
         public bool Visivel { get; set; }
         public string Separador { get; set; }
         public string Prefixo { get; set; }
+        public string Posfixo { get; set; }
         public FonteEscrita Fonte { get; set; }
         public int MargemBordas { get; set; }
         public bool Condensado { get; set; }
@@ -35,6 +36,7 @@ namespace RelatorioVM.Elementos.Relatorios
         public bool TemComplemento { get { return PropriedadeComplemento != null;  } }
         public int QuantidadeColunasUtilizadas { get { return TemComplemento && AlinhamentoHorizontalColuna == TipoAlinhamentoHorizontal.Centro ? 3 : 1; } }
         public bool TemPrefixo { get { return !string.IsNullOrEmpty(Prefixo); } }
+        public bool TemPosfixo { get { return !string.IsNullOrEmpty(Posfixo); } }
         public bool TemElementosLinha { get { return _elementos.Any(x => !x.ExibirNaColuna); } }
         public bool TemElementosColuna { get { return _elementos.Any(x => x.ExibirNaColuna); } }
 
@@ -106,9 +108,12 @@ namespace RelatorioVM.Elementos.Relatorios
         public string ObterValorConvertido(T origem, ConfiguracaoFormatacaoRelatorio formatacao) {
             var valor = Propriedade.ObterValorConvertido(origem, formatacao);
             if (TemPrefixo)
-                return $"{Prefixo} {valor}";
-            else
-                return valor;
+                valor = $"{Prefixo} {valor}";
+
+            if (TemPosfixo)
+                valor =  $"{valor} {Posfixo}";            
+
+            return valor;
         }
 
         public string ObterComplementoConvertido(T origem, ConfiguracaoFormatacaoRelatorio formatacao)
@@ -180,6 +185,12 @@ namespace RelatorioVM.Elementos.Relatorios
         public IColunaRelatorioVM<T> DefinirPrefixoColuna(string prefixo)
         {
             Prefixo = prefixo;
+            return this;
+        }
+
+        public IColunaRelatorioVM<T> DefinirPosfixoColuna(string posfixo)
+        {
+            Posfixo = posfixo;
             return this;
         }
 

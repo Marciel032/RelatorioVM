@@ -22,6 +22,13 @@ namespace RelatorioVM.Extensoes
                     colunaTotal.Value.Calcular(conteudo);
         }
 
+        public static void CalcularTotaisUsandoFuncaoCalculoTotal<T>(this List<TabelaTotal<T>> totais, IEnumerable<T> conteudos)
+        {
+            foreach (var total in totais)
+                foreach (var colunaTotal in total.Totais)
+                    colunaTotal.Value.CalcularUsandoFuncaoCalculoTotal(conteudos);
+        }
+
         public static void AdicionarTotaisHtml<T>(this List<TabelaTotal<T>> totais, HtmlTag tabelaHtml, Tabela<T> tabela, ConfiguracaoFormatacaoRelatorio formatacao, int indice)
         {
             if (tabela.ObterQuantidadeColunasVisiveis() == 0)
@@ -100,6 +107,8 @@ namespace RelatorioVM.Extensoes
                             var valor = totalColuna.ObterValorConvertido(formatacao);
                             if (coluna.TemPrefixo)
                                 valor = $"{coluna.Prefixo} {valor}";
+                            if (coluna.TemPosfixo)
+                                valor = $"{valor} {coluna.Posfixo}";
                             linhaTotal.CriarColunaTabela()
                                 .DefinirAlinhamentoHorizontal(coluna.AlinhamentoHorizontalColuna)
                                 .ExpandirColuna(coluna.QuantidadeColunasUtilizadas)

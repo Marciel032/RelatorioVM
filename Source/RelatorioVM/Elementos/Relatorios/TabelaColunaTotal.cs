@@ -15,6 +15,7 @@ namespace RelatorioVM.Elementos.Relatorios
     {
         public string Identificador { get; set; }
         public Propriedade<T> Propriedade { get; set; }
+        public Func<IEnumerable<T>, object> FuncaoCalculoTotal { get; set; }
         public TipoAlinhamentoHorizontal AlinhamentoHorizontal { get; set; }
         public string TituloColuna { get; set; }
         public object Valor { get; set; }
@@ -40,6 +41,14 @@ namespace RelatorioVM.Elementos.Relatorios
                 valorTotal += valorOrigem;
 
             Valor = valorTotal;
+        }
+
+        public void CalcularUsandoFuncaoCalculoTotal(IEnumerable<T> origens)
+        {
+            if (FuncaoCalculoTotal == null)
+                return;
+
+            Valor = FuncaoCalculoTotal(origens);
         }
 
         public string ObterValorConvertido(ConfiguracaoFormatacaoRelatorio formato) {

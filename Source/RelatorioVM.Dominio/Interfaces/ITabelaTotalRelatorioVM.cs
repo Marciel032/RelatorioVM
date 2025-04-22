@@ -31,6 +31,24 @@ namespace RelatorioVM.Dominio.Interfaces
         ITabelaTotalRelatorioVM<TConteudo> Coluna<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<TConteudo, long>> expressaoCalculo, Action<IColunaTotalRelatorioVM<TConteudo>> configuracao = null);
 
         /// <summary>
+        /// Define um calculo do totalizador manualmente
+        /// </summary>
+        /// <typeparam name="TPropriedade"></typeparam>
+        /// <param name="expressaoPropriedade">Coluna onde o total é exibido</param>
+        /// <param name="expressaoCalculo">Valor calculado para obter o totalizador</param>
+        /// <returns></returns>
+        ITabelaTotalRelatorioVM<TConteudo> ColunaCalculo<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<IEnumerable<TConteudo>, decimal>> expressaoCalculo, Action<IColunaTotalRelatorioVM<TConteudo>> configuracao = null);
+
+        /// <summary>
+        /// Define um calculo do totalizador manualmente
+        /// </summary>
+        /// <typeparam name="TPropriedade"></typeparam>
+        /// <param name="expressaoPropriedade">Coluna onde o total é exibido</param>
+        /// <param name="expressaoCalculo">Valor calculado para obter o totalizador</param>
+        /// <returns></returns>
+        ITabelaTotalRelatorioVM<TConteudo> ColunaCalculo<TPropriedade>(Expression<Func<TConteudo, TPropriedade>> expressaoPropriedade, Expression<Func<IEnumerable<TConteudo>, long>> expressaoCalculo, Action<IColunaTotalRelatorioVM<TConteudo>> configuracao = null);
+
+        /// <summary>
         /// Ignora uma coluna especifica
         /// </summary>
         /// <typeparam name="TPropriedade"></typeparam>
