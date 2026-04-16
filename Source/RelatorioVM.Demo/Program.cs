@@ -113,6 +113,7 @@ namespace RelatorioVM.Demo
                     tabela
                         .Titulo("Tabela exibindo valores na vertical")
                         .ComplementarValor(x => x.PessoaCodigo, x => x.Pessoa)
+                        .Coluna(x => x.Imagem, x => x.DefinirTitulo(string.Empty))
                         .Imagem(x => x.Imagem);
                 })
                 .AdicionarTabelaVertical(viewModel.Itens[1], tabela =>

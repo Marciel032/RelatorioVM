@@ -186,12 +186,17 @@ namespace RelatorioVM.Elementos.Relatorios
                 {
                     foreach (var conteudoVertical in colunaVertical)
                     {
-                        linha.CriarColunaTabela()
-                            .Text($"{conteudoVertical.TituloColuna}:")
-                            .AddClass("td-t");
+                        if(!string.IsNullOrWhiteSpace(conteudoVertical.TituloColuna))
+                            linha.CriarColunaTabela()
+                                .Text($"{conteudoVertical.TituloColuna}:")
+                                .AddClass("td-t");
 
-                        var colunaConteudoHtml = linha.CriarColunaTabela(conteudoVertical, conteudo)
-                            .DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda);
+                        var colunaConteudoHtml = linha.CriarColunaTabela(conteudoVertical, conteudo);
+
+                        if (string.IsNullOrWhiteSpace(conteudoVertical.TituloColuna)) //Expande a coluna quando nao tem titulo
+                            colunaConteudoHtml.ExpandirColuna(2).DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Centro);
+                        else
+                            colunaConteudoHtml.DefinirAlinhamentoHorizontal(TipoAlinhamentoHorizontal.Esquerda);
 
                         if (conteudoVertical.TemElementosColuna)
                             conteudoVertical.AdicionarHtmlColuna(colunaConteudoHtml, conteudo);
